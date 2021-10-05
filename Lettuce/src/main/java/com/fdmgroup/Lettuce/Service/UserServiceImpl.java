@@ -1,5 +1,8 @@
 package com.fdmgroup.Lettuce.Service;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,10 +43,11 @@ public class UserServiceImpl implements iUser {
 		// duplicated user name will throw DataIntegrityViolationException
 		
 		if(!isUserNameDuplicated(user.getUserName())) {
-			//TODO encrypt the password
-//			String originPassword = user.getPassword();
-//			String encryptedPassword = encryptPassword(originPassword);
-//			user.setPassword(encryptedPassword);
+			//encrypt the password(Done)
+			String originPassword = user.getPassword();
+			String encryptedPassword = encryptPassword(originPassword);
+			user.setPassword(encryptedPassword);
+			
 			userRepo.save(user);
 		};
 		
@@ -58,16 +62,25 @@ public class UserServiceImpl implements iUser {
 	}
 	
 	private String encryptPassword(String originPassword) {
-		//TODO add a encryption strategy
-		return null;
+		String encryptedPassword = "";
+		try {
+			MessageDigest md = MessageDigest.getInstance("SHA-1");
+			md.update(originPassword.getBytes("UTF-8"));
+			byte[] result = md.digest();
+			encryptedPassword=String.format("%040x",new BigInteger(1,result));
+		} catch (Exception e) {
+			// error in encrypting password
+			e.printStackTrace();
+		}
+		return encryptedPassword;
 	}
 
 	@Override
 	public boolean loginWithUserNameAndPassword(String userName, String inputPassword) throws FailToLoginException {
-        //TODO encrypt the password
-//		String encryptedInputPassword = encryptPassword(inputPassword);
-//		Optional<User> oUser = userRepo.getUserByUserNameAndPassword(userName, encryptedInputPassword);
-		Optional<User> oUser = userRepo.getUserByUserNameAndPassword(userName, inputPassword);
+        //encrypt the password(Done)
+		String encryptedInputPassword = encryptPassword(inputPassword);
+		Optional<User> oUser = userRepo.getUserByUserNameAndPassword(userName, encryptedInputPassword);
+//		Optional<User> oUser = userRepo.getUserByUserNameAndPassword(userName, inputPassword);
 		if(oUser.isEmpty()) {
 			throw new FailToLoginException();
 		} else {
