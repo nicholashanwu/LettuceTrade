@@ -86,14 +86,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-<<<<<<< HEAD
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<version>1.18.12</version>
-			<scope>provided</scope>
-		</dependency>
-=======
 
 		<!-- Lombok for cleaner getters/setters -->
 		<dependency>
@@ -107,7 +99,6 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>
->>>>>>> b5a4a735c672247f2e4f1f587e0758724d2bd37d
 	</dependencies>
 
 	<build>
