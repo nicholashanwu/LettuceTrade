@@ -31,7 +31,7 @@ public class CurrencyServiceImpl implements ICurrency {
 
 	@Override
 	public void updateCurrency(Currency currency, int id) {
-		currency.setCurrency_id(id);
+		currency.setCurrencyId(id);
 		currencyRepo.save(currency);
 	}
 

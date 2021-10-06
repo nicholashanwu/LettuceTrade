@@ -16,36 +16,40 @@ public class Currency {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "currencySeq")
 	@SequenceGenerator(name = "currencySeq", sequenceName = "LettureSeq1", initialValue = 0, allocationSize = 1)
-	private int currency_id;
-	private String currency_name;
+	private int currencyId;
+	private String currencyName;
 
 	/**
-	 * @param currency_name
+	 * @param currencyName
 	 */
-	public Currency(String currency_name) {
+	public Currency(String currencyName) {
 		super();
-		this.currency_name = currency_name;
+		this.currencyName = currencyName;
 	}
 
-	public int getCurrency_id() {
-		return currency_id;
+	public Currency() {
+		super();
 	}
 
-	public void setCurrency_id(int currency_id) {
-		this.currency_id = currency_id;
+	public int getCurrencyId() {
+		return currencyId;
 	}
 
-	public String getCurrency_name() {
-		return currency_name;
+	public void setCurrencyId(int currencyId) {
+		this.currencyId = currencyId;
 	}
 
-	public void setCurrency_name(String currency_name) {
-		this.currency_name = currency_name;
+	public String getCurrencyName() {
+		return currencyName;
+	}
+
+	public void setCurrencyName(String currencyName) {
+		this.currencyName = currencyName;
 	}
 
 	@Override
 	public String toString() {
-		return "Currency [currency_id=" + currency_id + ", currency_name=" + currency_name + "]";
+		return "Currency [currencyId=" + currencyId + ", currencyName=" + currencyName + "]";
 	}
 
 }

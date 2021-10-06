@@ -57,7 +57,7 @@ public class CurrencyDBTesting {
 		em.persist(currency2);
 	
 		
-		Currency findCurrency = cr.findById(currency2.getCurrency_id()).get();
+		Currency findCurrency = cr.findById(currency2.getCurrencyId()).get();
 		assertThat(findCurrency).isEqualTo(currency2);
 	}
 	
@@ -71,14 +71,14 @@ public class CurrencyDBTesting {
 	
 		Currency updateCurrency = new Currency("USD1");
 		
-		Currency currency = cr.findById(currency2.getCurrency_id()).get();
-		currency.setCurrency_name(updateCurrency.getCurrency_name());
+		Currency currency = cr.findById(currency2.getCurrencyId()).get();
+		currency.setCurrencyName(updateCurrency.getCurrencyName());
 		cr.save(currency);
 		
 		
-		Currency checkCurrency = cr.findById(currency2.getCurrency_id()).get();
-		assertThat(checkCurrency.getCurrency_id()).isEqualTo(currency2.getCurrency_id());
-		assertThat(checkCurrency.getCurrency_name()).isEqualTo(updateCurrency.getCurrency_name());
+		Currency checkCurrency = cr.findById(currency2.getCurrencyId()).get();
+		assertThat(checkCurrency.getCurrencyId()).isEqualTo(currency2.getCurrencyId());
+		assertThat(checkCurrency.getCurrencyName()).isEqualTo(updateCurrency.getCurrencyName());
 		
 	}
 
@@ -90,7 +90,7 @@ public class CurrencyDBTesting {
 		em.persist(currency1);
 		em.persist(currency2);
 		
-		cr.deleteById(currency2.getCurrency_id());
+		cr.deleteById(currency2.getCurrencyId());
 		
 		Iterable<Currency> currencies = cr.findAll();
 		assertThat(currencies).hasSize(1).contains(currency1);
