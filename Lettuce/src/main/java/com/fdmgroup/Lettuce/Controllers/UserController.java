@@ -43,6 +43,7 @@ public class UserController {
 	@RequestMapping("/registerHandler")
 	public String handlerRegister(User user) {
 		try {
+		    //PLEASE remember the password - there are no decryption process
 		      usi.addUser(user);
 //		      actLogger.info("Register user successfully");
 //		      dbLogger.info("Register user successfully");
