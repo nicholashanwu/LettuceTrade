@@ -20,10 +20,10 @@ public class Portfolio {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int portfolio_id;
 	
-	@OneToOne(mappedBy="portfolio")
-	private User user;
-	@ManyToMany
-	private  Map<Currency, Double> currencies_held;
+//	@OneToOne(mappedBy="portfolio")
+//	private User user;
+//	@ManyToMany
+//	private  Map<Currency, Double> currencies_held;
 	
 	public Portfolio() {
 		super();
@@ -31,24 +31,24 @@ public class Portfolio {
 	}
 	public Portfolio(User user, Map<Currency, Double> currencies_held) {
 		super();
-		this.user = user;
-		this.currencies_held = currencies_held;
+//		this.user = user;
+//		this.currencies_held = currencies_held;
 	}
 	public int getPortfolio_id() {
 		return portfolio_id;
 	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
-	}
-	public Map<Currency, Double> getCurrencies_held() {
-		return currencies_held;
-	}
-	public void setCurrencies_held(Map<Currency, Double> currencies_held) {
-		this.currencies_held = currencies_held;
-	}
+//	public User getUser() {
+//		return user;
+//	}
+//	public void setUser(User user) {
+//		this.user = user;
+//	}
+//	public Map<Currency, Double> getCurrencies_held() {
+//		return currencies_held;
+//	}
+//	public void setCurrencies_held(Map<Currency, Double> currencies_held) {
+//		this.currencies_held = currencies_held;
+//	}
 	
 	
 }
