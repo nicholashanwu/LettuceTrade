@@ -1,0 +1,36 @@
+@charset "ISO-8859-1";
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+:root {
+  --green-main: #33AB74;
+  --green-highlight: #87DC90;
+}
+
+header {
+  background-color: white;
+}
+
+/*forces footer to the bottom of the page*/
+body {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  margin: 0;
+  padding-bottom: 0px;
+  box-sizing: border-box;
+}
+
+footer {
+  height: 10vh;
+  position: relative;
+  vertical-align: middle !important;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}
+
+.green-text-v1 {
+  color: var(--green-main);
+}

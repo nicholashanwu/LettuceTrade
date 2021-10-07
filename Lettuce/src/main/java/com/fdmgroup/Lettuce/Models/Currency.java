@@ -14,8 +14,7 @@ import javax.persistence.Table;
 public class Currency {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "currencySeq")
-	@SequenceGenerator(name = "currencySeq", sequenceName = "LettureSeq1", initialValue = 0, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int currencyId;
 	private String currencyName;
 
