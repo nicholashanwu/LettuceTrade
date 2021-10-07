@@ -47,7 +47,7 @@ public class PortfolioServiceImpl implements iPortfolio {
 	}
 
 	@Override
-	public void increaseCurrency(Currency currency, Double quantity, int portfolio_id) {
+	public void increaseCurrency(Currency currency, double quantity, int portfolio_id) {
 		Portfolio portfolio = portfolioRepo.getById(portfolio_id);
 		List<HeldCurrency> heldCurrencies = portfolio.getHeldCurrencies();
 		
@@ -70,7 +70,7 @@ public class PortfolioServiceImpl implements iPortfolio {
 	}
 
 	@Override
-	public void decreaseCurrency(Currency currency, Double quantity, int portfolio_id) throws InsufficientFundsException {
+	public void decreaseCurrency(Currency currency, double quantity, int portfolio_id) throws InsufficientFundsException {
 		Portfolio portfolio = portfolioRepo.getById(portfolio_id);
 		List<HeldCurrency> heldCurrencies = portfolio.getHeldCurrencies();
 		

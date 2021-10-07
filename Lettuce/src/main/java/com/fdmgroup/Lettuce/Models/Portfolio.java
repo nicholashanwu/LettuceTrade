@@ -1,5 +1,6 @@
 package com.fdmgroup.Lettuce.Models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -24,7 +25,7 @@ public class Portfolio {
 	private User user;
 	
 	@OneToMany(mappedBy="portfolio")
-	private List<HeldCurrency> heldCurrencies;
+	private List<HeldCurrency> heldCurrencies = new ArrayList<>();
 	
 	public Portfolio() {
 		super();

@@ -14,6 +14,6 @@ public interface iPortfolio {
 	void deletePortfolioById(int portfolio_id);
 	void deleteAllPortfolios();
 	
-	void increaseCurrency(Currency currency, Double quantity, int portfolio_id);
-	void decreaseCurrency(Currency currency, Double quantity, int portfolio_id) throws InsufficientFundsException;
+	void increaseCurrency(Currency currency, double quantity, int portfolio_id);
+	void decreaseCurrency(Currency currency, double quantity, int portfolio_id) throws InsufficientFundsException;
 }
