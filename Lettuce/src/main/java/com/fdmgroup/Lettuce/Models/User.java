@@ -11,13 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-//import lombok.Getter;
-//import lombok.Setter;
-//import lombok.ToString;
 
-//@ToString
-//@Getter
-//@Setter
 @Entity
 public class User {
 	@Id

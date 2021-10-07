@@ -10,9 +10,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import lombok.ToString;
 
-@ToString
 @Entity
 @Table(name="Lettuce_Portfolio")
 public class Portfolio {
