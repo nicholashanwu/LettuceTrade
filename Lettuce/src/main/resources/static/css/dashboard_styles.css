@@ -1,0 +1,41 @@
+@charset "ISO-8859-1";
+
+.dashboard-container {
+	padding-top: 20vh;
+	padding-bottom: 20vh;
+	width: 45%;
+}
+
+.dashboard-header-1 {
+	font-weight: 500;
+	font-size: 50px;
+}
+
+.dashboard-header-2 {
+	font-weight: 500;
+	font-size: 30px;
+}
+
+.dashboard-header-logo-title {
+	font-weight: 700;
+	font-size: 30px;
+}
+
+.dashboard-header-logo-title-thin {
+	font-weight: 400;
+	font-size: 30px;
+}
+
+.btn-primary {
+	background-color: var(- -green-main) !important;
+	border-color: var(- -green-main) !important;
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+.btn-primary:hover {
+	background-color: var(- -green-highlight) !important;
+	border-color: var(- -green-highlight) !important;
+	outline: none !important;
+	box-shadow: none !important;
+}

@@ -10,27 +10,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "Lettuce_User")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int userId;
-	
-	@Column(unique=true)
+
+	@Column(unique = true)
 	private String email;
 	private String firstName;
 	private String lastName;
-	
 	private String password;
 	private double bankAccountBalance;
-	private boolean admin;
+	private String admin;
 
-	@OneToOne(mappedBy="user")
+	@OneToOne(mappedBy = "user")
 	private Portfolio portfolio;
-	
-	@OneToMany(mappedBy = "user") 
+
+	@OneToMany(mappedBy = "user")
 	private List<Order> orders = new ArrayList<>();
 
 	public User() {
@@ -38,14 +38,14 @@ public class User {
 	}
 
 	public User(String email, String firstName, String lastName, String password, double bankAccountBalance,
-			boolean admin) {
+			String admin) {
 		super();
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.password = password;
 		this.bankAccountBalance = bankAccountBalance;
-		this.admin = admin;
+		this.admin = admin; 
 	}
 
 	public int getUserId() {
@@ -96,11 +96,11 @@ public class User {
 		this.bankAccountBalance = bankAccountBalance;
 	}
 
-	public boolean isAdmin() {
+	public String isAdmin() {
 		return admin;
 	}
 
-	public void setAdmin(boolean admin) {
+	public void setAdmin(String admin) {
 		this.admin = admin;
 	}
 
@@ -122,9 +122,8 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", admin=" + admin
-				+ "]";
+		return "User [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", admin=" + admin +
+			"]";
 	}
 
-	
 }

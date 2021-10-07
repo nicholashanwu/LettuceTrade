@@ -1,0 +1,114 @@
+@charset "ISO-8859-1";
+
+.index-container {
+  padding-top: 20vh;
+  padding-bottom: 20vh;
+  width: 45%;
+}
+
+.index-header-1 {
+  font-weight: 500;
+  font-size: 50px;
+}
+
+.index-header-2 {
+  font-weight: 500;
+  font-size: 30px;
+}
+
+.index-header-logo-title {
+  font-weight: 700;
+  font-size: 30px;
+}
+
+.index-header-logo-title-thin {
+  font-weight: 400;
+  font-size: 30px;
+}
+
+.btn-primary {
+  background-color: var(--green-main) !important;
+  border-color: var(--green-main) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--green-highlight) !important;
+  border-color: var(--green-highlight) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn-outline-light {
+  color: var(--green-main);
+  border-color: var(--green-main) !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.btn-outline-light:hover {
+  color: white;
+  background-color: var(--green-highlight) !important;
+  background-color: var(--green-highlight) !important;
+  border-color: var(--green-highlight) !important;
+}
+
+.scroll-container {
+  /*must be same width and height as body*/
+  height: 100vh;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+
+section {
+  height: 100vh;
+  scroll-snap-align: start;
+}
+
+.one {
+  /* Location of the image */
+  background-image: url('/images/lettuce_splash_art_2.png');
+  /* Image is centered vertically and horizontally at all times */
+  background-position: center center;
+  /* Image doesn't repeat */
+  background-repeat: no-repeat;
+  /* Makes the image fixed in the viewport so that it doesn't move when 
+     the content height is greater than the image height */
+  background-attachment: fixed;
+  /* This is what makes the background image re-scale based on its container's size */
+  background-size: cover;
+  /* Pick a solid background color that will be displayed while the background image is loading */
+  background-color: white;
+}
+
+.two {
+  padding-top: 20vh;
+  height: 90vh;
+}
+
+#currency {
+	width: 180px;
+}
+
+.form-container {
+	padding-top: 10vh;
+	padding-bottom: 10vh;
+}
+
+.form-title {
+	padding-bottom: 5vh;
+}
+
+.form input, button {
+	width: 40%;
+}
+
+.validation-message {
+	padding-top: 5px;
+	padding-bottom: 10px;
+	padding-left: 3px;
+	font-size: 13px;
+	color: red;
+}

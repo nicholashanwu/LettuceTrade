@@ -24,6 +24,15 @@ public class DashboardController {
 	@Autowired
 	PortfolioServiceImpl psi = new PortfolioServiceImpl();
 	
+	@RequestMapping("/")
+	public String indexPage() {
+//		actLogger.info("Landed in Home Page")
+		return "index";
+	}
+	
+
+
+	
 	@RequestMapping("/portfolio")
 	public String toPortfolioPage(Model model) {
 		List<Portfolio> portfolios = psi.getAllPortfolios();

@@ -48,7 +48,7 @@ public interface iUser {
 	 * @return true if the user with this email is an admin
 	 * @throws InvalidEmailException if can not find a user with this email.
 	 */
-	boolean isAdmin(String email) throws InvalidEmailException;
+	/* boolean isAdmin(String email) throws InvalidEmailException; */
 
 	List<Order> getOrdersById(int userId);
 	

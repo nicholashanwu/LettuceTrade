@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 @Entity
@@ -21,6 +22,7 @@ public class Order {
 	private LocalDate expiryDate;
 	private LocalDate scheduledDate;
 	@ManyToOne
+	@MapsId("userId")
 	@JoinColumn(name = "FK_userId")
 	private User user;
 
