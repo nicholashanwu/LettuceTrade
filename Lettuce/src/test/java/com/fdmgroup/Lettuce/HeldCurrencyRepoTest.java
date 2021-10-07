@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fdmgroup.Lettuce.Models.Currency;
 import com.fdmgroup.Lettuce.Models.HeldCurrency;
+import com.fdmgroup.Lettuce.Models.Portfolio;
 import com.fdmgroup.Lettuce.Models.User;
 import com.fdmgroup.Lettuce.Repo.HeldCurrencyRepo;
 
@@ -34,26 +35,26 @@ public class HeldCurrencyRepoTest {
 	
 	@Test
 	public void should_store_a_record() {
-		User u = new User();
+		Portfolio p = new Portfolio();
 		Currency c = new Currency("USD");
-		em.persist(u);
+		em.persist(p);
 		em.persist(c);
-		HeldCurrency heldCurrency = hcr.save(new HeldCurrency(u, c));
-		assertThat(heldCurrency).hasFieldOrPropertyWithValue("user", u);
+		HeldCurrency heldCurrency = hcr.save(new HeldCurrency(p, c));
+		assertThat(heldCurrency).hasFieldOrPropertyWithValue("portfolio", p);
 		assertThat(heldCurrency).hasFieldOrPropertyWithValue("currency", c);
 
 	}
 	
 	@Test
 	public void should_find_all() {
-		User u1 = new User();
-		User u2 = new User();
-		User u3 = new User();
+		Portfolio p1 = new Portfolio();
+		Portfolio p2 = new Portfolio();
+		Portfolio p3 = new Portfolio();
 		Currency c = new Currency("USD");
 		
-		HeldCurrency hc1 = new HeldCurrency(u1, c);
-		HeldCurrency hc2 = new HeldCurrency(u2, c);
-		HeldCurrency hc3 = new HeldCurrency(u3, c);
+		HeldCurrency hc1 = new HeldCurrency(p1, c);
+		HeldCurrency hc2 = new HeldCurrency(p2, c);
+		HeldCurrency hc3 = new HeldCurrency(p3, c);
 		
 		em.persist(hc1);
 		em.persist(hc2);
@@ -64,35 +65,35 @@ public class HeldCurrencyRepoTest {
 	}
 	
 	@Test
-	public void should_find_by_user() {
-		User u1 = new User();
-		User u2 = new User();
-		User u3 = new User();
+	public void should_find_by_portfolio() {
+		Portfolio p1 = new Portfolio();
+		Portfolio p2 = new Portfolio();
+		Portfolio p3 = new Portfolio();
 		Currency c = new Currency("USD");
 		
-		HeldCurrency hc1 = new HeldCurrency(u1, c);
-		HeldCurrency hc2 = new HeldCurrency(u2, c);
-		HeldCurrency hc3 = new HeldCurrency(u3, c);
+		HeldCurrency hc1 = new HeldCurrency(p1, c);
+		HeldCurrency hc2 = new HeldCurrency(p2, c);
+		HeldCurrency hc3 = new HeldCurrency(p3, c);
 		
 		em.persist(hc1);
 		em.persist(hc2);
 		em.persist(hc3);
 		
-		Iterable<HeldCurrency> heldCurrencies = hcr.findByUser(u2);
+		Iterable<HeldCurrency> heldCurrencies = hcr.findByPortfolio(p2);
 		assertThat(heldCurrencies).hasSize(1).contains(hc2);
 	}
 	
 	@Test
 	public void should_find_by_currency() {
-		User u1 = new User();
-		User u2 = new User();
-		User u3 = new User();
+		Portfolio p1 = new Portfolio();
+		Portfolio p2 = new Portfolio();
+		Portfolio p3 = new Portfolio();
 		Currency c1 = new Currency("USD");
 		Currency c2 = new Currency("EUR");
 		
-		HeldCurrency hc1 = new HeldCurrency(u1, c1);
-		HeldCurrency hc2 = new HeldCurrency(u2, c2);
-		HeldCurrency hc3 = new HeldCurrency(u3, c1);
+		HeldCurrency hc1 = new HeldCurrency(p1, c1);
+		HeldCurrency hc2 = new HeldCurrency(p2, c2);
+		HeldCurrency hc3 = new HeldCurrency(p3, c1);
 		
 		em.persist(hc1);
 		em.persist(hc2);
@@ -104,35 +105,35 @@ public class HeldCurrencyRepoTest {
 	
 	@Test
 	public void should_find_unique_value() {
-		User u1 = new User();
-		User u2 = new User();
-		User u3 = new User();
+		Portfolio p1 = new Portfolio();
+		Portfolio p2 = new Portfolio();
+		Portfolio p3 = new Portfolio();
 		Currency c1 = new Currency("USD");
 		Currency c2 = new Currency("EUR");
 		
-		HeldCurrency hc1 = new HeldCurrency(u1, c1);
-		HeldCurrency hc2 = new HeldCurrency(u2, c2);
-		HeldCurrency hc3 = new HeldCurrency(u3, c1);
+		HeldCurrency hc1 = new HeldCurrency(p1, c1);
+		HeldCurrency hc2 = new HeldCurrency(p2, c2);
+		HeldCurrency hc3 = new HeldCurrency(p3, c1);
 		
 		em.persist(hc1);
 		em.persist(hc2);
 		em.persist(hc3);
 		
-		HeldCurrency heldCurrency = hcr.getByUserAndCurrency(u1, c1);
+		HeldCurrency heldCurrency = hcr.getByPortfolioAndCurrency(p1, c1);
 		assertThat(heldCurrency).isEqualTo(hc1);
 	}
 	
 	@Test
 	public void cannot_insert_duplicate_value() {
-		User u1 = new User();
-		User u2 = new User();
-		User u3 = new User();
+		Portfolio p1 = new Portfolio();
+		Portfolio p2 = new Portfolio();
+		Portfolio p3 = new Portfolio();
 		Currency c1 = new Currency("USD");
 		Currency c2 = new Currency("EUR");
 		
-		HeldCurrency hc1 = new HeldCurrency(u1, c1);
-		HeldCurrency hc2 = new HeldCurrency(u2, c2);
-		HeldCurrency hc3 = new HeldCurrency(u1, c1);
+		HeldCurrency hc1 = new HeldCurrency(p1, c1);
+		HeldCurrency hc2 = new HeldCurrency(p2, c2);
+		HeldCurrency hc3 = new HeldCurrency(p1, c1);
 		
 		em.persist(hc1);
 		em.persist(hc2);

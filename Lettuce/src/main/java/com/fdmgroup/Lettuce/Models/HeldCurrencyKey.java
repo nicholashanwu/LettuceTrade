@@ -9,15 +9,15 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class HeldCurrencyKey implements Serializable {
 	
-	@Column(name = "FK_user")
-	private int userId;
+	@Column(name = "FK_portfolio")
+	private int portfolioId;
 	
 	@Column(name = "FK_currency")
 	private int currencyId;
 	
-	public HeldCurrencyKey(int userId, int currencyId) {
+	public HeldCurrencyKey(int portfolioId, int currencyId) {
 		super();
-		this.userId = userId;
+		this.portfolioId = portfolioId;
 		this.currencyId = currencyId;
 	}
 
@@ -25,12 +25,12 @@ public class HeldCurrencyKey implements Serializable {
 		super();
 	}
 
-	public int getUserId() {
-		return userId;
+	public int getPortfolioId() {
+		return portfolioId;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setPortfolioId(int portfolioId) {
+		this.portfolioId = portfolioId;
 	}
 
 	public int getCurrencyId() {
@@ -43,7 +43,7 @@ public class HeldCurrencyKey implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(currencyId, userId);
+		return Objects.hash(currencyId, portfolioId);
 	}
 
 	@Override
@@ -55,12 +55,12 @@ public class HeldCurrencyKey implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		HeldCurrencyKey other = (HeldCurrencyKey) obj;
-		return currencyId == other.currencyId && userId == other.userId;
+		return currencyId == other.currencyId && portfolioId == other.portfolioId;
 	}
 
 	@Override
 	public String toString() {
-		return "HeldCurrencyKey [userId=" + userId + ", currencyId=" + currencyId + "]";
+		return "HeldCurrencyKey [userId=" + portfolioId + ", currencyId=" + currencyId + "]";
 	}
 	
 	

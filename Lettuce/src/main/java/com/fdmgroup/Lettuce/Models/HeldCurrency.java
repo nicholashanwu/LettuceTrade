@@ -1,5 +1,7 @@
 package com.fdmgroup.Lettuce.Models;
 
+import java.util.Objects;
+
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -15,9 +17,9 @@ public class HeldCurrency {
 	private HeldCurrencyKey id = new HeldCurrencyKey();
 	
 	@ManyToOne
-	@MapsId("userId")
-	@JoinColumn(name = "FK_user")
-	private User user;
+	@MapsId("portfolioId")
+	@JoinColumn(name = "FK_portfolio")
+	private Portfolio portfolio;
 	
 	@ManyToOne
 	@MapsId("currencyId")
@@ -26,9 +28,9 @@ public class HeldCurrency {
 	
 	private double quantity;
 
-	public HeldCurrency(User user, Currency currency) {
+	public HeldCurrency(Portfolio portfolio, Currency currency) {
 		super();
-		this.user = user;
+		this.portfolio = portfolio;
 		this.currency = currency;
 	}
 
@@ -36,12 +38,12 @@ public class HeldCurrency {
 		super();
 	}
 
-	public User getUser() {
-		return user;
+	public Portfolio getPortfolio() {
+		return portfolio;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setPortfolio(Portfolio portfolio) {
+		this.portfolio = portfolio;
 	}
 
 	public Currency getCurrency() {
@@ -64,6 +66,12 @@ public class HeldCurrency {
 	public String toString() {
 		return "HeldCurrency [id=" + id + ", quantity=" + quantity + "]";
 	}
+
+	public boolean equals(HeldCurrency other) {
+		return id.equals(other.id);
+	}
+	
+	
 	
 	
 	
