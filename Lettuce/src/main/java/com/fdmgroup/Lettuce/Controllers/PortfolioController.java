@@ -1,6 +1,4 @@
-package com.fdmgroup.Lettuce.Controller;
-
-import java.util.HashMap;
+package com.fdmgroup.Lettuce.Controllers;
 
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.fdmgroup.Lettuce.Exceptions.InsufficientFundsException;
 import com.fdmgroup.Lettuce.Models.Currency;
 import com.fdmgroup.Lettuce.Models.Portfolio;
 import com.fdmgroup.Lettuce.Models.User;
@@ -42,7 +41,7 @@ public class PortfolioController {
 		actLogger.info("Landed in Order page");
 		
 		User user = usi.getUserById(userId);
-		Portfolio portfolio = new Portfolio(user, new HashMap<>());
+		Portfolio portfolio = new Portfolio(user);
 		model.addAttribute("portfolio", portfolio);
 		
 		model.addAttribute("currency", new Currency());
@@ -57,7 +56,7 @@ public class PortfolioController {
 		// suggested to applied at user registeration
 		
 		User user = usi.getUserById(userId);
-		Portfolio portfolio = new Portfolio(user, new HashMap<>());
+		Portfolio portfolio = new Portfolio(user);
 		psi.addPortfolio(portfolio);
 		
 		dbLogger.info("Added "+portfolio+" into database successfully");
@@ -80,9 +79,14 @@ public class PortfolioController {
 		actLogger.info("Dealing with order");
 		
 		if(flag.equals("increase")) {
-			psi.increaseCurrency(currency, quantity, portfolio.getPortfolio_id());
+			psi.increaseCurrency(currency, quantity, portfolio.getPortfolioId());
 		}else if(flag.equals("decrease")) {
-			psi.decreaseCurrency(currency, quantity, portfolio.getPortfolio_id());
+			try {
+				psi.decreaseCurrency(currency, quantity, portfolio.getPortfolioId());
+			} catch (InsufficientFundsException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return "order";
 	}
