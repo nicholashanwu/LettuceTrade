@@ -3,7 +3,7 @@ package com.fdmgroup.Lettuce.Exceptions;
 public class FailToLoginException extends Exception {
 
 	public FailToLoginException() {
-		super("fail to log in because of invalid user name or password");
+		super("fail to log in because of invalid email or password");
 		// TODO Auto-generated constructor stub
 	}
 

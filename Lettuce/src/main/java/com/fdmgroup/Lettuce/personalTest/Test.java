@@ -17,7 +17,7 @@ public class Test {
 		byte[] result = md.digest();
 		System.out.println(new BigInteger(1,result).toString(16));
 		System.out.println(String.format("%040x",new BigInteger(1,result)));
-		System.out.println(encryptPassword(passwd));
+		System.out.println(encryptPassword("hello"));
 
 	}
 	

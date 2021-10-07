@@ -2,9 +2,11 @@ package com.fdmgroup.Lettuce.Service;
 
 import java.util.List;
 
-import com.fdmgroup.Lettuce.Exceptions.DuplicatedUserNameException;
+import com.fdmgroup.Lettuce.Exceptions.DuplicatedEmailException;
 import com.fdmgroup.Lettuce.Exceptions.FailToLoginException;
-import com.fdmgroup.Lettuce.Exceptions.InvalidUserNameException;
+import com.fdmgroup.Lettuce.Exceptions.InvalidEmailException;
+import com.fdmgroup.Lettuce.Models.Order;
+import com.fdmgroup.Lettuce.Models.Portfolio;
 import com.fdmgroup.Lettuce.Models.User;
 /**
  * 
@@ -18,50 +20,49 @@ public interface iUser {
 	
 	/**
 	 * 
-	 * @param userName
+	 * @param email
 	 * @return User
-	 * @throws InvalidUserNameException if can not find a user with this user name.
+	 * @throws InvalidEmailException if can not find a user with this email.
 	 */
-	User getUserByUserName(String userName) throws InvalidUserNameException;
+	User getUserByEmail(String email) throws InvalidEmailException;
 	
 	/**
-	 * Add a new user in database. It will check whether the user name is duplicated
+	 * Add a new user in database. It will check whether the email is duplicated
 	 * @param user
-	 * @throws DuplicatedUserNameException if the user name has been used.
+	 * @throws DuplicatedEmailException if the email has been used.
 	 */
-	void addUser(User user) throws DuplicatedUserNameException;
+	void addUser(User user) throws DuplicatedEmailException;
 	
 	/**
 	 * 
-	 * @param userName
+	 * @param email
 	 * @param password
 	 * @return true if log in successfully
-	 * @throws FailToLoginException if can not find a user with given userName and password
+	 * @throws FailToLoginException if can not find a user with given email and password
 	 */
-	boolean loginWithUserNameAndPassword(String userName, String password) throws FailToLoginException;
+	boolean loginWithEmailAndPassword(String email, String password) throws FailToLoginException;
 	
 	/**
 	 * 
-	 * @param userName
-	 * @return true if the user with this user name is an admin
-	 * @throws InvalidUserNameException if can not find a user with this user name.
+	 * @param email
+	 * @return true if the user with this email is an admin
+	 * @throws InvalidEmailException if can not find a user with this email.
 	 */
-	boolean isAdmin(String userName) throws InvalidUserNameException;
-	//TODO
-//	List<Order> getOrdersById(int userId);
-//	
-//	Portfolio getProfileById(int userId);
+	boolean isAdmin(String email) throws InvalidEmailException;
+
+	List<Order> getOrdersById(int userId);
+	
+	Portfolio getProfileById(int userId);
 	/**
 	 * 
 	 * @param userId
 	 * @param user with updated information
-	 * @throws DuplicatedUserNameException if the new user name has been used
+	 * @throws DuplicatedEmailException if the given email has been used
 	 */
-	void updateUser(int userId, User user) throws DuplicatedUserNameException;
+	void updateUser(int userId, User user) throws DuplicatedEmailException;
 	
 	//functions
-	//TODO
-//	void placeOrder(int userId, Order order);
+	void placeOrder(int userId, Order order);
 	
 	void takeMoneyFromBank(int userId, double moneyOut);
 	void sendMoneyToBank(int userId, double moneyIn);

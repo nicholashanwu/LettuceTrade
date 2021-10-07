@@ -19,95 +19,112 @@ public class User {
 	private int userId;
 	
 	@Column(unique=true)
-	private String userName;
-	private String name;
+	private String email;
+	private String firstName;
+	private String lastName;
 	
 	private String password;
 	private double bankAccountBalance;
-	private boolean Admin;
-//TODO
-//	@OneToOne(mappedBy="user")
-//	private Portfolio portfolio;
-//	
-//	@OneToMany(mappedBy = "user") 
-//	private List<Order> orders = new ArrayList<>();
+	private boolean admin;
+
+	@OneToOne(mappedBy="user")
+	private Portfolio portfolio;
 	
+	@OneToMany(mappedBy = "user") 
+	private List<Order> orders = new ArrayList<>();
+
 	public User() {
 		super();
 	}
-	
-	public User(String userName, String name, String password, double bankAccountBalance, boolean admin) {
+
+	public User(String email, String firstName, String lastName, String password, double bankAccountBalance,
+			boolean admin) {
 		super();
-		this.userName = userName;
-		this.name = name;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.password = password;
 		this.bankAccountBalance = bankAccountBalance;
-		Admin = admin;
-	}
-
-	public User(String userName, String password, boolean isAdmin) {
-		super();
-		this.userName = userName;
-		this.password = password;
-		this.Admin = isAdmin;
-	}
-	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
+		this.admin = admin;
 	}
 
 	public int getUserId() {
 		return userId;
 	}
+
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
-	public String getUserName() {
-		return userName;
+
+	public String getEmail() {
+		return email;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
 	public String getPassword() {
 		return password;
 	}
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 	public double getBankAccountBalance() {
 		return bankAccountBalance;
 	}
+
 	public void setBankAccountBalance(double bankAccountBalance) {
 		this.bankAccountBalance = bankAccountBalance;
 	}
+
 	public boolean isAdmin() {
-		return Admin;
+		return admin;
 	}
-	public void setAdmin(boolean isAdmin) {
-		this.Admin = isAdmin;
+
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
-	//TODO
-//	public Portfolio getPortfolio() {
-//		return portfolio;
-//	}
-//	public void setPortfolio(Portfolio portfolio) {
-//		this.portfolio = portfolio;
-//	}
-//	public List<Order> getOrders() {
-//		return orders;
-//	}
-//	public void setOrders(List<Order> orders) {
-//		this.orders = orders;
-//	}
+
+	public Portfolio getPortfolio() {
+		return portfolio;
+	}
+
+	public void setPortfolio(Portfolio portfolio) {
+		this.portfolio = portfolio;
+	}
+
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
 	@Override
 	public String toString() {
-		return "User [userName=" + userName + ", bankAccountBalance=" + bankAccountBalance + ", isAdmin=" + Admin
+		return "User [email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + ", admin=" + admin
 				+ "]";
 	}
-	
+
 	
 }
