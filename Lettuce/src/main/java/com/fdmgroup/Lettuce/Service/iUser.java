@@ -2,6 +2,8 @@ package com.fdmgroup.Lettuce.Service;
 
 import java.util.List;
 
+import org.springframework.dao.DataIntegrityViolationException;
+
 import com.fdmgroup.Lettuce.Exceptions.DuplicatedEmailException;
 import com.fdmgroup.Lettuce.Exceptions.FailToLoginException;
 import com.fdmgroup.Lettuce.Exceptions.InvalidEmailException;
@@ -48,7 +50,7 @@ public interface iUser {
 	 * @return true if the user with this email is an admin
 	 * @throws InvalidEmailException if can not find a user with this email.
 	 */
-	/* boolean isAdmin(String email) throws InvalidEmailException; */
+	boolean isAdmin(String email) throws InvalidEmailException;
 
 	List<Order> getOrdersById(int userId);
 	
@@ -59,7 +61,7 @@ public interface iUser {
 	 * @param user with updated information
 	 * @throws DuplicatedEmailException if the given email has been used
 	 */
-	void updateUser(int userId, User user) throws DuplicatedEmailException;
+	void updateUser(int userId, User user) throws DataIntegrityViolationException;
 	
 	//functions
 	void placeOrder(int userId, Order order);
