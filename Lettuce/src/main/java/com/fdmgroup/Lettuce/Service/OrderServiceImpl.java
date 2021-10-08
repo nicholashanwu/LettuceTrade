@@ -7,55 +7,60 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.OrderStatus;
+import com.fdmgroup.Lettuce.Models.Transaction;
 import com.fdmgroup.Lettuce.Models.User;
 import com.fdmgroup.Lettuce.Repo.OrderRepo;
+import com.fdmgroup.Lettuce.Repo.TransactionRepo;
 import com.fdmgroup.Lettuce.rates.ExchangeRate;
 
 public class OrderServiceImpl implements iOrder {
 	@Autowired
-	OrderRepo repo;
+	OrderRepo orderRepo;
+
+	@Autowired
+	TransactionRepo transRepo;
 
 	@Override
 	public List<Order> getAllOrders() {
-		return repo.findAll();
+		return orderRepo.findAll();
 	}
 
 	@Override
 	public List<Order> getAllOrdersForUser(User user) {
-		return repo.orderByUser(user);
+		return orderRepo.orderByUser(user);
 	}
 
 	@Override
 	public List<Order> getOutstandingOrders() {
-		List<Order> pending = repo.orderByStatus(OrderStatus.PENDING);
-		List<Order> partial = repo.orderByStatus(OrderStatus.PARTIALLY_COMPLETE);
+		List<Order> pending = orderRepo.orderByStatus(OrderStatus.PENDING);
+		List<Order> partial = orderRepo.orderByStatus(OrderStatus.PARTIALLY_COMPLETE);
 		pending.addAll(partial);
 		return pending;
 	}
 
 	@Override
 	public Order getOrderById(int id) {
-		return repo.getById(id);
+		return orderRepo.getById(id);
 	}
 
 	@Override
 	public void addOrder(Order order) {
-		repo.save(order);
+		orderRepo.save(order);
 	}
 
 	@Override
 	public void updateOrder(Order order) {
-		repo.save(order);
+		orderRepo.save(order);
 	}
 
 	@Override
 	public void deleteOrder(Order order) {
-		repo.delete(order);
+		orderRepo.delete(order);
 	}
 
 	@Override
 	public void deleteOrderById(int id) {
-		repo.deleteById(id);
+		orderRepo.deleteById(id);
 	}
 
 	@Override
@@ -68,33 +73,45 @@ public class OrderServiceImpl implements iOrder {
 				try {
 					double exchangeRate = ExchangeRate.getRateForPair(order.getBaseCurrency().toString(),
 							order.getTargetCurrency().toString());
-					double availableToSell = order.getQuantity();
-					double wantToBuy = order.getQuantity() * exchangeRate;
-					double availableToBuy = orderFound.getQuantity();
-					double wantToSell = orderFound.getQuantity() / exchangeRate;
-					if (wantToBuy < availableToBuy) {
+
+					double firstUserHas = order.getQuantity(); // Expressed in first user's base currency.
+					double firstUserWants = order.getQuantity() * exchangeRate; // Expressed in first user's target
+																				// currency.
+
+					double secondUserHas = orderFound.getQuantity(); // Expressed in second user's base currency.
+					double secondUserWants = orderFound.getQuantity() / exchangeRate; // Expressed in second user's
+																						// target currency.
+
+					if (firstUserWants < secondUserHas) {
 						// Consume the entire order, and consume part of the orderFound.
 						order.setQuantity(0);
 						order.setOrderStatus(OrderStatus.COMPLETE);
-						orderFound.setQuantity(availableToBuy - wantToBuy);
+						orderFound.setQuantity(secondUserHas - firstUserWants);
 						orderFound.setOrderStatus(OrderStatus.PARTIALLY_COMPLETE);
-					} else if (wantToBuy > availableToBuy) {
+						transRepo.save(new Transaction(order, orderFound, order.getBaseCurrency(),
+								orderFound.getBaseCurrency(), firstUserHas, firstUserWants));
+
+					} else if (firstUserWants > secondUserHas) {
 						// Consume the entire orderFound, and consume part of the order.
-						order.setQuantity(availableToSell - wantToSell);
+						order.setQuantity(firstUserHas - secondUserWants);
 						order.setOrderStatus(OrderStatus.PARTIALLY_COMPLETE);
 						orderFound.setQuantity(0);
 						orderFound.setOrderStatus(OrderStatus.COMPLETE);
-					} else if (wantToBuy == availableToBuy) {
+						transRepo.save(new Transaction(order, orderFound, order.getBaseCurrency(),
+								orderFound.getBaseCurrency(), secondUserWants, secondUserHas));
+
+					} else if (firstUserWants == secondUserHas) {
 						// Consume both.
 						order.setQuantity(0);
 						order.setOrderStatus(OrderStatus.COMPLETE);
 						orderFound.setQuantity(0);
 						orderFound.setOrderStatus(OrderStatus.COMPLETE);
+						transRepo.save(new Transaction(order, orderFound, order.getBaseCurrency(),
+								orderFound.getBaseCurrency(), firstUserHas, secondUserHas));
 					}
 					// Save changes.
-					repo.save(order);
-					repo.save(orderFound);
-					// TODO transactions
+					orderRepo.save(order);
+					orderRepo.save(orderFound);
 					// TODO logging
 				} catch (IOException e) {
 					// Couldn't contact API. Do nothing.
