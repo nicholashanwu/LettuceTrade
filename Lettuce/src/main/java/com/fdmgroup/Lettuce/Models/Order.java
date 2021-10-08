@@ -1,13 +1,13 @@
 package com.fdmgroup.Lettuce.Models;
 
 import java.time.LocalDate;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 @Entity
@@ -28,6 +28,7 @@ public class Order {
 	private OrderType orderType;
 	private OrderStatus orderStatus;
 	private double quantity;
+	private double initialQuantity;
 	private LocalDate expiryDate;
 	private LocalDate scheduledDate;
 
@@ -35,14 +36,16 @@ public class Order {
 		super();
 	}
 
-	public Order(User user, Currency baseCurrency, Currency targetCurrency, OrderType orderType, double quantity,
+	public Order(User user, Currency baseCurrency, Currency targetCurrency, OrderType orderType, double initialQuantity,
 			LocalDate expiryDate) {
 		super();
 		this.user = user;
 		this.baseCurrency = baseCurrency;
 		this.targetCurrency = targetCurrency;
 		this.orderType = orderType;
-		this.quantity = quantity;
+		this.orderStatus = OrderStatus.PENDING;
+		this.initialQuantity = initialQuantity;
+		this.quantity = initialQuantity;
 		this.expiryDate = expiryDate;
 	}
 
@@ -102,6 +105,14 @@ public class Order {
 		this.quantity = quantity;
 	}
 
+	public double getInitialQuantity() {
+		return initialQuantity;
+	}
+
+	public void setInitialQuantity(double initialQuantity) {
+		this.initialQuantity = initialQuantity;
+	}
+
 	public LocalDate getExpiryDate() {
 		return expiryDate;
 	}
@@ -116,6 +127,16 @@ public class Order {
 
 	public void setScheduledDate(LocalDate scheduledDate) {
 		this.scheduledDate = scheduledDate;
+	}
+	
+	public boolean isOppositeCurrency(Order otherOrder) {
+		return (this.baseCurrency.equals(otherOrder.targetCurrency) && this.targetCurrency.equals(otherOrder.baseCurrency));
+	}
+
+	@Override
+	public String toString() {
+		return "Order [orderId=" + orderId + ", baseCurrency=" + baseCurrency + ", targetCurrency=" + targetCurrency
+				+ ", quantity=" + quantity + "]";
 	}
 	
 	

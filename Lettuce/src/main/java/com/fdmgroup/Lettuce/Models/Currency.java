@@ -48,7 +48,7 @@ public class Currency {
 
 	@Override
 	public String toString() {
-		return "Currency [currencyId=" + currencyId + ", currencyName=" + currencyName + "]";
+		return currencyName;
 	}
 
 }
