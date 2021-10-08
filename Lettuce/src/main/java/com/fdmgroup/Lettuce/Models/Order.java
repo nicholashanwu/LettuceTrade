@@ -16,20 +16,66 @@ public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int orderId;
-	private OrderType orderType;
-	private double ppu;
-	private double quantity; // May need to change, ASK CALEB
-	private LocalDate expiryDate;
-	private LocalDate scheduledDate;
 	@ManyToOne
-	@MapsId("userId")
 	@JoinColumn(name = "FK_userId")
 	private User user;
+	@ManyToOne
+	@JoinColumn(name = "FK_baseCurrency")
+	private Currency baseCurrency;
+	@ManyToOne
+	@JoinColumn(name = "FK_targetCurrency")
+	private Currency targetCurrency;
+	private OrderType orderType;
+	private OrderStatus orderStatus;
+	private double quantity;
+	private LocalDate expiryDate;
+	private LocalDate scheduledDate;
 
-	@Override
-	public String toString() {
-		return "Order [orderId=" + orderId + ", orderType=" + orderType + ", ppu=" + ppu + ", quantity=" + quantity
-				+ ", expiryDate=" + expiryDate + ", scheduledDate=" + scheduledDate + ", user=" + user + "]";
+	public Order() {
+		super();
+	}
+
+	public Order(User user, Currency baseCurrency, Currency targetCurrency, OrderType orderType, double quantity,
+			LocalDate expiryDate) {
+		super();
+		this.user = user;
+		this.baseCurrency = baseCurrency;
+		this.targetCurrency = targetCurrency;
+		this.orderType = orderType;
+		this.quantity = quantity;
+		this.expiryDate = expiryDate;
+	}
+
+	public int getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Currency getBaseCurrency() {
+		return baseCurrency;
+	}
+
+	public void setBaseCurrency(Currency baseCurrency) {
+		this.baseCurrency = baseCurrency;
+	}
+
+	public Currency getTargetCurrency() {
+		return targetCurrency;
+	}
+
+	public void setTargetCurrency(Currency targetCurrency) {
+		this.targetCurrency = targetCurrency;
 	}
 
 	public OrderType getOrderType() {
@@ -40,12 +86,12 @@ public class Order {
 		this.orderType = orderType;
 	}
 
-	public double getPpu() {
-		return ppu;
+	public OrderStatus getOrderStatus() {
+		return orderStatus;
 	}
 
-	public void setPpu(double ppu) {
-		this.ppu = ppu;
+	public void setOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus = orderStatus;
 	}
 
 	public double getQuantity() {
@@ -71,30 +117,6 @@ public class Order {
 	public void setScheduledDate(LocalDate scheduledDate) {
 		this.scheduledDate = scheduledDate;
 	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public int getOrderId() {
-		return orderId;
-	}
-
-	public Order(OrderType orderType, double ppu, double quantity, LocalDate expiryDate, LocalDate scheduledDate, User user) {
-		super();
-		this.orderType = orderType;
-		this.ppu = ppu;
-		this.quantity = quantity;
-		this.expiryDate = expiryDate;
-		this.scheduledDate = scheduledDate;
-		this.user = user;
-	}
-
-	public Order() {
-		super();
-	}
+	
+	
 }
