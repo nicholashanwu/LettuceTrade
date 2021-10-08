@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xlmns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="ISO-8859-1">
+  <title>LettuceTrade/SignUp</title>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!--CSS References-->
+  <link th:href="@{/css/standard_styles.css}" rel="stylesheet" />
+  <link th:href="@{/css/index_styles.css}" rel="stylesheet" />
+  <!-- Javascript -->
+  <script type="text/javascript" th:src="@{/scripts/validations.js}"></script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column h-100">
+  <!-- Header -->
+  <main>
+    <header class="p-3 mb-3 border-bottom">
+      <div class="container">
+        <!-- Logo -->
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+          <a class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none" th:href="@{/}">
+            <img id="header_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
+            <span class="index-header-logo-title"> Lettuce <span class="index-header-logo-title-thin">Trade</span></span>
+          </a>
+          <!-- Sign Up and Log In buttons -->
+          <div class="navbar-nav ms-auto mb-2 mb-lg-0">
+            <div>
+              <a class="btn btn-primary" th:href="@{/register}">Sign Up</a>
+              <a class="btn btn-outline-light me-2" th:href="@{/login}">Log In</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  </main>
+
+  <!-- Main Body -->
+  <main class="flex-shrink-0">
+   <section class="three">
+    <div class="form-container">
+      <div class="container">
+      <div class="register-info-container">
+        <h1 class="form-title">Sign Up <span>Successful</span></h1>
+        <h4 class="green-text-v1">Thank you for signing up!</h4>
+        <p class="register-info">Please click on the link in the email sent to your inbox to verify your account.</p>
+        <a th:href="@{/}">&#8592; Back to Home</a>
+      </div>
+      </div>
+    </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+      <img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
+      <span class="text-muted">&copy; 2021 Lettuce</span>
+    </div>
+  </footer>
+</body>
+
+</html>

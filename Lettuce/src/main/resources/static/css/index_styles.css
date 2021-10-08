@@ -1,5 +1,9 @@
 @charset "ISO-8859-1";
 
+#index-footer {
+	height: 10vh;
+}
+
 .index-container {
   padding-top: 20vh;
   padding-bottom: 20vh;
@@ -89,6 +93,15 @@ section {
   height: 90vh;
 }
 
+.three {
+  background-image: url('/images/lettuce_splash_art_3.png');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-color: white;
+}
+
 #currency {
 	width: 180px;
 }
@@ -112,4 +125,13 @@ section {
 	padding-left: 3px;
 	font-size: 13px;
 	color: red;
+}
+
+.register-info-container {
+	width: 30%;
+}
+
+.register-info {
+	padding-top: 1vh;
+	color: grey;
 }

@@ -133,7 +133,7 @@ public class UserController {
 //		        actLogger.info(" log in successfully as a user");
 //		        dbLogger.info(" log in successfully as a user");
 //		        adminLogger.info(" log in successfully as a user");
-				return "userDashboard";
+				return "redirect:/dashboard";
 			}
 		} else {
 			return "login";
