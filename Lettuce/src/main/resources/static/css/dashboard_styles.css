@@ -1,19 +1,8 @@
 @charset "ISO-8859-1";
 
 .dashboard-container {
-	padding-top: 20vh;
+	padding-top: 10vh;
 	padding-bottom: 20vh;
-	width: 45%;
-}
-
-.dashboard-header-1 {
-	font-weight: 500;
-	font-size: 50px;
-}
-
-.dashboard-header-2 {
-	font-weight: 500;
-	font-size: 30px;
 }
 
 .dashboard-header-logo-title {
@@ -27,15 +16,32 @@
 }
 
 .btn-primary {
-	background-color: var(- -green-main) !important;
-	border-color: var(- -green-main) !important;
+	background-color: var(--green-main) !important;
+	border-color: var(--green-main) !important;
 	outline: none !important;
 	box-shadow: none !important;
 }
 
 .btn-primary:hover {
-	background-color: var(- -green-highlight) !important;
-	border-color: var(- -green-highlight) !important;
+	background-color: var(--green-highlight) !important;
+	border-color: var(--green-highlight) !important;
 	outline: none !important;
 	box-shadow: none !important;
+}
+
+.nav-bar-links {
+	padding-left: 10vh;
+}
+
+.nav-link {
+	color: black;
+	padding-right: 3vw;
+}
+
+.nav-link:hover {
+	color: var(--green-highlight);
+}
+
+.dashboard-section {
+	padding-top: 10vh;
 }

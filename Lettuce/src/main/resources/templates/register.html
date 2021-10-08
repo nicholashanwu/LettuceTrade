@@ -33,7 +33,7 @@
           <!-- Sign Up and Log In buttons -->
           <div class="navbar-nav ms-auto mb-2 mb-lg-0">
             <div>
-              <a class="btn btn-primary" th:href="@{/sign-up}">Sign Up</a>
+              <a class="btn btn-primary" th:href="@{/register}">Sign Up</a>
               <a class="btn btn-outline-light me-2" th:href="@{/login}">Log In</a>
             </div>
           </div>
@@ -47,7 +47,7 @@
     <div class="form-container">
       <div class="container">
         <h1 class="form-title">Sign Up</h1>
-        <form class="form" th:onsubmit="return validate_signUp()" th:action = "@{/registerHandler}" th:object = "${user}" method = "post" id="sign-up-form"  novalidate>
+        <form class="form" th:onsubmit="return validate_signUp()" id="sign-up-form" th:action = "@{/registerHandler}" th:object = "${user}" method="post" novalidate>
           <input class="form-control" type="text" id="user-firstName" th:name="firstName" placeholder="First Name" title="Please enter your first name." required></input>
           <div class="validation-message" id="user-firstName-message"></div>
           <input class="form-control" type="text" id="user-lastName" th:name="lastName" placeholder="Last Name" title="Please enter your last name." required></input>
@@ -59,7 +59,7 @@
           <input class="form-control" type="password" id="user-confirm-password" th:name="user-confirm-password" placeholder="Confirm Password" title="Please confirm your password." required></input>
           <div class="validation-message" id="user-confirm-password-message"></div>
           <br />
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Sign Up</button>
         </form>
       </div>
     </div>

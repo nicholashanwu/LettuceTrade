@@ -69,6 +69,7 @@ section {
 
 .one {
   /* Location of the image */
+  /*https://unsplash.com/photos/Tb10XvEeyl0*/
   background-image: url('/images/lettuce_splash_art_2.png');
   /* Image is centered vertically and horizontally at all times */
   background-position: center center;
@@ -94,7 +95,7 @@ section {
 
 .form-container {
 	padding-top: 10vh;
-	padding-bottom: 10vh;
+	padding-bottom: 15vh;
 }
 
 .form-title {
@@ -107,7 +108,7 @@ section {
 
 .validation-message {
 	padding-top: 5px;
-	padding-bottom: 10px;
+	padding-bottom: 15px;
 	padding-left: 3px;
 	font-size: 13px;
 	color: red;

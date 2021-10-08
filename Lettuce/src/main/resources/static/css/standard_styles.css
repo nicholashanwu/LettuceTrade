@@ -31,6 +31,15 @@ footer {
   padding-bottom: 1vh;
 }
 
+a {
+	text-decoration: none;
+	color: var(--green-main);
+}
+
+a:hover {
+	color: var(--green-highlight);
+}
+
 .green-text-v1 {
   color: var(--green-main);
 }
