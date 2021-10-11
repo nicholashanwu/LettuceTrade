@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="template :: setup"></th:block>
+</head>
+<body>
+	<th:block th:replace="template :: header"></th:block>
+
+	<main class="flex-shrink-0">
+		<div class="container">
+			<div class="dashboard-container">
+				<h1>Order History</h1>
+				<table class="table">
+					<tr>
+						<th colspan="2">Selling</th>
+						<th>Remaining</th>
+						<th colspan="2">Buying</th>
+						<th>Current Value</th>
+						<th>Expires</th>
+						<th>Status</th>
+					</tr>
+					<th:block th:each="order : ${orders}">
+						<tr>
+							<td>Image</td>
+							<td th:text="${order.baseCurrency}"></td>
+							<td th:text="|${order.quantity}/${order.initialQuantity}|"></td>
+							<td>Image</td>
+							<td th:text="${order.targetCurrency}"></td>
+							<td>?</td>
+							<td th:text="${order.expiryDate}"></td>
+							<td th:text="${order.orderStatus}"></td>
+						</tr>
+					</th:block>
+				</table>
+			</div>
+		</div>
+	</main>
+
+	<th:block th:replace="template :: footer"></th:block>
+
+</body>
+</html>

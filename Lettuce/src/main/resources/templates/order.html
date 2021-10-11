@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="template :: setup"></th:block>
+</head>
+<body>
+	<th:block th:replace="template :: header"></th:block>
+
+	<main class="flex-shrink-0">
+		<div class="container">
+			<div class="dashboard-container">
+				<h1>Place an Order</h1>
+				<form th:action="@{/orderHandler}" th:object="${newOrder}" method="post">
+					Sell <input list="sell-choices" placeholder="AUD" name="baseCurrency" th:field="*{baseCurrency}">
+					for <input list="buy-choices" placeholder="USD" name="targetCurrency" th:field="*{targetCurrency}">
+					<datalist id="sell-choices">
+						<option th:each="heldCurrency : ${session.user.portfolio.heldCurrencies}" th:value="${heldCurrency.currency}">
+					</datalist>
+					<datalist id="buy-choices">
+						<option th:each="currency : ${currencies}" th:value="${currency}">
+					</datalist>
+					<br>
+					<label>Quantity to sell</label><input type="number" step=".01" th:field="*{initialQuantity}">
+					<br>
+					<label>Expiry date</label><input type="date" id="date" th:field="*{expiryDate}">
+					<br>
+					SELLING
+					<br>
+					...
+					<br>
+					EXPECTED RETURN
+					<br>
+					...
+					<br>
+					<input type="submit" value="Place order">
+				</form>
+			</div>
+		</div>
+	</main>
+	
+	<th:block th:replace="template :: footer"></th:block>
+
+</body>
+</html>
