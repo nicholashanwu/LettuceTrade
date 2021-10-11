@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.OrderStatus;
@@ -13,6 +14,7 @@ import com.fdmgroup.Lettuce.Repo.OrderRepo;
 import com.fdmgroup.Lettuce.Repo.TransactionRepo;
 import com.fdmgroup.Lettuce.rates.ExchangeRate;
 
+@Service
 public class OrderServiceImpl implements iOrder {
 	@Autowired
 	OrderRepo orderRepo;
