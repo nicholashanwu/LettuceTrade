@@ -167,8 +167,12 @@ public class PortfolioController {
 		User user = (User) request.getSession().getAttribute("user");
 		int pid = user.getPortfolio().getPortfolioId();
 		Currency aud = cr.getById("AUD");
-		psi.decreaseCurrency(aud, amount, pid);
-		return "redirect:/profile";
+		try {
+			psi.decreaseCurrency(aud, amount, pid);
+			return "redirect:/profile";
+		} catch(InsufficientFundsException e) {
+			return "addfund";
+		}
 	}
 	
 	@RequestMapping("/order")

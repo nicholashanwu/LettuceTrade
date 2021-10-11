@@ -129,6 +129,7 @@ public class UserController {
 	 * getSiteURL(request)); return "register-message"; } catch (Exception e) {
 	 * e.printStackTrace(); return "register"; } }
 	 */
+	
 	@RequestMapping("/verify")
 	public String verifyUser(@Param("code") String code) {
 		System.out.println(code);
