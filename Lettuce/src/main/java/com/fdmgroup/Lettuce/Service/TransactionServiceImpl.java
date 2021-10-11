@@ -3,11 +3,13 @@ package com.fdmgroup.Lettuce.Service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.Transaction;
 import com.fdmgroup.Lettuce.Repo.TransactionRepo;
 
+@Service
 public class TransactionServiceImpl implements iTransaction {
 	
 	@Autowired
