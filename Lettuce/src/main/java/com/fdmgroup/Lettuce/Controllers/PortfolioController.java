@@ -159,26 +159,16 @@ public class PortfolioController {
 		int pid = user.getPortfolio().getPortfolioId();
 		Currency aud = cr.getById("AUD");
 		psi.increaseCurrency(aud, amount, pid);
-		/*
-		 * Optional<User> u = ur.findById(362); Portfolio p = pr.getById(409); Currency
-		 * aud = csi.getCurrencyById(406); //CHANGE TO ID OF AUD CURRENCY.
-		 * psi.increaseCurrency(aud, amount, p.getPortfolioId());
-		 */
-		System.out.println(amount + " top-up was called");
-		return "addfund";
+		return "redirect:/profile";
 	}
 
 	@RequestMapping(value = "/fundHandler", params = "withdraw", method = RequestMethod.POST)
-	public String withdrawFundHandler(@RequestParam double amount, HttpServletRequest request) {
+	public String withdrawFundHandler(@RequestParam double amount, HttpServletRequest request) throws InsufficientFundsException {
 		User user = (User) request.getSession().getAttribute("user");
+		int pid = user.getPortfolio().getPortfolioId();
 		Currency aud = cr.getById("AUD");
-		HeldCurrency audHeld = hcr.getByPortfolioAndCurrency(user.getPortfolio(), aud);
-		if (audHeld.getQuantity() > amount) {
-			audHeld.setQuantity(audHeld.getQuantity() - amount);
-		} else {
-			System.out.println("You do not have sufficient funds to withdraw");
-		}
-		return "addfund";
+		psi.decreaseCurrency(aud, amount, pid);
+		return "redirect:/profile";
 	}
 	
 	@RequestMapping("/order")
