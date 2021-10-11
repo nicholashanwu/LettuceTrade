@@ -20,7 +20,7 @@ public class HeldCurrency {
 	private Portfolio portfolio;
 	
 	@ManyToOne
-	@MapsId("currencyId")
+	@MapsId("currencyCode")
 	@JoinColumn(name = "FK_currency")
 	private Currency currency;
 	

@@ -10,7 +10,7 @@ import com.fdmgroup.Lettuce.Repo.CurrencyRepo;
 
 
 @Service
-public class CurrencyServiceImpl implements ICurrency {
+public class CurrencyServiceImpl implements iCurrency {
 
 	@Autowired
 	CurrencyRepo currencyRepo;
@@ -21,7 +21,7 @@ public class CurrencyServiceImpl implements ICurrency {
 	}
 
 	@Override
-	public Currency getCurrencyById(int id) {
+	public Currency getCurrencyById(String id) {
 		return currencyRepo.getById(id);
 	}
 
@@ -31,13 +31,13 @@ public class CurrencyServiceImpl implements ICurrency {
 	}
 
 	@Override
-	public void updateCurrency(Currency currency, int id) {
-		currency.setCurrencyId(id);
+	public void updateCurrency(Currency currency, String name) {
+		currency.setFullName(name);
 		currencyRepo.save(currency);
 	}
 
 	@Override
-	public void deleteCurrency(int id) {
+	public void deleteCurrency(String id) {
 		currencyRepo.deleteById(id);
 	}
 

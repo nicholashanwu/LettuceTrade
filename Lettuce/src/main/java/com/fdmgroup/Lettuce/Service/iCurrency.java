@@ -4,16 +4,16 @@ import java.util.List;
 
 import com.fdmgroup.Lettuce.Models.Currency;
 
-public interface ICurrency {
+public interface iCurrency {
 
 	List<Currency> getAllCurrency();
 
-	Currency getCurrencyById(int id);
+	Currency getCurrencyById(String id);
 
 	void addCurrency(Currency currency);
 
-	void updateCurrency(Currency currency, int id);
+	void updateCurrency(Currency currency, String name);
 
-	void deleteCurrency(int id);
+	void deleteCurrency(String id);
 
 }

@@ -30,7 +30,7 @@ public class CurrencyDBTesting {
 	@Test
 	public void should_store_a_currency() {
 		Currency currency = cr.save(new Currency("USD"));
-		assertThat(currency).hasFieldOrPropertyWithValue("currency_name", "USD");
+		assertThat(currency).hasFieldOrPropertyWithValue("currencyCode", "USD");
 	}
 	
 	@Test
@@ -57,7 +57,7 @@ public class CurrencyDBTesting {
 		em.persist(currency2);
 	
 		
-		Currency findCurrency = cr.findById(currency2.getCurrencyId()).get();
+		Currency findCurrency = cr.getById(currency2.getCurrencyCode());
 		assertThat(findCurrency).isEqualTo(currency2);
 	}
 	
@@ -71,14 +71,14 @@ public class CurrencyDBTesting {
 	
 		Currency updateCurrency = new Currency("USD1");
 		
-		Currency currency = cr.findById(currency2.getCurrencyId()).get();
-		currency.setCurrencyName(updateCurrency.getCurrencyName());
+		Currency currency = cr.findById(currency2.getCurrencyCode()).get();
+		currency.setFullName(updateCurrency.getFullName());
 		cr.save(currency);
 		
 		
-		Currency checkCurrency = cr.findById(currency2.getCurrencyId()).get();
-		assertThat(checkCurrency.getCurrencyId()).isEqualTo(currency2.getCurrencyId());
-		assertThat(checkCurrency.getCurrencyName()).isEqualTo(updateCurrency.getCurrencyName());
+		Currency checkCurrency = cr.findById(currency2.getCurrencyCode()).get();
+		assertThat(checkCurrency.getCurrencyCode()).isEqualTo(currency2.getCurrencyCode());
+		assertThat(checkCurrency.getFullName()).isEqualTo(updateCurrency.getFullName());
 		
 	}
 
@@ -90,7 +90,7 @@ public class CurrencyDBTesting {
 		em.persist(currency1);
 		em.persist(currency2);
 		
-		cr.deleteById(currency2.getCurrencyId());
+		cr.deleteById(currency2.getCurrencyCode());
 		
 		Iterable<Currency> currencies = cr.findAll();
 		assertThat(currencies).hasSize(1).contains(currency1);

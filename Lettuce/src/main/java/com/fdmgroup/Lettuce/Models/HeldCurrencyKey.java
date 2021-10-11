@@ -13,12 +13,12 @@ public class HeldCurrencyKey implements Serializable {
 	private int portfolioId;
 	
 	@Column(name = "FK_currency")
-	private int currencyId;
+	private String currencyCode;
 	
-	public HeldCurrencyKey(int portfolioId, int currencyId) {
+	public HeldCurrencyKey(int portfolioId, String currencyCode) {
 		super();
 		this.portfolioId = portfolioId;
-		this.currencyId = currencyId;
+		this.currencyCode = currencyCode;
 	}
 
 	public HeldCurrencyKey() {
@@ -33,17 +33,17 @@ public class HeldCurrencyKey implements Serializable {
 		this.portfolioId = portfolioId;
 	}
 
-	public int getCurrencyId() {
-		return currencyId;
+	public String getCurrencyId() {
+		return currencyCode;
 	}
 
-	public void setCurrencyId(int currencyId) {
-		this.currencyId = currencyId;
+	public void setCurrencyId(String currencyCode) {
+		this.currencyCode = currencyCode;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(currencyId, portfolioId);
+		return Objects.hash(currencyCode, portfolioId);
 	}
 
 	@Override
@@ -55,12 +55,12 @@ public class HeldCurrencyKey implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		HeldCurrencyKey other = (HeldCurrencyKey) obj;
-		return currencyId == other.currencyId && portfolioId == other.portfolioId;
+		return currencyCode.equals(other.currencyCode) && portfolioId == other.portfolioId;
 	}
 
 	@Override
 	public String toString() {
-		return "HeldCurrencyKey [userId=" + portfolioId + ", currencyId=" + currencyId + "]";
+		return "HeldCurrencyKey [userId=" + portfolioId + ", currencyCode=" + currencyCode + "]";
 	}
 	
 	
