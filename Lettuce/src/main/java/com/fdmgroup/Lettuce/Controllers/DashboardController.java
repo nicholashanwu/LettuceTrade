@@ -52,6 +52,21 @@ public class DashboardController {
 		model.addAttribute("portfolios",portfolios);
 		return "portfolio";
 	}
+
+	
+	@RequestMapping("/profile")
+	public String toProfilePage(Model model) {
+		User user = (User) model.getAttribute("user");
+		Portfolio portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
+		model.addAttribute("portfolio",portfolio);
+		
+		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
+		
+		// show first 4 heldcurrency
+		model.addAttribute("heldCurrencys", heldcurrency); // each has attribute currency, quantity
+		
+		return "profile";
+	}
 	
 	@RequestMapping("/dashboard")
 	public String toDashboardPage(Model model){
