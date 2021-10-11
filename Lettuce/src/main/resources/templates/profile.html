@@ -67,7 +67,7 @@
             
             <tr th:each="heldCurrency:${heldCurrencys}">
 				<td>Image</td>
-				<td><span th:text="${heldCurrency.currency.currencyName}"/></td>
+				<td><span th:text="${heldCurrency.currency.currencyCode}"/></td>
 				<td><span th:text="${heldCurrency.quantity}"/></td>
 				
 			</tr>

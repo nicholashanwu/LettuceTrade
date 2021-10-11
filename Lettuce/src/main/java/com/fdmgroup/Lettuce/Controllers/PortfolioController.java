@@ -26,6 +26,7 @@ import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.OrderStatus;
 import com.fdmgroup.Lettuce.Models.Portfolio;
 import com.fdmgroup.Lettuce.Models.User;
+import com.fdmgroup.Lettuce.Repo.CurrencyRepo;
 import com.fdmgroup.Lettuce.Repo.HeldCurrencyRepo;
 import com.fdmgroup.Lettuce.Repo.PortfolioRepo;
 import com.fdmgroup.Lettuce.Service.CurrencyServiceImpl;
@@ -52,6 +53,8 @@ public class PortfolioController {
 	private PortfolioRepo pr;
 	@Autowired
 	private HeldCurrencyRepo hcr;
+	@Autowired
+	private CurrencyRepo cr;
 	
 	public static final Logger actLogger=LogManager.getLogger("ActLogging");
 	public static final Logger dbLogger=LogManager.getLogger("DBLogging");
@@ -151,7 +154,11 @@ public class PortfolioController {
 	}
 
 	@RequestMapping(value = "/fundHandler",params = "top-up",method=RequestMethod.POST)
-	public String addFundHandler(@RequestParam double amount) {
+	public String addFundHandler(@RequestParam double amount, HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		int pid = user.getPortfolio().getPortfolioId();
+		Currency aud = cr.getById("AUD");
+		psi.increaseCurrency(aud, amount, pid);
 		/*
 		 * Optional<User> u = ur.findById(362); Portfolio p = pr.getById(409); Currency
 		 * aud = csi.getCurrencyById(406); //CHANGE TO ID OF AUD CURRENCY.
@@ -162,8 +169,15 @@ public class PortfolioController {
 	}
 
 	@RequestMapping(value = "/fundHandler", params = "withdraw", method = RequestMethod.POST)
-	public String withdrawFundHandler(@RequestParam double amount) {
-		System.out.println(amount + " withdraw was called");
+	public String withdrawFundHandler(@RequestParam double amount, HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
+		Currency aud = cr.getById("AUD");
+		HeldCurrency audHeld = hcr.getByPortfolioAndCurrency(user.getPortfolio(), aud);
+		if (audHeld.getQuantity() > amount) {
+			audHeld.setQuantity(audHeld.getQuantity() - amount);
+		} else {
+			System.out.println("You do not have sufficient funds to withdraw");
+		}
 		return "addfund";
 	}
 	

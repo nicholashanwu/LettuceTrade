@@ -53,7 +53,7 @@
         
         
         <form class="form" id="fund-form" th:action = "@{/fundHandler}" th:object = "${amount}" method="post" novalidate>
-        <input list="text" id="amount" name="amount" placeholder="Quantity" /><label><b>AUD</b></label><br>
+        <input list="text" id="amount" name="amount" placeholder="Quantity" /><label style="margin:15px;"><b>AUD</b></label><br>
           <button type="submit" id = "top-up" class="btn btn-primary" name = "top-up" value = "top-up">Top Up</button>
           <button style="margin:15px;" type="submit" id = "withdraw" class="btn btn-primary" name = "withdraw" value = "withdraw">Withdraw</button>  
         </form>
