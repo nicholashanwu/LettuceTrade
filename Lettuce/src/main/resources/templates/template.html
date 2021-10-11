@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:fragment="setup">
+	  <meta charset="ISO-8859-1">
+	  <title>LettuceTrade</title>
+	  <!-- Bootstrap -->
+	  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+	  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <!--CSS References-->
+	  <link th:href="@{/css/standard_styles.css}" rel="stylesheet" />
+	  <link th:href="@{/css/index_styles.css}" rel="stylesheet" />
+	  <link th:href="@{/css/dashboard_styles.css}" rel="stylesheet" />
+	  <!-- Fonts -->
+	  <link rel="preconnect" href="https://fonts.googleapis.com">
+	  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+	</th:block>
+</head>
+<body>
+	<th:block th:fragment="header">
+		<header class="p-3 mb-3 border-bottom">
+	      <div class="container">
+	        <!-- Logo -->
+	        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+	          <a class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none" th:href="@{/}">
+	            <img id="header_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
+	            <span class="dashboard-header-logo-title"> Lettuce <span class="dashboard-header-logo-title-thin">Trade</span></span>
+	          </a>
+	          <!-- Nav Bar Options -->
+	          <div class="nav-bar-links">
+	            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+	              <li><a class="nav-link" th:href="@{/dashboard}">Dashboard</a></li>
+	              <li><a class="nav-link" th:href="@{/rates}">Rates</a></li>
+	              <li><a class="nav-link" th:href="@{/profile}">Profile</a></li>
+	              <li><a class="nav-link" th:href="@{/order}">Order</a></li>
+	              
+	            </ul>
+	          </div>
+	          <!-- Log Out button-->
+	          <div class="navbar-nav ms-auto mb-2 mb-lg-0">
+	            <a class="btn btn-primary" th:href="@{/logout}">Log Out</a>
+	          </div>
+	        </div>
+	      </div>
+	    </header>
+	</th:block>
+	
+	<th:block th:fragment="footer">
+	  <footer class="footer mt-auto py-3 bg-light">
+    	<div class="container">
+      	<img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
+     	<span class="text-muted">&copy; 2021 Lettuce</span>
+    	</div>
+  	  </footer>
+	</th:block>
+
+</body>
+</html>
