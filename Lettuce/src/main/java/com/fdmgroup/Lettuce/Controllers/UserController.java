@@ -1,11 +1,15 @@
 package com.fdmgroup.Lettuce.Controllers;
 
 
+import java.io.UnsupportedEncodingException;
+
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -115,6 +119,31 @@ public class UserController {
 	    	return "register";
 		}
 	}
+	
+	@RequestMapping("/registerHandler")
+	public String registerHandler(User user, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException, DuplicatedEmailException {
+		try {
+			usi.registerUser(user, getSiteURL(request));
+			return "registerSuccess";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "register";
+		}
+	}
+	@RequestMapping("/verify")
+	public String verifyUser(@Param("code") String code) {
+		System.out.println(code);
+		if (usi.verify(code)) {
+			return "login";
+		} else {
+			return "register";
+		}
+	}
+	private String getSiteURL(HttpServletRequest request) {
+		String siteURL = request.getRequestURL().toString();
+		return siteURL.replace(request.getServletPath(), "");
+	}
+
 	
 	//change the Password before login
 	@RequestMapping("/changePassword")

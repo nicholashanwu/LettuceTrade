@@ -24,8 +24,11 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String password;
-	private double bankAccountBalance;
 	private String admin;
+    @Column(name = "verification_code", updatable = false)
+    private String verificationCode;
+   
+    private String enabled;
 
 	@OneToOne(mappedBy = "user")
 	private Portfolio portfolio;
@@ -37,16 +40,36 @@ public class User {
 		super();
 	}
 
-	public User(String email, String firstName, String lastName, String password, double bankAccountBalance,
-			String admin) {
+	
+
+	public User( String email, String firstName, String lastName, String password, String admin) {
 		super();
+
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.password = password;
-		this.bankAccountBalance = bankAccountBalance;
-		this.admin = admin; 
+		this.admin = admin;
+		//this.portfolio = portfolio;
+		//this.orders = orders;
 	}
+
+
+
+	public User(int userId, String email, String firstName, String lastName, String password, String admin,
+			String verificationCode, String enabled) {
+		super();
+		this.userId = userId;
+		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
+		this.admin = admin;
+		this.verificationCode = verificationCode;
+		this.enabled = enabled;
+	}
+
+
 
 	public int getUserId() {
 		return userId;
@@ -88,13 +111,6 @@ public class User {
 		this.password = password;
 	}
 
-	public double getBankAccountBalance() {
-		return bankAccountBalance;
-	}
-
-	public void setBankAccountBalance(double bankAccountBalance) {
-		this.bankAccountBalance = bankAccountBalance;
-	}
 
 	public String isAdmin() {
 		return admin;
@@ -119,6 +135,30 @@ public class User {
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
 	}
+
+	public String getVerificationCode() {
+		return verificationCode;
+	}
+
+
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+
+
+
+	public String getEnabled() {
+		return enabled;
+	}
+
+
+
+	public void setEnabled(String enabled) {
+		this.enabled = enabled;
+	}
+
+
 
 	@Override
 	public String toString() {

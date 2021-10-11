@@ -1,6 +1,9 @@
 package com.fdmgroup.Lettuce.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+
+import javax.mail.MessagingException;
 
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -12,7 +15,7 @@ import com.fdmgroup.Lettuce.Models.Portfolio;
 import com.fdmgroup.Lettuce.Models.User;
 /**
  * 
- * @author Bo
+ * @author Bo Hunter
  *
  */
 public interface iUser {
@@ -33,6 +36,8 @@ public interface iUser {
 	 * @param user
 	 * @throws DuplicatedEmailException if the email has been used.
 	 */
+	
+	
 	void addUser(User user) throws DuplicatedEmailException;
 	
 	/**
@@ -66,6 +71,15 @@ public interface iUser {
 	//functions
 	void placeOrder(int userId, Order order);
 	
-	void takeMoneyFromBank(int userId, double moneyOut);
-	void sendMoneyToBank(int userId, double moneyIn);
+	/**
+	 * 
+	 * @param user
+	 * @param siteURL
+	 * @throws UnsupportedEncodingException
+	 * @throws MessagingException
+	 * @throws DuplicatedEmailException 
+	 */
+	void registerUser(User user, String siteURL) throws UnsupportedEncodingException, MessagingException, DuplicatedEmailException;
+	//void takeMoneyFromBank(int userId, double moneyOut);
+	//void sendMoneyToBank(int userId, double moneyIn);
 }

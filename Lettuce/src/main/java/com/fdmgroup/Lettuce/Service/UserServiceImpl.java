@@ -1,15 +1,24 @@
 package com.fdmgroup.Lettuce.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.List;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-
+import org.springframework.mail.MailSender;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import com.fdmgroup.Lettuce.Repo.UserRepo;
+
+import net.bytebuddy.utility.RandomString;
+
 import com.fdmgroup.Lettuce.Exceptions.DuplicatedEmailException;
 import com.fdmgroup.Lettuce.Exceptions.FailToLoginException;
 import com.fdmgroup.Lettuce.Exceptions.InvalidEmailException;
@@ -17,12 +26,14 @@ import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.Portfolio;
 import com.fdmgroup.Lettuce.Models.User;
 
+
 @Service
 public class UserServiceImpl implements iUser {
 
 	@Autowired
 	UserRepo userRepo;
-	
+	@Autowired
+	JavaMailSender mailSender;
 	@Override
 	public User getUserById(int userId) {
 		User user = userRepo.getById(userId);
@@ -60,6 +71,71 @@ public class UserServiceImpl implements iUser {
 		};
 		
 	}
+	//For sending email verification when register.
+	@Override
+	public void registerUser(User user, String siteURL) throws UnsupportedEncodingException, DuplicatedEmailException, MessagingException{
+		String email = user.getEmail();
+		if(!isEmailDuplicated(user.getEmail()) && isEmailValid(email)) {
+			String originPassword = user.getPassword();
+			String encryptedPassword = encryptPassword(originPassword);
+			user.setPassword(encryptedPassword);
+		     
+		    String randomCode = RandomString.make(16);
+		    user.setVerificationCode(randomCode);
+		    user.setEnabled("false");
+		    user.setEmail(email.toLowerCase());
+		    userRepo.save(user);
+		     
+		    sendVerificationEmail(user, siteURL);
+		}
+
+	}
+
+	private void sendVerificationEmail(User user, String siteURL)
+	        throws MessagingException, UnsupportedEncodingException {
+	    String toAddress = user.getEmail();
+	    String fromAddress = "Company Email";
+	    String senderName = "Lettuce Group";
+	    String subject = "Please verify your registration";
+	    String content = "Dear [[name]],<br>"
+	            + "Please click the link below to verify your registration:<br>"
+	            + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+	            + "Thank you,<br>"
+	            + "The Lettuce Team.";
+	     
+	   //MimeMessage message = mailSender.createMimeMessage();
+	    MimeMessage message = mailSender.createMimeMessage();
+	    MimeMessageHelper helper = new MimeMessageHelper(message);
+	     
+	    helper.setFrom(fromAddress, senderName);
+	    helper.setTo(toAddress);
+	    helper.setSubject(subject);
+	     
+	    content = content.replace("[[name]]", user.getFirstName());
+	    String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
+	     
+	    content = content.replace("[[URL]]", verifyURL);
+	     
+	    helper.setText(content, true);
+	     
+	    mailSender.send(message);
+	     
+	}
+	public boolean verify(String verificationCode) {
+	    User user = userRepo.findByVerificationCode(verificationCode);
+	    System.out.println(user);
+	    if (user == null || user.getEnabled().equals("true")) {
+	        return false;
+	    } else {
+	        user.setVerificationCode(null);
+	        user.setEnabled("true");
+	        userRepo.save(user);
+	         
+	        return true;
+	    }
+	     
+	}
+
 
 	private boolean isEmailValid(String email) {
 		// TODO Validate the email
@@ -138,20 +214,22 @@ public class UserServiceImpl implements iUser {
 		userRepo.save(user);
 	}
 
-	@Override
-	public void takeMoneyFromBank(int userId, double moneyOut) {
-		User user = userRepo.getById(userId);
-		double moneyInBank = user.getBankAccountBalance();
-		user.setBankAccountBalance(moneyInBank-moneyOut);
-		userRepo.save(user);	
-	}
 
-	@Override
-	public void sendMoneyToBank(int userId, double moneyIn) {
-		User user = userRepo.getById(userId);
-		double moneyInBank = user.getBankAccountBalance();
-		user.setBankAccountBalance(moneyInBank+moneyIn);
-		userRepo.save(user); 
-	}
-	
+
+//	@Override
+//	public void takeMoneyFromBank(int userId, double moneyOut) {
+//		User user = userRepo.getById(userId);
+//		double moneyInBank = user.getBankAccountBalance();
+//		user.setBankAccountBalance(moneyInBank-moneyOut);
+//		userRepo.save(user);	
+//	}
+//
+//	@Override
+//	public void sendMoneyToBank(int userId, double moneyIn) {
+//		User user = userRepo.getById(userId);
+//		double moneyInBank = user.getBankAccountBalance();
+//		user.setBankAccountBalance(moneyInBank+moneyIn);
+//		userRepo.save(user); 
+//	}
+//	
 }

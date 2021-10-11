@@ -33,26 +33,26 @@ public class UserDBTesting {
 	
 	@Test
 	public void should_store_a_User() {
-		User user1 = new User("email1","firstName1", "lastName1","password1", 100.0,"True");
+		User user1 = new User("email1","firstName1", "lastName1","password1","True");
 		userRepo.save(user1);
 		assertThat(user1).hasFieldOrPropertyWithValue("email", "email1");
 		assertThat(user1).hasFieldOrPropertyWithValue("firstName", "firstName1");
 		assertThat(user1).hasFieldOrPropertyWithValue("lastName", "lastName1");
 		assertThat(user1).hasFieldOrPropertyWithValue("password", "password1");
-		assertThat(user1).hasFieldOrPropertyWithValue("bankAccountBalance", 100.0);
+		
 		assertThat(user1).hasFieldOrPropertyWithValue("admin", "True");
 
 	}
 	
 	@Test
 	public void should_find_all_User() {
-		User user1 = new User( "email1","firstName1", "lastName1","password1", 100.0,"True");
+		User user1 = new User( "email1","firstName1", "lastName1","password1","True");
 		userRepo.save(user1);
 
-		User user2 = new User( "email2","firstName2", "lastName2","password2", 100.0,"false");
+		User user2 = new User( "email2","firstName2", "lastName2","password2", "false");
 		userRepo.save(user2);
 
-		User user3 = new User( "email3","firstName3", "lastName3","password3", 1500.0,"true");
+		User user3 = new User( "email3","firstName3", "lastName3","password3","true");
 		userRepo.save(user3);
 
 		Iterable<User> userList = userRepo.findAll();
@@ -62,9 +62,9 @@ public class UserDBTesting {
 	@Test
 	public void should_find_user_by_userId() {
 		
-		User user1 = new User( "email1","firstName1", "lastName1","password1", 100.0,"true");
+		User user1 = new User( "email1","firstName1", "lastName1","password1", "true");
 		userRepo.save(user1);
-		User user2 = new User( "email2","firstName2", "lastName2","password2", 100.0,"false");
+		User user2 = new User( "email2","firstName2", "lastName2","password2", "false");
 		userRepo.save(user2);
 		
 		User findUser = userRepo.findById(user1.getUserId()).get();
@@ -74,9 +74,9 @@ public class UserDBTesting {
 	
 	@Test
 	public void find_user_by_email() {
-		User user1 = new User( "email1","firstName1", "lastName1","password1", 100.0,"true");
+		User user1 = new User( "email1","firstName1", "lastName1","password1","true");
 		userRepo.save(user1);
-		User user2 = new User( "email2","firstName2", "lastName2","password2", 100.0,"false");
+		User user2 = new User( "email2","firstName2", "lastName2","password2", "false");
 		userRepo.save(user2);
 		User findUser = userRepo.getByEmail("email1").get();
 		assertThat(findUser).isEqualTo(user1);
@@ -84,18 +84,18 @@ public class UserDBTesting {
 	
 	@Test
 	public void find_user_by_emailandPassword() {
-		User user1 = new User( "email1","firstName1", "lastName1","password1", 100.0,"true");
+		User user1 = new User( "email1","firstName1", "lastName1","password1", "true");
 		userRepo.save(user1);
-		User user2 = new User( "email2","firstName2", "lastName2","password2", 100.0,"false");
+		User user2 = new User( "email2","firstName2", "lastName2","password2","false");
 		userRepo.save(user2);
 		User findUser = userRepo.getUserByEmailAndPassword("email1","password1").get();
 		assertThat(findUser).isEqualTo(user1);
 	}
 	@Test
 	public void should_update_user_by_id() {
-		User user1 = new User( "email1","firstName1", "lastName1","password1", 100.0,"true");
+		User user1 = new User( "email1","firstName1", "lastName1","password1","true");
 		userRepo.save(user1);
-		User updateUser = new User( "email2","firstName2", "lastName2","password2", 100.0,"false");
+		User updateUser = new User( "email2","firstName2", "lastName2","password2","false");
 		
 		User user = userRepo.findById(user1.getUserId()).get();
 		user.setEmail(updateUser.getEmail());
@@ -113,9 +113,9 @@ public class UserDBTesting {
 	
 	@Test 
 	public void should_not_have_two_users_with_the_same_email() {
-		User user1 = new User( "email1","firstName1", "lastName1","password1", 100.0,"true");
+		User user1 = new User( "email1","firstName1", "lastName1","password1","true");
 		userRepo.save(user1);
-		User user2 = new User( "email1","firstName2", "lastName2","password2", 100.0,"false");
+		User user2 = new User( "email1","firstName2", "lastName2","password2","false");
 		userRepo.save(user2);
 		boolean exception = false;
 		try {
