@@ -57,7 +57,7 @@
           <button type="submit" id = "top-up" class="btn btn-primary" name = "top-up" value = "top-up">Top Up</button>
           <button style="margin:15px;" type="submit" id = "withdraw" class="btn btn-primary" name = "withdraw" value = "withdraw">Withdraw</button>  
         </form>
-        
+        <div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
         
       </div>
     </div>

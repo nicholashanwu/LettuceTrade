@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fdmgroup.Lettuce.Exceptions.InsufficientFundsException;
 import com.fdmgroup.Lettuce.Models.Currency;
@@ -163,7 +164,7 @@ public class PortfolioController {
 	}
 
 	@RequestMapping(value = "/fundHandler", params = "withdraw", method = RequestMethod.POST)
-	public String withdrawFundHandler(@RequestParam double amount, HttpServletRequest request) throws InsufficientFundsException {
+	public String withdrawFundHandler(@RequestParam double amount, HttpServletRequest request, RedirectAttributes redir) throws InsufficientFundsException {
 		User user = (User) request.getSession().getAttribute("user");
 		int pid = user.getPortfolio().getPortfolioId();
 		Currency aud = cr.getById("AUD");
@@ -171,7 +172,8 @@ public class PortfolioController {
 			psi.decreaseCurrency(aud, amount, pid);
 			return "redirect:/profile";
 		} catch(InsufficientFundsException e) {
-			return "addfund";
+			redir.addFlashAttribute("noFunds", "You do not have sufficient funds to withdraw!");
+			return "redirect:/addfund";
 		}
 	}
 	
