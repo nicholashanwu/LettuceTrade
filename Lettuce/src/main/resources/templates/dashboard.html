@@ -34,11 +34,13 @@
               <li><a class="nav-link" th:href="@{/dashboard}">Dashboard</a></li>
               <li><a class="nav-link" th:href="@{/rates}">Rates</a></li>
               <li><a class="nav-link" th:href="@{/profile}">Profile</a></li>
+              <li><a class="nav-link" th:href="@{/order}">Order</a></li>
+              
             </ul>
           </div>
           <!-- Log Out button-->
           <div class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <a class="btn btn-primary" th:href="@{/}">Log Out</a>
+            <a class="btn btn-primary" th:href="@{/logout}">Log Out</a>
           </div>
         </div>
       </div>
@@ -51,7 +53,7 @@
     <div class="container">
       <div class="dashboard-container">
       
-        <h1>[First Name]'s dashboard </h1><br>
+        <h1>Welcome to your dashboard, <span th:text="${#strings.capitalize(#strings.toLowerCase(session.user.firstName))}"</span></h1> <br>
         <h4 class="green-text-v1">View your portfolio and current rates!</h4>
         <div class="dashboard-section">
           <h2>Portfolio overview</h2>
