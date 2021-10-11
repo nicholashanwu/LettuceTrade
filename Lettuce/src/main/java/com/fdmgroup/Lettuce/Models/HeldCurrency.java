@@ -1,7 +1,5 @@
 package com.fdmgroup.Lettuce.Models;
 
-import java.util.Objects;
-
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -10,7 +8,7 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Lettuce_Held_Currencies")
+@Table(name="Lettuce_Held_Currency")
 public class HeldCurrency {
 	
 	@EmbeddedId

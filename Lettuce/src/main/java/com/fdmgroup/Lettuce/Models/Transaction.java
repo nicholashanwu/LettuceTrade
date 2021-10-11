@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Records a foreign exchange transaction between two Orders, including the
@@ -20,6 +21,7 @@ import javax.persistence.ManyToOne;
  * @author Simon Whelan
  */
 @Entity
+@Table(name = "Lettuce_Transaction")
 public class Transaction {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

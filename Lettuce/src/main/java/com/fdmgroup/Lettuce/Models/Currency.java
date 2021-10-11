@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name = "Currency")
+@Table(name = "Lettuce_Currency")
 public class Currency {
 
 	@Id
