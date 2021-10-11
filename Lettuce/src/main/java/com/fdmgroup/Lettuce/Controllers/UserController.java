@@ -103,28 +103,28 @@ public class UserController {
 		return "register";
 	}
 	
-	@RequestMapping("/registerHandler")
-	public String handlerRegister(User user) {
-		try {
-		    //PLEASE remember the password - there are no decryption process
-			
-			setUpNewTestUser(user);
-
-//		      actLogger.info("Register user successfully");
-//		      dbLogger.info("Register user successfully");
-	    return "register-message";  
-		} catch(Exception e) {
-//			actLogger.warn("Fail to register a user because" + e.getMessage());
-	    	e.printStackTrace();
-	    	return "register";
-		}
-	}
+//	@RequestMapping("/registerHandler")
+//	public String handlerRegister(User user) {
+//		try {
+//		    //PLEASE remember the password - there are no decryption process
+//			
+//			setUpNewTestUser(user);
+//
+////		      actLogger.info("Register user successfully");
+////		      dbLogger.info("Register user successfully");
+//	    return "register-message";  
+//		} catch(Exception e) {
+////			actLogger.warn("Fail to register a user because" + e.getMessage());
+//	    	e.printStackTrace();
+//	    	return "register";
+//		}
+//	}
 	
 	@RequestMapping("/registerHandler")
 	public String registerHandler(User user, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException, DuplicatedEmailException {
 		try {
 			usi.registerUser(user, getSiteURL(request));
-			return "registerSuccess";
+			return "register-message";
 		} catch (Exception e) {
 			e.printStackTrace();
 			return "register";
