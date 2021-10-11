@@ -52,7 +52,9 @@ public class OrderServiceImpl implements iOrder {
 	public List<Order> getClosedOrders() {
 		List<Order> closed = orderRepo.getByStatus(OrderStatus.COMPLETE);
 		List<Order> cancelled = orderRepo.getByStatus(OrderStatus.CANCELLED);
+		List<Order> expired = orderRepo.getByStatus(OrderStatus.EXPIRED);
 		closed.addAll(cancelled);
+		closed.addAll(expired);
 		return closed;
 	}
 
@@ -60,7 +62,9 @@ public class OrderServiceImpl implements iOrder {
 	public List<Order> getClosedOrdersForUser(User user) {
 		List<Order> closed = orderRepo.getByUserAndStatus(user, OrderStatus.COMPLETE);
 		List<Order> cancelled = orderRepo.getByUserAndStatus(user, OrderStatus.CANCELLED);
+		List<Order> expired = orderRepo.getByUserAndStatus(user, OrderStatus.EXPIRED);
 		closed.addAll(cancelled);
+		closed.addAll(expired);
 		return closed;
 	}
 
@@ -94,7 +98,7 @@ public class OrderServiceImpl implements iOrder {
 	public void tryToMatch(Order order) {
 		List<Order> orders = getOutstandingOrders();
 		for (Order orderFound : orders) {
-			if (order.isOppositeCurrency(orderFound)) {
+			if (order.matches(orderFound)) {
 				// We've found a match!
 				// Determine how much currency to exchange.
 				try {

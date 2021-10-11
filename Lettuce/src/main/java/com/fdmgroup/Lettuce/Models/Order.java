@@ -2,14 +2,14 @@ package com.fdmgroup.Lettuce.Models;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -19,6 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "Lettuce_Order")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,7 +39,6 @@ public class Order {
 	private double initialQuantity;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate expiryDate;
-	private LocalDate scheduledDate;
 	@OneToMany(mappedBy = "order1")
 	private List<Transaction> transactionsAsParty1 = new ArrayList<>();
 	@OneToMany(mappedBy = "order2")
@@ -133,15 +133,6 @@ public class Order {
 		this.expiryDate = expiryDate;
 	}
 
-	public LocalDate getScheduledDate() {
-		return scheduledDate;
-	}
-
-	public void setScheduledDate(LocalDate scheduledDate) {
-		this.scheduledDate = scheduledDate;
-	}
-	
-	
 	public List<Transaction> getTransactionsAsParty1() {
 		return transactionsAsParty1;
 	}
@@ -165,7 +156,7 @@ public class Order {
 		return list;
 	}
 
-	public boolean isOppositeCurrency(Order otherOrder) {
+	public boolean matches(Order otherOrder) {
 		return (this.baseCurrency.equals(otherOrder.targetCurrency) && this.targetCurrency.equals(otherOrder.baseCurrency));
 	}
 
