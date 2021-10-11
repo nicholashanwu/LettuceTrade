@@ -75,7 +75,7 @@ public class OrderServiceTest {
 		list.add(o1);
 		list.add(o2);
 		when(orderRepo.findAll()).thenReturn(list);
-		when(orderRepo.orderByStatus(OrderStatus.PENDING)).thenReturn(list);
+		when(orderRepo.getByStatus(OrderStatus.PENDING)).thenReturn(list);
 
 		// Act
 		service.tryToMatch(o1);
@@ -109,7 +109,7 @@ public class OrderServiceTest {
 		list.add(o1);
 		list.add(o2);
 		when(orderRepo.findAll()).thenReturn(list);
-		when(orderRepo.orderByStatus(OrderStatus.PENDING)).thenReturn(list);
+		when(orderRepo.getByStatus(OrderStatus.PENDING)).thenReturn(list);
 
 		// Act
 		service.tryToMatch(o1);
@@ -142,7 +142,7 @@ public class OrderServiceTest {
 		list.add(o1);
 		list.add(o2);
 		when(orderRepo.findAll()).thenReturn(list);
-		when(orderRepo.orderByStatus(OrderStatus.PENDING)).thenReturn(list);
+		when(orderRepo.getByStatus(OrderStatus.PENDING)).thenReturn(list);
 
 		// Act
 		service.tryToMatch(o1);
@@ -175,7 +175,7 @@ public class OrderServiceTest {
 		list.add(o1);
 		list.add(o2);
 		when(orderRepo.findAll()).thenReturn(list);
-		when(orderRepo.orderByStatus(OrderStatus.PENDING)).thenReturn(list);
+		when(orderRepo.getByStatus(OrderStatus.PENDING)).thenReturn(list);
 
 		// Act
 		service.tryToMatch(o1);
@@ -208,7 +208,7 @@ public class OrderServiceTest {
 		list.add(o1);
 		list.add(o2);
 		when(orderRepo.findAll()).thenReturn(list);
-		when(orderRepo.orderByStatus(OrderStatus.PENDING)).thenReturn(list);
+		when(orderRepo.getByStatus(OrderStatus.PENDING)).thenReturn(list);
 
 		// Act
 		service.tryToMatch(o1);

@@ -29,15 +29,39 @@ public class OrderServiceImpl implements iOrder {
 
 	@Override
 	public List<Order> getAllOrdersForUser(User user) {
-		return orderRepo.orderByUser(user);
+		return orderRepo.getByUser(user);
 	}
 
 	@Override
 	public List<Order> getOutstandingOrders() {
-		List<Order> pending = orderRepo.orderByStatus(OrderStatus.PENDING);
-		List<Order> partial = orderRepo.orderByStatus(OrderStatus.PARTIALLY_COMPLETE);
+		List<Order> pending = orderRepo.getByStatus(OrderStatus.PENDING);
+		List<Order> partial = orderRepo.getByStatus(OrderStatus.PARTIALLY_COMPLETE);
 		pending.addAll(partial);
 		return pending;
+	}
+
+	@Override
+	public List<Order> getOutstandingOrdersForUser(User user) {
+		List<Order> pending = orderRepo.getByUserAndStatus(user, OrderStatus.PENDING);
+		List<Order> partial = orderRepo.getByUserAndStatus(user, OrderStatus.PARTIALLY_COMPLETE);
+		pending.addAll(partial);
+		return pending;
+	}
+
+	@Override
+	public List<Order> getClosedOrders() {
+		List<Order> closed = orderRepo.getByStatus(OrderStatus.COMPLETE);
+		List<Order> cancelled = orderRepo.getByStatus(OrderStatus.CANCELLED);
+		closed.addAll(cancelled);
+		return closed;
+	}
+
+	@Override
+	public List<Order> getClosedOrdersForUser(User user) {
+		List<Order> closed = orderRepo.getByUserAndStatus(user, OrderStatus.COMPLETE);
+		List<Order> cancelled = orderRepo.getByUserAndStatus(user, OrderStatus.CANCELLED);
+		closed.addAll(cancelled);
+		return closed;
 	}
 
 	@Override
@@ -48,6 +72,7 @@ public class OrderServiceImpl implements iOrder {
 	@Override
 	public void addOrder(Order order) {
 		orderRepo.save(order);
+		tryToMatch(order);
 	}
 
 	@Override

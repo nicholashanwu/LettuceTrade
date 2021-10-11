@@ -1,14 +1,21 @@
 package com.fdmgroup.Lettuce.Models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "Lettuce_Order")
@@ -29,8 +36,13 @@ public class Order {
 	private OrderStatus orderStatus;
 	private double quantity;
 	private double initialQuantity;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate expiryDate;
 	private LocalDate scheduledDate;
+	@OneToMany(mappedBy = "order1")
+	private List<Transaction> transactionsAsParty1 = new ArrayList<>();
+	@OneToMany(mappedBy = "order2")
+	private List<Transaction> transactionsAsParty2 = new ArrayList<>();
 
 	public Order() {
 		super();
@@ -129,6 +141,30 @@ public class Order {
 		this.scheduledDate = scheduledDate;
 	}
 	
+	
+	public List<Transaction> getTransactionsAsParty1() {
+		return transactionsAsParty1;
+	}
+
+	public void setTransactionsAsParty1(List<Transaction> transactionsAsParty1) {
+		this.transactionsAsParty1 = transactionsAsParty1;
+	}
+
+	public List<Transaction> getTransactionsAsParty2() {
+		return transactionsAsParty2;
+	}
+
+	public void setTransactionsAsParty2(List<Transaction> transactionsAsParty2) {
+		this.transactionsAsParty2 = transactionsAsParty2;
+	}
+	
+	public List<Transaction> getTransactions() {
+		List<Transaction> list = new ArrayList<>();
+		list.addAll(transactionsAsParty1);
+		list.addAll(transactionsAsParty2);
+		return list;
+	}
+
 	public boolean isOppositeCurrency(Order otherOrder) {
 		return (this.baseCurrency.equals(otherOrder.targetCurrency) && this.targetCurrency.equals(otherOrder.baseCurrency));
 	}

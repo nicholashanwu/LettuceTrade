@@ -9,6 +9,9 @@ public interface iOrder {
 	public List<Order> getAllOrders();
 	public List<Order> getAllOrdersForUser(User user);
 	public List<Order> getOutstandingOrders();
+	public List<Order> getOutstandingOrdersForUser(User user);
+	public List<Order> getClosedOrders();
+	public List<Order> getClosedOrdersForUser(User user);
 	public Order getOrderById(int id);
 	
 	public void addOrder(Order order);

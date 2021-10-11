@@ -14,12 +14,17 @@ import com.fdmgroup.Lettuce.Models.User;
 @Repository
 public interface OrderRepo extends JpaRepository<Order, Integer> {
 	@Query("select o from Order o where o.orderType=?1")
-	List<Order> orderByType(OrderType ot);
+	List<Order> getByType(OrderType ot);
 	
 	@Query("select o from Order o where o.orderStatus=?1")
-	List<Order> orderByStatus(OrderStatus os);
+	List<Order> getByStatus(OrderStatus os);
 	
 	@Query("select o from Order o where o.user=?1")
-	List<Order> orderByUser(User user);
+	List<Order> getByUser(User user);
+	
+	@Query("select o from Order o where o.user=?1 and o.orderStatus=?2")
+	List<Order> getByUserAndStatus(User user, OrderStatus os);
+	
+	
 
 }

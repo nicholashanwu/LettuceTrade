@@ -65,7 +65,7 @@ public class OrderRepoTest {
 		Order o2 = or.save(new Order(u, usd, eur, OrderType.FORWARD, 100.2, now));
 		Order o3 = or.save(new Order(u, usd, eur, OrderType.FORWARD, 1.5, now));
 
-		Iterable<Order> items = or.orderByType(OrderType.SPOT);
+		Iterable<Order> items = or.getByType(OrderType.SPOT);
 		
 		assertThat(items).hasSize(1).contains(o1);
 	}
