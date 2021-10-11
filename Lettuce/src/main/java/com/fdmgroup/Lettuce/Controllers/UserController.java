@@ -1,17 +1,33 @@
 package com.fdmgroup.Lettuce.Controllers;
 
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.fdmgroup.Lettuce.Exceptions.DuplicatedEmailException;
+import com.fdmgroup.Lettuce.Models.Currency;
+import com.fdmgroup.Lettuce.Models.HeldCurrency;
+import com.fdmgroup.Lettuce.Models.Portfolio;
 import com.fdmgroup.Lettuce.Models.User;
+import com.fdmgroup.Lettuce.Repo.CurrencyRepo;
+import com.fdmgroup.Lettuce.Repo.HeldCurrencyRepo;
+import com.fdmgroup.Lettuce.Repo.PortfolioRepo;
+import com.fdmgroup.Lettuce.Service.CurrencyServiceImpl;
+import com.fdmgroup.Lettuce.Service.PortfolioServiceImpl;
 import com.fdmgroup.Lettuce.Service.UserServiceImpl;
 
 @Controller
+@SessionAttributes({"user"})
 public class UserController {
 	// In my(Bo) project, I use this way to identify the user who is using the system,
 	// The disadvantage is that only one user can use the system at a time
@@ -20,7 +36,48 @@ public class UserController {
 	private boolean currentAdmin = false;
 	
 	@Autowired
-	UserServiceImpl usi = new UserServiceImpl();
+	private UserServiceImpl usi = new UserServiceImpl();
+	@Autowired
+	private CurrencyServiceImpl csi = new CurrencyServiceImpl();
+	@Autowired
+	private PortfolioServiceImpl psi = new PortfolioServiceImpl();
+	@Autowired
+	private PortfolioRepo pr;
+	@Autowired
+	private HeldCurrencyRepo hcr;
+	
+	//When adding currencies to a user's portfolio, please follow this process!
+	public void setUpNewTestUser(User user) throws DuplicatedEmailException {
+		
+		usi.addUser(user);
+		
+	    Portfolio portfolio = new Portfolio(user);
+	    
+	    Currency currency1 = new Currency("USD");
+		Currency currency2 = new Currency("AUD");
+		Currency currency3 = new Currency("HKD");
+		
+		psi.addPortfolio(portfolio);		
+		
+		csi.addCurrency(currency1);
+		csi.addCurrency(currency2);
+		csi.addCurrency(currency3);
+		
+		hcr.save(new HeldCurrency(portfolio, currency1));
+		hcr.save(new HeldCurrency(portfolio, currency2));
+		hcr.save(new HeldCurrency(portfolio, currency3));
+		
+		// there should only be two currencies with quantities > 0
+		//currently not working pls help
+//		psi.increaseCurrency(currency1, 50.0, portfolio.getPortfolioId());
+//		psi.increaseCurrency(currency2, 100.0, portfolio.getPortfolioId());
+		
+	}
+	
+	@ModelAttribute("user")
+	public User user() {
+		return new User();
+	}
 	
 	@RequestMapping("/")
 	public String toIndexPage() {
@@ -34,27 +91,29 @@ public class UserController {
 		return "login";
 	}
 	
-	@RequestMapping("/sign-up")
+	@RequestMapping("/register")
 	public String toRegisterPage(Model model){
 		//actLogger.info("Landed in register Page")
 		User user = new User();
 		model.addAttribute("user",user);
-		return "sign-up";
+		return "register";
 	}
 	
 	@RequestMapping("/registerHandler")
 	public String handlerRegister(User user) {
 		try {
 		    //PLEASE remember the password - there are no decryption process
-		      usi.addUser(user);
+			
+			setUpNewTestUser(user);
+
 //		      actLogger.info("Register user successfully");
 //		      dbLogger.info("Register user successfully");
-		      return "login";  
-		    }
-		    catch(Exception e) {
-//		      actLogger.warn("Fail to register a user because" + e.getMessage());
-		      return "register";
-		    }
+	    return "register-message";  
+		} catch(Exception e) {
+//			actLogger.warn("Fail to register a user because" + e.getMessage());
+	    	e.printStackTrace();
+	    	return "register";
+		}
 	}
 	
 	//change the Password before login
@@ -107,16 +166,19 @@ public class UserController {
 	
 	@RequestMapping("/loginHandler")
     public String handlerLogin(@RequestParam(value="email") String email,
-                               @RequestParam(value="password") String password) {
+                               @RequestParam(value="password") String password, Model model) {
+		
 		boolean verified;
 		boolean isAdmin;
 		try {
 			verified=usi.loginWithEmailAndPassword(email, password);
-			isAdmin=usi.isAdmin(email);
+			isAdmin = false;
+//			isAdmin=usi.isAdmin(email);											may not have admin features in final product
 			currentUserId=usi.getUserByEmail(email).getUserId();
 		} catch (Exception e) {
 			verified=false;
 			isAdmin=false;
+			e.printStackTrace();
 //		    actLogger.warn("Fail to login because EXCEPTION " + e.getClass()+" "+e.getMessage());
 		}
 		
@@ -133,6 +195,9 @@ public class UserController {
 //		        actLogger.info(" log in successfully as a user");
 //		        dbLogger.info(" log in successfully as a user");
 //		        adminLogger.info(" log in successfully as a user");
+				User user = usi.getUserById(currentUserId);
+				model.addAttribute("user", user);
+				
 				return "redirect:/dashboard";
 			}
 		} else {
@@ -165,6 +230,12 @@ public class UserController {
 		return "userDashboard";
 	}
 	
+	@RequestMapping("/logout")
+	public String logOutHandler(SessionStatus status) {
+		status.setComplete();
+		return "index";
+	}
+	
 	/*
 	 * I don't know how to transfer funds from bank account to trade portfolio.
 	 * It seems that it need place an order first, and then transfer the money according
@@ -172,3 +243,4 @@ public class UserController {
 	 */
 	
 }
+

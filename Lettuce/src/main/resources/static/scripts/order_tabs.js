@@ -1,9 +1,62 @@
 /**
  * 
  */
+function changeCurrenciesBasedOnBuySellChosen(rates, portfolio) {
+	
+	
+    var value = document.getElementById("buy-sell-choice").value;
+	
+	// convert objects back into maps
+	var rates = Object.entries(rates).map(([key, value]) => ({key,value}));
+	var portfolio = Object.entries(portfolio).map(([key, value]) => ({key,value}));
+	
+	
+	
+	if(value == "Buy") {
+		
+		console.log(rates);
+		var str = '';
+		for (const rate of rates) {  
+			str += '<option value="'+ rate.key +'" />'; // Storing options in variable
+		}
+		
+		var currencySelection = document.getElementById("currency-choices");
+		currencySelection.innerHTML = str;
+		
+		console.log("buy"); 	//show any currency
+	} else if (value == "Sell") {
+		console.log("sell");	//show currencies from user's portfolio only
+	
+		
+		console.log(portfolio);
+		
+		/*var str = '';
+		for (const currency of portfolio) {  
+			str += '<option value="'+ currency +'" />'; // Storing options in variable
+		}
+		
+		var currencySelection = document.getElementById("currency-choices");
+		currencySelection.innerHTML = str;*/
+		
+		
+		var str = '';
+		
+		// Populate list with options:
+		for (const currency of portfolio) {  
+			str += '<option value="'+ currency.key +'" />'; // Storing options in variable
+		}
+		
+		var currencySelection = document.getElementById("currency-choices");
+		currencySelection.innerHTML = str;
 
+	}
 
-function openCity(evt, cityName) {
+ 
+  
+	
+}
+
+function chooseOrderType(evt, cityName) {
   // Declare all variables
   var i, tabcontent, tablinks;
 

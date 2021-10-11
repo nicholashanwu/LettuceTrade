@@ -52,6 +52,13 @@ public class Portfolio {
 	public void setHeldCurrencies(List<HeldCurrency> heldCurrencies) {
 		this.heldCurrencies = heldCurrencies;
 	}
+	@Override
+	public String toString() {
+		return "Portfolio [portfolioId=" + portfolioId + 
+//				", heldCurrencies=" + heldCurrencies + 
+				"]";
+	}
+	
 	
 	
 	
