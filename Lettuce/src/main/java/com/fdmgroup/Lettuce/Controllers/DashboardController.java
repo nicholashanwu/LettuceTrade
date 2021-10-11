@@ -69,25 +69,22 @@ public class DashboardController {
 	}
 	
 	@RequestMapping("/dashboard")
-	public String toDashboardPage(Model model){
-		//Usercontoller need to set attibrute and pass it 
-		//Portfolio portfolio = usi.getUserById(userId).getPortfolio();
+	public String toDashboardPage(Model model) throws IOException{
+		User user = new User();
+		Portfolio portfolio = new Portfolio();
+				
+		user = (User) model.getAttribute("user");
+		portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
 		
-	//hardcode it just for test
-//		Portfolio portfolio = new Portfolio();
-//		portfolio.setUser(usi.getUserById(121));
-//		Currency c = new Currency("USD");
-//		HeldCurrency hc = new HeldCurrency(portfolio, c);
-//		hc.setQuantity(20.0);
-//		portfolio.getHeldCurrencies().add(hc);
-		User user = (User) model.getAttribute("user");
-		
-		Portfolio portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
 		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
 		
 		// show first 4 heldcurrency
-		model.addAttribute("heldCurrencys", heldcurrency.subList(0, 3)); // each has attribute currency, quantity
-
+		
+		if(heldcurrency.size()>3) {
+			model.addAttribute("heldCurrencys", heldcurrency.subList(0, 3)); // each has attribute currency, quantity
+		}else {
+			model.addAttribute("heldCurrencys", heldcurrency);
+		}
 //		//show the popular rates with AUD
 		Map<String, Double> rates = new HashMap<String, Double>();
 		String currency ="AUD";
