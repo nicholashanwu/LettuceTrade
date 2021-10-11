@@ -94,7 +94,7 @@ public class UserServiceImpl implements iUser {
 	private void sendVerificationEmail(User user, String siteURL)
 	        throws MessagingException, UnsupportedEncodingException {
 	    String toAddress = user.getEmail();
-	    String fromAddress = "Company Email";
+	    String fromAddress = "lettucetradingteam@gmail.com";
 	    String senderName = "Lettuce Group";
 	    String subject = "Please verify your registration";
 	    String content = "Dear [[name]],<br>"
