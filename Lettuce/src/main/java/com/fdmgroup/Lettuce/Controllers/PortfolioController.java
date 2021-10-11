@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -137,6 +138,27 @@ public class PortfolioController {
 			}
 		}
 		return "order";
+	}
+	@RequestMapping("/addfund")
+	public String addFundPage() {
+		return "addfund";
+	}
+
+	@RequestMapping(value = "/fundHandler",params = "top-up",method=RequestMethod.POST)
+	public String addFundHandler(@RequestParam double amount) {
+		/*
+		 * Optional<User> u = ur.findById(362); Portfolio p = pr.getById(409); Currency
+		 * aud = csi.getCurrencyById(406); //CHANGE TO ID OF AUD CURRENCY.
+		 * psi.increaseCurrency(aud, amount, p.getPortfolioId());
+		 */
+		System.out.println(amount + " top-up was called");
+		return "addfund";
+	}
+
+	@RequestMapping(value = "/fundHandler", params = "withdraw", method = RequestMethod.POST)
+	public String withdrawFundHandler(@RequestParam double amount) {
+		System.out.println(amount + " withdraw was called");
+		return "addfund";
 	}
 	
 }
