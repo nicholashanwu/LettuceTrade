@@ -39,7 +39,12 @@
 		</div>
 	</main>
 	
-	<th:block th:replace="template :: footer"></th:block>
+	<footer style="bottom: 0; width: 100%; position: fixed;"class="footer mt-auto py-3 bg-light">
+    	<div class="container">
+      	<img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
+     	<span class="text-muted">&copy; 2021 Lettuce</span>
+    	</div>
+  	  </footer>
 
 </body>
 </html>
