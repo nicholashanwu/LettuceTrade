@@ -70,7 +70,7 @@
             </tr>
             
             <tr th:each="heldCurrency:${heldCurrencys}">
-				<td><img th:src="@{'/images/' + ${heldCurrency.currency.currencyName} + '.png'}" width="40" height="40" /></td>
+				<td><img th:src="@{'/images/' + ${heldCurrency.currency.currencyCode} + '.png'}" width="40" height="40" /></td>
 				<td><span th:text="${heldCurrency.currency.currencyCode}"/></td>
 				<td><span th:text="${heldCurrency.quantity}"/></td>
 				<td>value</td>
