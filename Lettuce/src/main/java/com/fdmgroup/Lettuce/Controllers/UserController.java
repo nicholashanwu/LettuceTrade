@@ -150,6 +150,11 @@ public class UserController {
 		return siteURL.replace(request.getServletPath(), "");
 	}
 
+	@RequestMapping("/forgotPasswordForm")
+	public String forgotPasswordForm() {
+		return "forgot-password";
+	}
+	
 	// change the Password before login
 	@RequestMapping("/changePassword")
 	public String toChangePasswordPage() {
