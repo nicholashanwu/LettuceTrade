@@ -92,4 +92,83 @@ function validate_login() {
 	}
 	return check;
 }
+function validate_change_password() {
+	var oldPsd = document.getElementById('user-oldpsd');
+	var password = document.getElementById('user-password');
+	var confirmpassword = document.getElementById('user-confrimpassword');
+	
+	var oldpassword_msg = document.getElementById('old-password-message');
+	var password_msg = document.getElementById('user-password-message');
+	var confirm_password_msg = document.getElementById('confirm-password-message');
+	var check = true;
 
+	// Email
+	if (oldPsd.value.length == 0) {
+		oldpassword_msg.innerText = "Valid password is required.";
+		check = false;
+	} else {
+		email_msg.innerText = "";
+		check = true;
+	}
+	// Password 
+	if (password.value.length == 0) {
+		password_msg.innerText = "Valid password is required.";
+		check = false;
+	} else {
+		password_msg.innerText = "";
+		check = true;
+	}
+		// Password 
+	if (confirmpassword.value.length == 0) {
+		confirm_password_msg.innerText = "Valid password is required.";
+		check = false;
+	} else {
+		confirm_password_msg.innerText = "";
+		check = true;
+	}
+	if(password.value===confirmpassword.value){
+		confirm_password_msg.innerText = "";
+		check=true;
+
+	}else{
+		confirm_password_msg.innerText = "two passwords are not identical. Please re-enter your password."
+		check=false;
+	}
+
+	return check;
+}
+function validate_reset_password() {
+	var password = document.getElementById('user-password');
+	var confirmpassword = document.getElementById('user-confirmpassword');
+	
+	var password_msg = document.getElementById('user-password-message');
+	var confirm_password_msg = document.getElementById('confirm-password-message');
+	var check = true;
+
+	// Password 
+	if (password.value.length == 0) {
+		password_msg.innerText = "Valid password is required.";
+		check = false;
+	} else {
+		password_msg.innerText = "";
+		check = true;
+	}
+		// Password 
+	if (confirmpassword.value.length == 0) {
+		confirm_password_msg.innerText = "Valid password is required.";
+		check = false;
+	} else {
+		confirm_password_msg.innerText = "";
+		check = true;
+	}
+	if(password.value===confirmpassword.value){
+		confirm_password_msg.innerText = "";
+		check=true;
+
+	}else{
+		confirm_password_msg.innerText = "two passwords are not identical. Please re-enter your password."
+		check=false;
+	}
+
+	return check;
+}
