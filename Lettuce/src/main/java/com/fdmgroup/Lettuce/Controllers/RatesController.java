@@ -26,19 +26,30 @@ public class RatesController {
 		
 		List<Double> ratelist = new ArrayList<>();
 		
-		// "AUD", "USD", "CAD", "GBP", "NZD"
+		// "AUD", "USD", "CAD", "GBP", "NZD", "EUR", "JPY"
 		
 		try {
 			ratelist.add(ExchangeRate.getRateForPair("AUD", "USD"));
 			ratelist.add(ExchangeRate.getRateForPair("AUD", "CAD"));
 			ratelist.add(ExchangeRate.getRateForPair("AUD", "GBP"));
 			ratelist.add(ExchangeRate.getRateForPair("AUD", "NZD"));
+			ratelist.add(ExchangeRate.getRateForPair("AUD", "EUR"));
+			ratelist.add(ExchangeRate.getRateForPair("AUD", "JPY"));
 			ratelist.add(ExchangeRate.getRateForPair("USD", "CAD"));
 			ratelist.add(ExchangeRate.getRateForPair("USD", "GBP"));
 			ratelist.add(ExchangeRate.getRateForPair("USD", "NZD"));
+			ratelist.add(ExchangeRate.getRateForPair("USD", "EUR"));
+			ratelist.add(ExchangeRate.getRateForPair("USD", "JPY"));
 			ratelist.add(ExchangeRate.getRateForPair("CAD", "GBP"));
 			ratelist.add(ExchangeRate.getRateForPair("CAD", "NZD"));
+			ratelist.add(ExchangeRate.getRateForPair("CAD", "EUR"));
+			ratelist.add(ExchangeRate.getRateForPair("CAD", "JPY"));
 			ratelist.add(ExchangeRate.getRateForPair("GBP", "NZD"));
+			ratelist.add(ExchangeRate.getRateForPair("GBP", "EUR"));
+			ratelist.add(ExchangeRate.getRateForPair("GBP", "JPY"));
+			ratelist.add(ExchangeRate.getRateForPair("NZD", "EUR"));
+			ratelist.add(ExchangeRate.getRateForPair("NZD", "JPY"));
+			ratelist.add(ExchangeRate.getRateForPair("EUR", "JPY"));
 			
 			actLogger.info("Showing rates");
 			model.addAttribute("ratelist", ratelist);
