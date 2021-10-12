@@ -23,12 +23,16 @@
 						<tr>
 							<td>Image</td>
 							<td th:text="${order.baseCurrency}"></td>
-							<td th:text="|${order.quantity}/${order.initialQuantity}|"></td>
+							<td th:text="|${order.quantity} / ${order.initialQuantity}|"></td>
 							<td>Image</td>
 							<td th:text="${order.targetCurrency}"></td>
 							<td>?</td>
 							<td th:text="${order.expiryDate}"></td>
 							<td th:text="${order.orderStatus}"></td>
+						</tr>
+						<tr th:each="trans : ${order.getTransactions()}">
+							<td colspan="2"></td>
+							<td colspan="6" th:text="|At ${trans.time}, traded ${trans.currency1} ${trans.quantity1} for ${trans.currency2} ${trans.quantity2}|"></td>
 						</tr>
 					</th:block>
 				</table>
