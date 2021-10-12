@@ -34,6 +34,7 @@
 					<br>
 					<input type="submit" value="Place order">
 				</form>
+				<div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
 			</div>
 		</div>
 	</main>

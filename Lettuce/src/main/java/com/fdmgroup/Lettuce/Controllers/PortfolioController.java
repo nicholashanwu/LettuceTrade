@@ -192,13 +192,18 @@ public class PortfolioController {
 	}
 	
 	@RequestMapping("/orderHandler")
-	public String orderHandler(Order order, HttpServletRequest request) {
+	public String orderHandler(Order order, HttpServletRequest request, RedirectAttributes redir) {
 		User user = (User) request.getSession().getAttribute("user");
 		order.setUser(user);
 		order.setQuantity(order.getInitialQuantity());
 		order.setOrderStatus(OrderStatus.PENDING);
-		osi.addOrder(order);
-		return "redirect:/dashboard";
+		try {
+			osi.addOrder(order);
+			return "redirect:/dashboard";
+		} catch (InsufficientFundsException e) {
+			redir.addFlashAttribute("noFunds", "You don't have sufficient funds to place that order!");
+			return "redirect:/order";
+		}
 	}
 	
 }

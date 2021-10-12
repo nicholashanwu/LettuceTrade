@@ -2,6 +2,7 @@ package com.fdmgroup.Lettuce.Service;
 
 import java.util.List;
 
+import com.fdmgroup.Lettuce.Exceptions.InsufficientFundsException;
 import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.User;
 
@@ -14,7 +15,7 @@ public interface iOrder {
 	public List<Order> getClosedOrdersForUser(User user);
 	public Order getOrderById(int id);
 	
-	public void addOrder(Order order);
+	public void addOrder(Order order) throws InsufficientFundsException;
 	public void updateOrder(Order order);
 	public void deleteOrder(Order order);
 	public void deleteOrderById(int id);

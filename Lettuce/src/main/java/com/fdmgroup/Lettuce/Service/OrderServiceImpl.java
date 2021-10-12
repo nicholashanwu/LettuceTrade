@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fdmgroup.Lettuce.Exceptions.InsufficientFundsException;
 import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.OrderStatus;
 import com.fdmgroup.Lettuce.Models.Transaction;
@@ -21,6 +22,9 @@ public class OrderServiceImpl implements iOrder {
 
 	@Autowired
 	TransactionRepo transRepo;
+	
+	@Autowired
+	PortfolioServiceImpl psi;
 
 	@Override
 	public List<Order> getAllOrders() {
@@ -74,7 +78,8 @@ public class OrderServiceImpl implements iOrder {
 	}
 
 	@Override
-	public void addOrder(Order order) {
+	public void addOrder(Order order) throws InsufficientFundsException {
+		psi.decreaseCurrency(order.getBaseCurrency(), order.getQuantity(), order.getUser().getPortfolio().getPortfolioId());
 		orderRepo.save(order);
 		tryToMatch(order);
 	}
