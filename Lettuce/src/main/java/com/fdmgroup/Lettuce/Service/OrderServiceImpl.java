@@ -38,7 +38,7 @@ public class OrderServiceImpl implements iOrder {
 
 	@Override
 	public List<Order> getOutstandingOrders() {
-		List<Order> pending = orderRepo.getByStatus(OrderStatus.PENDING);
+		List<Order> pending = orderRepo.getByStatus(OrderStatus.ACTIVE);
 		List<Order> partial = orderRepo.getByStatus(OrderStatus.PARTIALLY_COMPLETE);
 		pending.addAll(partial);
 		return pending;
@@ -46,7 +46,7 @@ public class OrderServiceImpl implements iOrder {
 
 	@Override
 	public List<Order> getOutstandingOrdersForUser(User user) {
-		List<Order> pending = orderRepo.getByUserAndStatus(user, OrderStatus.PENDING);
+		List<Order> pending = orderRepo.getByUserAndStatus(user, OrderStatus.ACTIVE);
 		List<Order> partial = orderRepo.getByUserAndStatus(user, OrderStatus.PARTIALLY_COMPLETE);
 		pending.addAll(partial);
 		return pending;

@@ -61,12 +61,12 @@ public class OrderServiceTest {
 	@Test
 	public void should_not_find_match() {
 		// Arrange
-		o1.setOrderStatus(OrderStatus.PENDING);
+		o1.setOrderStatus(OrderStatus.ACTIVE);
 		o1.setBaseCurrency(usd);
 		o1.setTargetCurrency(eur);
 		o1.setQuantity(50.0);
 
-		o2.setOrderStatus(OrderStatus.PENDING);
+		o2.setOrderStatus(OrderStatus.ACTIVE);
 		o2.setBaseCurrency(usd);
 		o2.setTargetCurrency(eur);
 		o2.setQuantity(50.0);
@@ -75,14 +75,14 @@ public class OrderServiceTest {
 		list.add(o1);
 		list.add(o2);
 		when(orderRepo.findAll()).thenReturn(list);
-		when(orderRepo.getByStatus(OrderStatus.PENDING)).thenReturn(list);
+		when(orderRepo.getByStatus(OrderStatus.ACTIVE)).thenReturn(list);
 
 		// Act
 		service.tryToMatch(o1);
 
 		// Assert
-		assertThat(o1.getOrderStatus()).isEqualTo(OrderStatus.PENDING);
-		assertThat(o2.getOrderStatus()).isEqualTo(OrderStatus.PENDING);
+		assertThat(o1.getOrderStatus()).isEqualTo(OrderStatus.ACTIVE);
+		assertThat(o2.getOrderStatus()).isEqualTo(OrderStatus.ACTIVE);
 		assertThat(o1.getQuantity()).isCloseTo(50.0, within(0.1));
 		assertThat(o2.getQuantity()).isCloseTo(50.0, within(0.1));
 	}
@@ -95,12 +95,12 @@ public class OrderServiceTest {
 	@Test
 	public void should_find_match_where_o2_is_larger() {
 		// Arrange
-		o1.setOrderStatus(OrderStatus.PENDING);
+		o1.setOrderStatus(OrderStatus.ACTIVE);
 		o1.setBaseCurrency(usd);
 		o1.setTargetCurrency(eur);
 		o1.setQuantity(50.0); // USD 50.0 is worth EUR 43.155
 
-		o2.setOrderStatus(OrderStatus.PENDING);
+		o2.setOrderStatus(OrderStatus.ACTIVE);
 		o2.setBaseCurrency(eur);
 		o2.setTargetCurrency(usd);
 		o2.setQuantity(50.0);
@@ -109,7 +109,7 @@ public class OrderServiceTest {
 		list.add(o1);
 		list.add(o2);
 		when(orderRepo.findAll()).thenReturn(list);
-		when(orderRepo.getByStatus(OrderStatus.PENDING)).thenReturn(list);
+		when(orderRepo.getByStatus(OrderStatus.ACTIVE)).thenReturn(list);
 
 		// Act
 		service.tryToMatch(o1);
@@ -128,12 +128,12 @@ public class OrderServiceTest {
 	@Test
 	public void should_find_match_where_o1_is_larger() {
 		// Arrange
-		o1.setOrderStatus(OrderStatus.PENDING);
+		o1.setOrderStatus(OrderStatus.ACTIVE);
 		o1.setBaseCurrency(usd);
 		o1.setTargetCurrency(eur);
 		o1.setQuantity(50.0);
 
-		o2.setOrderStatus(OrderStatus.PENDING);
+		o2.setOrderStatus(OrderStatus.ACTIVE);
 		o2.setBaseCurrency(eur);
 		o2.setTargetCurrency(usd);
 		o2.setQuantity(30.0); // EUR 30.0 is worth USD 34.7584
@@ -142,7 +142,7 @@ public class OrderServiceTest {
 		list.add(o1);
 		list.add(o2);
 		when(orderRepo.findAll()).thenReturn(list);
-		when(orderRepo.getByStatus(OrderStatus.PENDING)).thenReturn(list);
+		when(orderRepo.getByStatus(OrderStatus.ACTIVE)).thenReturn(list);
 
 		// Act
 		service.tryToMatch(o1);
@@ -161,12 +161,12 @@ public class OrderServiceTest {
 	@Test
 	public void should_find_match_equal_quantities() {
 		// Arrange
-		o1.setOrderStatus(OrderStatus.PENDING);
+		o1.setOrderStatus(OrderStatus.ACTIVE);
 		o1.setBaseCurrency(usd);
 		o1.setTargetCurrency(eur);
 		o1.setQuantity(50.0);
 
-		o2.setOrderStatus(OrderStatus.PENDING);
+		o2.setOrderStatus(OrderStatus.ACTIVE);
 		o2.setBaseCurrency(eur);
 		o2.setTargetCurrency(usd);
 		o2.setQuantity(43.155);
@@ -175,7 +175,7 @@ public class OrderServiceTest {
 		list.add(o1);
 		list.add(o2);
 		when(orderRepo.findAll()).thenReturn(list);
-		when(orderRepo.getByStatus(OrderStatus.PENDING)).thenReturn(list);
+		when(orderRepo.getByStatus(OrderStatus.ACTIVE)).thenReturn(list);
 
 		// Act
 		service.tryToMatch(o1);
@@ -194,12 +194,12 @@ public class OrderServiceTest {
 	@Test
 	public void should_save_completed_order() {
 		// Arrange
-		o1.setOrderStatus(OrderStatus.PENDING);
+		o1.setOrderStatus(OrderStatus.ACTIVE);
 		o1.setBaseCurrency(usd);
 		o1.setTargetCurrency(eur);
 		o1.setQuantity(50.0); // USD 50.0 is worth EUR 43.155
 
-		o2.setOrderStatus(OrderStatus.PENDING);
+		o2.setOrderStatus(OrderStatus.ACTIVE);
 		o2.setBaseCurrency(eur);
 		o2.setTargetCurrency(usd);
 		o2.setQuantity(50.0);
@@ -208,7 +208,7 @@ public class OrderServiceTest {
 		list.add(o1);
 		list.add(o2);
 		when(orderRepo.findAll()).thenReturn(list);
-		when(orderRepo.getByStatus(OrderStatus.PENDING)).thenReturn(list);
+		when(orderRepo.getByStatus(OrderStatus.ACTIVE)).thenReturn(list);
 
 		// Act
 		service.tryToMatch(o1);

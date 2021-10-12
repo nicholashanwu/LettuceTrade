@@ -33,7 +33,7 @@
 							<td>?</td>
 							<td th:text="${order.expiryDate}"></td>
 							<td th:text="${order.orderStatus}"></td>
-							<td th:if="${order.orderStatus.name() == 'PENDING' || order.orderStatus.name() == 'PARTIALLY_COMPLETE'}">
+							<td th:if="${order.orderStatus.name() == 'ACTIVE' || order.orderStatus.name() == 'PARTIALLY_COMPLETE'}">
 								<a th:href="@{/cancelorder(orderId=${order.orderId})}">Cancel</a></td>
 						</tr>
 						<!-- Show all transactions for this order -->

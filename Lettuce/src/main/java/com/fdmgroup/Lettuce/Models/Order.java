@@ -57,7 +57,7 @@ public class Order {
 		this.baseCurrency = baseCurrency;
 		this.targetCurrency = targetCurrency;
 		this.orderType = orderType;
-		this.orderStatus = OrderStatus.PENDING;
+		this.orderStatus = OrderStatus.ACTIVE;
 		this.initialQuantity = initialQuantity;
 		this.quantity = initialQuantity;
 		this.expiryDate = expiryDate;

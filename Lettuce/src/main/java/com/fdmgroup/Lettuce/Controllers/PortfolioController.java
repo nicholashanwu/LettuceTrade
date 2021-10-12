@@ -197,7 +197,7 @@ public class PortfolioController {
 		User user = (User) request.getSession().getAttribute("user");
 		order.setUser(user);
 		order.setQuantity(order.getInitialQuantity());
-		order.setOrderStatus(OrderStatus.PENDING);
+		order.setOrderStatus(OrderStatus.ACTIVE);
 		order.setOrderType(OrderType.SPOT); // TODO: make this submitted by the form instead
 		try {
 			osi.addOrder(order);
@@ -218,7 +218,7 @@ public class PortfolioController {
 	public String outOrderPage(Model model, HttpServletRequest request) throws IOException {
 	User user = (User) request.getSession().getAttribute("user");
 	HashMap<Order, Double> er = new HashMap<Order, Double>();
-	for (Order order: osi.getAllOrdersNotUser(user, OrderStatus.PENDING, OrderStatus.PARTIALLY_COMPLETE)) {
+	for (Order order: osi.getAllOrdersNotUser(user, OrderStatus.ACTIVE, OrderStatus.PARTIALLY_COMPLETE)) {
 		er.put(order, ExchangeRate.getRateForPair(order.getBaseCurrency().toString(), order.getTargetCurrency().toString()));
 	}
 	System.out.println(er);
