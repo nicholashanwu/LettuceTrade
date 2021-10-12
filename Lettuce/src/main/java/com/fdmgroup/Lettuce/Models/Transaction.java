@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -28,16 +28,16 @@ public class Transaction {
 	private int transactionId;
 	private LocalDateTime time;
 	@ManyToOne
-	@JoinTable(name = "FK_order_1")
+	@JoinColumn(name = "FK_order_1")
 	private Order order1;
 	@ManyToOne
-	@JoinTable(name = "FK_order_2")
+	@JoinColumn(name = "FK_order_2")
 	private Order order2;
 	@ManyToOne
-	@JoinTable(name = "FK_currency_1")
+	@JoinColumn(name = "FK_currency_1")
 	private Currency currency1;
 	@ManyToOne
-	@JoinTable(name = "FK_currency_2")
+	@JoinColumn(name = "FK_currency_2")
 	private Currency currency2;
 	private double quantity1;
 	private double quantity2;

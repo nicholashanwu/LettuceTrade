@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "Lettuce_Forward_Orders")
+@Table(name = "Lettuce_Forward_Order")
 public class ForwardOrder extends Order {
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
