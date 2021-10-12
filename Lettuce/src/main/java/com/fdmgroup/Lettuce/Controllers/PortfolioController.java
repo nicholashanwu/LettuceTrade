@@ -207,5 +207,19 @@ public class PortfolioController {
 			return "redirect:/order";
 		}
 	}
+	@RequestMapping("/outstandingOrder")
+	public String outOrderPage(Model model, HttpServletRequest request) throws IOException {
+	User user = (User) request.getSession().getAttribute("user");
+	HashMap<Order, Double> er = new HashMap<Order, Double>();
+	for (Order order: osi.getAllOrdersNotUser(user, OrderStatus.PENDING, OrderStatus.PARTIALLY_COMPLETE)) {
+		er.put(order, ExchangeRate.getRateForPair(order.getBaseCurrency().toString(), order.getTargetCurrency().toString()));
+	}
+	System.out.println(er);
+	model.addAttribute("outOrder", er);
+	//model.addAttribute("outOrder", osi.getAllOrdersNotUser(user)); //null, OrderStatus.))
+	return "outstandingOrder";
+		
+	}
+
 	
 }

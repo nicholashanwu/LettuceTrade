@@ -173,5 +173,10 @@ public class OrderServiceImpl implements iOrder {
 		// No match found. Do nothing.
 		// TODO logging
 	}
+	@Override
+	public List<Order> getAllOrdersNotUser(User user, OrderStatus pend, OrderStatus part){
+		List<Order> outstanding = orderRepo.getAllOrdersNotUser(user, pend, part);//, ot, os);
+		return outstanding;
+	}
 
 }
