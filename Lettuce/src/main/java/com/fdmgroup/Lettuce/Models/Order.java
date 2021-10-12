@@ -39,6 +39,8 @@ public class Order {
 	private double initialQuantity;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate expiryDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate scheduledDate; // Intended for forward orders. Leave it null for spot orders.
 	@OneToMany(mappedBy = "order1")
 	private List<Transaction> transactionsAsParty1 = new ArrayList<>();
 	@OneToMany(mappedBy = "order2")
@@ -157,7 +159,20 @@ public class Order {
 	}
 
 	public boolean matches(Order otherOrder) {
-		return (this.baseCurrency.equals(otherOrder.targetCurrency) && this.targetCurrency.equals(otherOrder.baseCurrency));
+		// To 'match', each Order must have the same currencies except REVERSED.
+		// Additionally, Forward Orders must be scheduled for the same day.
+		boolean firstCurrencyMatches = this.baseCurrency.equals(otherOrder.targetCurrency);
+		boolean secondCurrencyMatches = this.targetCurrency.equals(otherOrder.baseCurrency);
+		switch (orderType) {
+		case SPOT:
+			return (firstCurrencyMatches && secondCurrencyMatches);
+		case FORWARD:
+			boolean dateMatches = this.scheduledDate.equals(otherOrder.scheduledDate);
+			return (dateMatches && firstCurrencyMatches && secondCurrencyMatches);
+		default:
+			// Should be unreachable.
+			return false;
+		}
 	}
 
 	@Override

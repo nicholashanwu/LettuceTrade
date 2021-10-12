@@ -25,6 +25,7 @@ import com.fdmgroup.Lettuce.Models.Currency;
 import com.fdmgroup.Lettuce.Models.HeldCurrency;
 import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.OrderStatus;
+import com.fdmgroup.Lettuce.Models.OrderType;
 import com.fdmgroup.Lettuce.Models.Portfolio;
 import com.fdmgroup.Lettuce.Models.User;
 import com.fdmgroup.Lettuce.Repo.CurrencyRepo;
@@ -197,6 +198,7 @@ public class PortfolioController {
 		order.setUser(user);
 		order.setQuantity(order.getInitialQuantity());
 		order.setOrderStatus(OrderStatus.PENDING);
+		order.setOrderType(OrderType.SPOT); // TODO: make this submitted by the form instead
 		try {
 			osi.addOrder(order);
 			return "redirect:/dashboard";
