@@ -122,13 +122,18 @@ public class UserController {
 		}
 	}
 
-	/*
-	 * @RequestMapping("/registerHandler") public String registerHandler(User user,
-	 * HttpServletRequest request) throws UnsupportedEncodingException,
-	 * MessagingException, DuplicatedEmailException { try { usi.registerUser(user,
-	 * getSiteURL(request)); return "register-message"; } catch (Exception e) {
-	 * e.printStackTrace(); return "register"; } }
-	 */
+	/**
+	@RequestMapping("/registerHandler") 
+	public String registerHandler(User user, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException, DuplicatedEmailException { 
+		try { 
+			usi.registerUser(user,getSiteURL(request)); 
+			return "register-message"; 
+		} catch (Exception e) {
+			e.printStackTrace(); 
+			return "register"; 
+		}
+	}
+	 **/
 	
 	@RequestMapping("/verify")
 	public String verifyUser(@Param("code") String code) {
