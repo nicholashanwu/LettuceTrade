@@ -1,58 +1,44 @@
 /**
  * 
  */
-function changeCurrenciesBasedOnBuySellChosen(rates, portfolio) {
+
+// TODO : prevent exchanging for the same currency
+
+
+/*updates the value in the label to reflect changes in currencies selected*/
+function changeLabelBasedOnFirstCurrency(rates, portfolio) {
 	
-	
-    var value = document.getElementById("buy-sell-choice").value;
-	
-	// convert objects back into maps
-	var rates = Object.entries(rates).map(([key, value]) => ({key,value}));
+	//Converts the rates and portfolio Objects to arrays
+	var rates = Object.entries(rates).map(([key, value]) => ({key,value}));				
 	var portfolio = Object.entries(portfolio).map(([key, value]) => ({key,value}));
+	var value = document.getElementById("buy-sell-choice").value;
 	
+	var label = document.getElementById("second-currency-quantity-label");
+	var first_currency_picker = document.getElementById("first-currency-choice").value;
+	var first_currency_quantity = document.getElementById("first-currency").value;
 	
+	var second_currency_picker = document.getElementById("second-currency-choice").value;
 	
-	if(value == "Buy") {
-		
-		console.log(rates);
-		var str = '';
-		for (const rate of rates) {  
-			str += '<option value="'+ rate.key +'" />'; // Storing options in variable
-		}
-		
-		var currencySelection = document.getElementById("currency-choices");
-		currencySelection.innerHTML = str;
-		
-		console.log("buy"); 	//show any currency
-	} else if (value == "Sell") {
-		console.log("sell");	//show currencies from user's portfolio only
+	/*console.log(first_currency_picker);			//prints the currency the first currency picker
+	console.log(first_currency_quantity);*/
 	
-		
-		console.log(portfolio);
-		
-		/*var str = '';
-		for (const currency of portfolio) {  
-			str += '<option value="'+ currency +'" />'; // Storing options in variable
-		}
-		
-		var currencySelection = document.getElementById("currency-choices");
-		currencySelection.innerHTML = str;*/
-		
-		
-		var str = '';
-		
-		// Populate list with options:
-		for (const currency of portfolio) {  
-			str += '<option value="'+ currency.key +'" />'; // Storing options in variable
-		}
-		
-		var currencySelection = document.getElementById("currency-choices");
-		currencySelection.innerHTML = str;
+	//multiply first value 
+	
+	console.log("first currency picker " + first_currency_picker);
+	let rate_one = rates.find(o => o.key === first_currency_picker);		//grabs both key and value pair
+	
+	console.log(rate_one.value);											//obj.value is the vaule
+	
+	let rate_two = rates.find(o => o.key === second_currency_picker);
+	let inverse_rate_two = 1*1.0/rate_two.value;
+	
+	console.log(inverse_rate_two);
+	
+	var result_rate = rate_one.value * inverse_rate_two;
+	console.log("multiply " + result_rate);
 
-	}
-
- 
-  
+	console.log("resulting amount " + first_currency_quantity / result_rate); //print the resulting amount
+	label.innerText = Math.round(first_currency_quantity / result_rate * 1000) / 1000;
 	
 }
 
@@ -78,6 +64,55 @@ function chooseOrderType(evt, cityName) {
 
   document.getElementById("defaultOpen").click();
 }
+
+
+
+function changeCurrenciesBasedOnBuySellChosen(rates, portfolio) {
+	
+    var value = document.getElementById("buy-sell-choice").value;
+	var for_using = document.getElementById("for-using-label");
+	
+	
+	// convert objects back into maps
+	var rates = Object.entries(rates).map(([key, value]) => ({key,value}));
+	var portfolio = Object.entries(portfolio).map(([key, value]) => ({key,value}));
+	
+	
+	
+	if(value == "Buy") {					//show all available currencies
+
+		console.log("buy"); 
+		
+		for_using.innerHTML = "using";
+
+		var first = document.getElementById("first-currency-choice"); 
+		var second = document.getElementById("second-currency-choice");
+		var temp = second.innerHTML;
+		second.innerHTML = first.innerHTML;
+		first.innerHTML = temp;
+		
+		
+
+	} else if (value == "Sell") {			//show currencies from user's portfolio only
+		
+		console.log("sell");		
+		
+		for_using.innerHTML = "for";
+		
+		var first = document.getElementById("first-currency-choice"); 
+		var second = document.getElementById("second-currency-choice");
+		var temp = first.innerHTML;
+		first.innerHTML = second.innerHTML;
+		second.innerHTML = temp;
+		
+		
+
+	}
+
+ 
+}
+
+
 
 
 
