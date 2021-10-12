@@ -22,6 +22,7 @@ import net.bytebuddy.utility.RandomString;
 import com.fdmgroup.Lettuce.Exceptions.DuplicatedEmailException;
 import com.fdmgroup.Lettuce.Exceptions.FailToLoginException;
 import com.fdmgroup.Lettuce.Exceptions.InvalidEmailException;
+import com.fdmgroup.Lettuce.Exceptions.UserNotFoundException;
 import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.Portfolio;
 import com.fdmgroup.Lettuce.Models.User;
@@ -163,7 +164,61 @@ public class UserServiceImpl implements iUser {
 		}
 		return encryptedPassword;
 	}
-
+	
+	public void resetPassword(String email,String siteURL) throws UserNotFoundException, UnsupportedEncodingException, MessagingException {
+		String randomCode = RandomString.make(16);
+		Optional<User> userOption= userRepo.getByEmail(email);
+		User user;
+		if (userOption.isEmpty()) {
+			throw new UserNotFoundException();
+		}else {
+			user=userOption.get();
+			user.setVerificationCode(randomCode);
+			userRepo.save(user);
+			sendResetPasswordVerificationEmail(user,siteURL);
+		}
+		
+		
+		
+		
+	}
+	private void sendResetPasswordVerificationEmail(User user, String siteURL)
+	        throws MessagingException, UnsupportedEncodingException {
+	    String toAddress = user.getEmail();
+	    String fromAddress = "lettucetradingteam@gmail.com";
+	    String senderName = "Lettuce Group";
+	    String subject = "Please reset your password";
+	    String content = "Dear [[name]],<br>"
+	            + "Please click the link below to reset your password:<br>"
+	            + "<h3><a href=\"[[URL]]\" target=\"_self\">RESET YOUR PASSWORD</a></h3>"
+	            + "Thank you,<br>"
+	            + "The Lettuce Team.";
+	     
+	   //MimeMessage message = mailSender.createMimeMessage();
+	    MimeMessage message = mailSender.createMimeMessage();
+	    MimeMessageHelper helper = new MimeMessageHelper(message);
+	     
+	    helper.setFrom(fromAddress, senderName);
+	    helper.setTo(toAddress);
+	    helper.setSubject(subject);
+	     
+	    content = content.replace("[[name]]", user.getFirstName());
+	    String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
+	     
+	    content = content.replace("[[URL]]", verifyURL);
+	     
+	    helper.setText(content, true);
+	     
+	    mailSender.send(message);
+	     
+	}
+	
+	public void updatePassword(User user, String newPassword) {
+		String encryptedPassword = encryptPassword(newPassword);
+		user.setPassword(encryptedPassword);
+		user.setVerificationCode(null);
+		userRepo.save(user);
+	}
 	@Override
 	public boolean loginWithEmailAndPassword(String inputEmail, String inputPassword) throws FailToLoginException {
 		String encryptedInputPassword = encryptPassword(inputPassword);

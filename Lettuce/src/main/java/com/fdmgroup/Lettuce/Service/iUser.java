@@ -80,6 +80,13 @@ public interface iUser {
 	 * @throws DuplicatedEmailException 
 	 */
 	void registerUser(User user, String siteURL) throws UnsupportedEncodingException, MessagingException, DuplicatedEmailException;
+	
+	public void updatePassword(User user, String newPassword);
+	
+	
+	
 	//void takeMoneyFromBank(int userId, double moneyOut);
 	//void sendMoneyToBank(int userId, double moneyIn);
+	
+	
 }
