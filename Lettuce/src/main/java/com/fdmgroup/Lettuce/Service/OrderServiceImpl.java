@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.fdmgroup.Lettuce.Exceptions.InsufficientFundsException;
 import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.OrderStatus;
+import com.fdmgroup.Lettuce.Models.OrderType;
 import com.fdmgroup.Lettuce.Models.Transaction;
 import com.fdmgroup.Lettuce.Models.User;
 import com.fdmgroup.Lettuce.Repo.OrderRepo;
@@ -140,11 +141,20 @@ public class OrderServiceImpl implements iOrder {
 						orderFound.setQuantity(secondUserHas - firstUserWants);
 						orderFound.setOrderStatus(OrderStatus.PARTIALLY_COMPLETE);
 						// Record the changes in a transaction object.
-						transRepo.save(new Transaction(order, orderFound, order.getBaseCurrency(),
-								orderFound.getBaseCurrency(), firstUserHas, firstUserWants));
-						// Give each user the currency they earned.
-						psi.increaseCurrency(order.getTargetCurrency(), firstUserWants, order.getUser().getPortfolio().getPortfolioId());
-						psi.increaseCurrency(orderFound.getTargetCurrency(), firstUserHas, orderFound.getUser().getPortfolio().getPortfolioId());
+						Transaction trans = new Transaction(order, orderFound, order.getBaseCurrency(),
+								orderFound.getBaseCurrency(), firstUserHas, firstUserWants);
+						// If it's a spot order, move the money right away.
+						if (order.getOrderType() == OrderType.SPOT) {
+							psi.increaseCurrency(order.getTargetCurrency(), firstUserWants, order.getUser().getPortfolio().getPortfolioId());
+							psi.increaseCurrency(orderFound.getTargetCurrency(), firstUserHas, orderFound.getUser().getPortfolio().getPortfolioId());
+							trans.setResolved(true);
+						}
+						// If it's a forward order, don't move any money yet, but mark the Transaction appropriately.
+						if (order.getOrderType() == OrderType.FORWARD) {
+							trans.setScheduledDate(order.getScheduledDate());
+							trans.setResolved(false);
+						}
+						transRepo.save(trans);
 
 					} else if (firstUserWants > secondUserHas) {
 						// Second user gets everything they want. First user gets everything the second user has.
@@ -154,11 +164,20 @@ public class OrderServiceImpl implements iOrder {
 						orderFound.setQuantity(0);
 						orderFound.setOrderStatus(OrderStatus.COMPLETE);
 						// Record the changes in a transaction object.
-						transRepo.save(new Transaction(order, orderFound, order.getBaseCurrency(),
-								orderFound.getBaseCurrency(), secondUserWants, secondUserHas));
-						// Give each user the currency they earned.
-						psi.increaseCurrency(order.getTargetCurrency(), secondUserHas, order.getUser().getPortfolio().getPortfolioId());
-						psi.increaseCurrency(orderFound.getTargetCurrency(), secondUserWants, orderFound.getUser().getPortfolio().getPortfolioId());
+						Transaction trans = new Transaction(order, orderFound, order.getBaseCurrency(),
+								orderFound.getBaseCurrency(), secondUserWants, secondUserHas);
+						// If it's a spot order, move the money right away.
+						if (order.getOrderType() == OrderType.SPOT) {
+							psi.increaseCurrency(order.getTargetCurrency(), secondUserHas, order.getUser().getPortfolio().getPortfolioId());
+							psi.increaseCurrency(orderFound.getTargetCurrency(), secondUserWants, orderFound.getUser().getPortfolio().getPortfolioId());
+							trans.setResolved(true);
+						}
+						// If it's a forward order, don't move any money yet, but mark the Transaction appropriately.
+						if (order.getOrderType() == OrderType.FORWARD) {
+							trans.setScheduledDate(order.getScheduledDate());
+							trans.setResolved(false);
+						}
+						transRepo.save(trans);
 
 					} else if (firstUserWants == secondUserHas) {
 						// Both users get everything they want.
@@ -168,11 +187,20 @@ public class OrderServiceImpl implements iOrder {
 						orderFound.setQuantity(0);
 						orderFound.setOrderStatus(OrderStatus.COMPLETE);
 						// Record the changes in a transaction object.
-						transRepo.save(new Transaction(order, orderFound, order.getBaseCurrency(),
-								orderFound.getBaseCurrency(), firstUserHas, secondUserHas));
-						// Give each user the currency they earned.
-						psi.increaseCurrency(order.getTargetCurrency(), firstUserWants, order.getUser().getPortfolio().getPortfolioId());
-						psi.increaseCurrency(orderFound.getTargetCurrency(), secondUserWants, orderFound.getUser().getPortfolio().getPortfolioId());
+						Transaction trans = new Transaction(order, orderFound, order.getBaseCurrency(),
+								orderFound.getBaseCurrency(), firstUserHas, secondUserHas);
+						// If it's a spot order, move the money right away.
+						if (order.getOrderType() == OrderType.SPOT) {
+							psi.increaseCurrency(order.getTargetCurrency(), firstUserWants, order.getUser().getPortfolio().getPortfolioId());
+							psi.increaseCurrency(orderFound.getTargetCurrency(), secondUserWants, orderFound.getUser().getPortfolio().getPortfolioId());
+							trans.setResolved(true);
+						}
+						// If it's a forward order, don't move any money yet, but mark the Transaction appropriately.
+						if (order.getOrderType() == OrderType.FORWARD) {
+							trans.setScheduledDate(order.getScheduledDate());
+							trans.setResolved(false);
+						}
+						transRepo.save(trans);
 					}
 					// Save changes.
 					orderRepo.save(order);

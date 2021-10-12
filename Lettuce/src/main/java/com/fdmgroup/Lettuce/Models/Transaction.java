@@ -1,5 +1,6 @@
 package com.fdmgroup.Lettuce.Models;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
@@ -9,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Records a foreign exchange transaction between two Orders, including the
@@ -41,6 +44,9 @@ public class Transaction {
 	private Currency currency2;
 	private double quantity1;
 	private double quantity2;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate scheduledDate; // Intended for forward orders. Leave it null for spot orders.
+	private boolean resolved;
 
 	public Transaction() {
 		super();
@@ -120,6 +126,22 @@ public class Transaction {
 
 	public void setQuantity2(double quantity2) {
 		this.quantity2 = quantity2;
+	}
+
+	public LocalDate getScheduledDate() {
+		return scheduledDate;
+	}
+
+	public void setScheduledDate(LocalDate scheduledDate) {
+		this.scheduledDate = scheduledDate;
+	}
+
+	public boolean isResolved() {
+		return resolved;
+	}
+
+	public void setResolved(boolean resolved) {
+		this.resolved = resolved;
 	}
 
 	@Override

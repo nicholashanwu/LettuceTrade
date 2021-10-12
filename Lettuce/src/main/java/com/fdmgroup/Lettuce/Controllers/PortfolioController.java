@@ -1,6 +1,7 @@
 package com.fdmgroup.Lettuce.Controllers;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -189,6 +190,7 @@ public class PortfolioController {
 	public String historyPage(Model model, HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
 		model.addAttribute("orders", osi.getAllOrdersForUser(user));
+		model.addAttribute("now", LocalDate.now());
 		return "history";
 	}
 	

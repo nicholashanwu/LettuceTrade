@@ -157,6 +157,14 @@ public class Order {
 		list.addAll(transactionsAsParty2);
 		return list;
 	}
+	
+	public LocalDate getScheduledDate() {
+		return scheduledDate;
+	}
+
+	public void setScheduledDate(LocalDate scheduledDate) {
+		this.scheduledDate = scheduledDate;
+	}
 
 	public boolean matches(Order otherOrder) {
 		// To 'match', each Order must have the same currencies except REVERSED.

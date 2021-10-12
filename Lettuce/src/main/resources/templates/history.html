@@ -42,31 +42,38 @@
 							<td colspan="7">At <th:block th:text="${#temporals.format(trans.time, 'h:mma, d MMM yyyy')}"></th:block>, 
 							<!-- Check which way around the transaction goes -->
 							<th:block th:if="${trans.currency1.equals(order.baseCurrency)}">
-								<!-- This order is party 1 -->
+								<!-- This order is party 1 in the transaction -->
 								sold
 								<th:block th:text="|${trans.currency1} ${#numbers.formatDecimal(trans.quantity1, 1, 'DEFAULT', 2, 'DEFAULT')}|"></th:block>
 								for
 								<th:block th:text="|${trans.currency2} ${#numbers.formatDecimal(trans.quantity2, 1, 'DEFAULT', 2, 'DEFAULT')}|"></th:block>
+
 							</th:block>
 							<th:block th:if="${trans.currency2.equals(order.baseCurrency)}">
-								<!-- This order is party 2 -->
+								<!-- This order is party 2 in the transaction -->
 								sold
 								<th:block th:text="|${trans.currency2} ${#numbers.formatDecimal(trans.quantity2, 1, 'DEFAULT', 2, 'DEFAULT')}|"></th:block>
 								for
 								<th:block th:text="|${trans.currency1} ${#numbers.formatDecimal(trans.quantity1, 1, 'DEFAULT', 2, 'DEFAULT')}|"></th:block>
 							</th:block>
+							<!-- Optional section for forward trades -->
+							<th:block th:if="${trans.scheduledDate}">
+								<th:block th:if="${trans.scheduledDate <= now}">
+									exchanged on <th:block th:text="${#temporals.format(trans.scheduledDate, 'd MMM yyyy')}"></th:block>
+								</th:block>
+								<th:block th:if="${trans.scheduledDate > now}">
+									scheduled for <th:block th:text="${#temporals.format(trans.scheduledDate, 'd MMM yyyy')}"></th:block>
+								</th:block>
+							</th:block>
+							</td>
 						</tr>
 					</th:block>
 				</table>
 			</div>
 		</div>
 	</main>
-	<footer style="bottom: 0; width: 100%; position: fixed;"class="footer mt-auto py-3 bg-light">
-    	<div class="container">
-      	<img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
-     	<span class="text-muted">&copy; 2021 Lettuce</span>
-    	</div>
-  	  </footer>
+	
+	<th:block th:replace="template :: lockedfooter"></th:block>
 
 </body>
 </html>
