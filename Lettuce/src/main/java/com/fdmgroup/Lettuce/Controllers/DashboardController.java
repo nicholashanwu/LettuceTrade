@@ -1,10 +1,14 @@
 package com.fdmgroup.Lettuce.Controllers;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -64,10 +68,27 @@ public class DashboardController {
 		User user = (User) model.getAttribute("user");
 		Portfolio portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
 		model.addAttribute("portfolio",portfolio);
-		
 		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
+		double totalBalance = 0;
 		
-		model.addAttribute("heldCurrencys", heldcurrency); 
+		Map<Double,HeldCurrency> portfolioWithValue = new TreeMap<>(Collections.reverseOrder());
+		for(HeldCurrency hc:heldcurrency) {
+			double exchangeRate = 0;
+			try {
+				exchangeRate = ExchangeRate.getRateForPair(hc.getCurrency().getCurrencyCode(), "AUD");
+				double value = hc.getQuantity()*exchangeRate;
+				BigDecimal bd = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
+				portfolioWithValue.put(bd.doubleValue(),hc);
+				
+				totalBalance +=bd.doubleValue();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		BigDecimal total = new BigDecimal(totalBalance).setScale(2, RoundingMode.HALF_UP);
+		
+		model.addAttribute("heldCurrencys", portfolioWithValue);
+		model.addAttribute("TotalBalance", total.doubleValue());
 		
 		return "profile";
 	}
@@ -77,19 +98,37 @@ public class DashboardController {
 		User user = new User();
 		Portfolio portfolio = new Portfolio();
 				
-		user = (User) model.getAttribute("user");
+		user = (User) model.getAttribute("user");		
 		portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
 		
 		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
-		
-		// show first 4 heldcurrency
+		// show  only first 4 heldcurrency
 		
 		if(heldcurrency.size()>3) {
-			model.addAttribute("heldCurrencys", heldcurrency.subList(0, 3)); // each has attribute currency, quantity
-		}else {
-			model.addAttribute("heldCurrencys", heldcurrency);
+			heldcurrency = heldcurrency.subList(0, 3);
+		}	
+		double totalBalance = 0;
+		
+		Map<Double,HeldCurrency> portfolioWithValue = new TreeMap<>(Collections.reverseOrder());
+		for(HeldCurrency hc:heldcurrency) {
+			double exchangeRate = 0;
+			try {
+				exchangeRate = ExchangeRate.getRateForPair(hc.getCurrency().getCurrencyCode(), "AUD");
+				double value = hc.getQuantity()*exchangeRate;
+				BigDecimal bd = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
+				portfolioWithValue.put(bd.doubleValue(),hc);
+				
+				totalBalance +=bd.doubleValue();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-//		//show the popular rates with AUD
+		BigDecimal total = new BigDecimal(totalBalance).setScale(2, RoundingMode.HALF_UP);
+		
+		model.addAttribute("heldCurrencys", portfolioWithValue);
+		model.addAttribute("TotalBalance", total.doubleValue());
+		
+		//show the popular rates with AUD
 		Map<String, Double> rates = new HashMap<String, Double>();
 		String currency ="AUD";
 		try {
