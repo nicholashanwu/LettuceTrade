@@ -119,31 +119,46 @@ public class OrderServiceImpl implements iOrder {
 																						// target currency.
 
 					if (firstUserWants < secondUserHas) {
+						// First user gets everything they want. Second user gets everything the first user has.
 						// Consume the entire order, and consume part of the orderFound.
 						order.setQuantity(0);
 						order.setOrderStatus(OrderStatus.COMPLETE);
 						orderFound.setQuantity(secondUserHas - firstUserWants);
 						orderFound.setOrderStatus(OrderStatus.PARTIALLY_COMPLETE);
+						// Record the changes in a transaction object.
 						transRepo.save(new Transaction(order, orderFound, order.getBaseCurrency(),
 								orderFound.getBaseCurrency(), firstUserHas, firstUserWants));
+						// Give each user the currency they earned.
+						psi.increaseCurrency(order.getTargetCurrency(), firstUserWants, order.getUser().getPortfolio().getPortfolioId());
+						psi.increaseCurrency(orderFound.getTargetCurrency(), firstUserHas, orderFound.getUser().getPortfolio().getPortfolioId());
 
 					} else if (firstUserWants > secondUserHas) {
+						// Second user gets everything they want. First user gets everything the second user has.
 						// Consume the entire orderFound, and consume part of the order.
 						order.setQuantity(firstUserHas - secondUserWants);
 						order.setOrderStatus(OrderStatus.PARTIALLY_COMPLETE);
 						orderFound.setQuantity(0);
 						orderFound.setOrderStatus(OrderStatus.COMPLETE);
+						// Record the changes in a transaction object.
 						transRepo.save(new Transaction(order, orderFound, order.getBaseCurrency(),
 								orderFound.getBaseCurrency(), secondUserWants, secondUserHas));
+						// Give each user the currency they earned.
+						psi.increaseCurrency(order.getTargetCurrency(), secondUserHas, order.getUser().getPortfolio().getPortfolioId());
+						psi.increaseCurrency(orderFound.getTargetCurrency(), secondUserWants, orderFound.getUser().getPortfolio().getPortfolioId());
 
 					} else if (firstUserWants == secondUserHas) {
+						// Both users get everything they want.
 						// Consume both.
 						order.setQuantity(0);
 						order.setOrderStatus(OrderStatus.COMPLETE);
 						orderFound.setQuantity(0);
 						orderFound.setOrderStatus(OrderStatus.COMPLETE);
+						// Record the changes in a transaction object.
 						transRepo.save(new Transaction(order, orderFound, order.getBaseCurrency(),
 								orderFound.getBaseCurrency(), firstUserHas, secondUserHas));
+						// Give each user the currency they earned.
+						psi.increaseCurrency(order.getTargetCurrency(), firstUserWants, order.getUser().getPortfolio().getPortfolioId());
+						psi.increaseCurrency(orderFound.getTargetCurrency(), secondUserWants, orderFound.getUser().getPortfolio().getPortfolioId());
 					}
 					// Save changes.
 					orderRepo.save(order);
