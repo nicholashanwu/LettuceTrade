@@ -70,7 +70,7 @@
             </tr>
             
             <tr th:each="heldCurrency:${heldCurrencys}">
-				<td>Image</td>
+				<td><img th:src="@{'/images/' + ${heldCurrency.currency.currencyName} + '.png'}" width="40" height="40" /></td>
 				<td><span th:text="${heldCurrency.currency.currencyCode}"/></td>
 				<td><span th:text="${heldCurrency.quantity}"/></td>
 				<td>value</td>
@@ -103,7 +103,8 @@
             
            
 			<tr th:each="rate:${rates}">
-				<td>Image</td>
+				<td><img th:src="@{'/images/' + ${currency} + '.png'}" width="40" height="40" />
+				<img th:src="@{'/images/' + ${rate.key} + '.png'}" width="40" height="40" /></td>
 				<td><span th:text="${currency}"/>-<span th:text="${rate.key}"/></td>
 				<td><span th:text="${rate.value}"/></td>
 				<td><a role="button" th:href="@{/placeOrderHandler}" id = "place-order"class="btn btn-primary">Trade</a><td>
