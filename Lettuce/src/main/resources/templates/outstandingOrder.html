@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:replace="template :: setup"></th:block>
+</head>
+<body>
+	<th:block th:replace="template :: header"></th:block>
+
+	<main class="flex-shrink-0">
+		<div class="container">
+			<div class="dashboard-container">
+				<h1>Order History</h1>
+				<table class="table">
+					<tr>
+						<th colspan="2">Selling</th>
+						<th>Remaining</th>
+						<th colspan="2">Buying</th>
+						<th>Current Value</th>
+						<th>Expires</th>
+						<th>Status</th>
+					</tr>
+					<th:block th:each="order : ${outOrder}">
+						<tr>
+							<td>Image</td>
+							<td th:text="${order.key.baseCurrency}"></td>
+							<td th:text="|${order.key.quantity}/${order.key.initialQuantity}|"></td>
+							<td>Image</td>
+							<td th:text="${order.key.targetCurrency}"></td>
+							<td th:text="${order.value}"></td>
+							<td th:text="${order.key.expiryDate}"></td>
+							<td th:text="${order.key.orderStatus}"></td>
+						</tr>
+					</th:block>
+				</table>
+			</div>
+		</div>
+	</main>
+	<footer style="bottom: 0; width: 100%; position: fixed;"class="footer mt-auto py-3 bg-light">
+    	<div class="container">
+      	<img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
+     	<span class="text-muted">&copy; 2021 Lettuce</span>
+    	</div>
+  	  </footer>
+
+</body>
+</html>

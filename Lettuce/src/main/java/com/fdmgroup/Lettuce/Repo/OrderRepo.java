@@ -24,6 +24,10 @@ public interface OrderRepo extends JpaRepository<Order, Integer> {
 	
 	@Query("select o from Order o where o.user=?1 and o.orderStatus=?2")
 	List<Order> getByUserAndStatus(User user, OrderStatus os);
+	@Query("select o from Order o where o.user<>?1 and (o.orderStatus=?2  or o.orderStatus=?3)")
+	List<Order> getAllOrdersNotUser(User user, OrderStatus pend, OrderStatus part);//, OrderType ot, OrderStatus os);
+	
+
 	
 	
 
