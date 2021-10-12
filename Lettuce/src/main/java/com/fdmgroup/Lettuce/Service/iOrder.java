@@ -21,6 +21,8 @@ public interface iOrder {
 	public void updateOrder(Order order);
 	public void deleteOrder(Order order);
 	public void deleteOrderById(int id);
+	public void cancelOrder(Order order);
+	public void expireOrder(Order order);
 	
 	public void tryToMatch(Order order);
 }

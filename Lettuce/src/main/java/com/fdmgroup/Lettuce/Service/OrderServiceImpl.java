@@ -100,6 +100,20 @@ public class OrderServiceImpl implements iOrder {
 	}
 
 	@Override
+	public void cancelOrder(Order order) {
+		psi.increaseCurrency(order.getBaseCurrency(), order.getQuantity(), order.getUser().getPortfolio().getPortfolioId());
+		order.setOrderStatus(OrderStatus.CANCELLED);
+		orderRepo.save(order);
+	}
+
+	@Override
+	public void expireOrder(Order order) {
+		psi.increaseCurrency(order.getBaseCurrency(), order.getQuantity(), order.getUser().getPortfolio().getPortfolioId());
+		order.setOrderStatus(OrderStatus.EXPIRED);
+		orderRepo.save(order);
+	}
+
+	@Override
 	public void tryToMatch(Order order) {
 		List<Order> orders = getOutstandingOrders();
 		for (Order orderFound : orders) {

@@ -9,7 +9,7 @@
 	<main class="flex-shrink-0">
 		<div class="container">
 			<div class="dashboard-container">
-				<h1>Order History</h1>
+				<h1>Your Order History</h1>
 				<table class="table">
 					<tr>
 						<th colspan="2">Selling</th>
@@ -17,8 +17,9 @@
 						<th colspan="2">Buying</th>
 						<th>Current Value</th>
 						<th>Expires</th>
-						<th>Status</th>
+						<th colspan="2">Status</th>
 					</tr>
+					<!-- Show all orders for this user -->
 					<th:block th:each="order : ${orders}">
 						<tr>
 							<td>Image</td>
@@ -32,10 +33,13 @@
 							<td>?</td>
 							<td th:text="${order.expiryDate}"></td>
 							<td th:text="${order.orderStatus}"></td>
+							<td th:if="${order.orderStatus.name() == 'PENDING' || order.orderStatus.name() == 'PARTIALLY_COMPLETE'}">
+								<a th:href="@{/cancelorder(orderId=${order.orderId})}">Cancel</a></td>
 						</tr>
+						<!-- Show all transactions for this order -->
 						<tr th:each="trans : ${order.getTransactions()}" class="table-info">
 							<td colspan="2"></td>
-							<td colspan="6">At <th:block th:text="${#temporals.format(trans.time, 'h:mma, d MMM yyyy')}"></th:block>, 
+							<td colspan="7">At <th:block th:text="${#temporals.format(trans.time, 'h:mma, d MMM yyyy')}"></th:block>, 
 							<!-- Check which way around the transaction goes -->
 							<th:block th:if="${trans.currency1.equals(order.baseCurrency)}">
 								<!-- This order is party 1 -->

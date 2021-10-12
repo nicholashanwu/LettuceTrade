@@ -207,6 +207,13 @@ public class PortfolioController {
 			return "redirect:/order";
 		}
 	}
+	
+	@RequestMapping("/cancelorder")
+	public String cancelHandler(@RequestParam int orderId) {
+		osi.cancelOrder(osi.getOrderById(orderId));
+		return "redirect:/history";
+	}
+	
 	@RequestMapping("/outstandingOrder")
 	public String outOrderPage(Model model, HttpServletRequest request) throws IOException {
 	User user = (User) request.getSession().getAttribute("user");
