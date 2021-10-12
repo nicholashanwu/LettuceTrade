@@ -66,15 +66,17 @@ public class UserController {
 		csi.addCurrency(currency1);
 		csi.addCurrency(currency2);
 		csi.addCurrency(currency3);
+		
+		HeldCurrency hc1 = new HeldCurrency(portfolio, currency1);
+		HeldCurrency hc2 = new HeldCurrency(portfolio, currency2);
+		HeldCurrency hc3 = new HeldCurrency(portfolio, currency3);
 
-		hcr.save(new HeldCurrency(portfolio, currency1));
-		hcr.save(new HeldCurrency(portfolio, currency2));
-		hcr.save(new HeldCurrency(portfolio, currency3));
-
-		// there should only be two currencies with quantities > 0
-		// currently not working pls help
-//		psi.increaseCurrency(currency1, 50.0, portfolio.getPortfolioId());
-//		psi.increaseCurrency(currency2, 100.0, portfolio.getPortfolioId());
+		hc1.setQuantity(5000.0);
+		hc2.setQuantity(2500.0);
+		
+		hcr.save(hc1);
+		hcr.save(hc2);
+		hcr.save(hc3);
 
 	}
 
