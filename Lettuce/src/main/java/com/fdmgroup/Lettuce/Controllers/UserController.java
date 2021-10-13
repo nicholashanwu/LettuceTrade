@@ -55,7 +55,8 @@ public class UserController {
 	public void setUpNewTestUser(User user) throws DuplicatedEmailException {
 
 		usi.addUser(user);
-
+		
+		
 		Portfolio portfolio = new Portfolio(user);
 
 		psi.addPortfolio(portfolio);
@@ -129,7 +130,7 @@ public class UserController {
 		model.addAttribute("user", user);
 		return "register";
 	}
-
+	
 	@RequestMapping("/registerHandler")
 	public String handlerRegister(User user) {
 		try {
@@ -137,10 +138,10 @@ public class UserController {
 
 			setUpNewTestUser(user);
 
-			/*
-			 * actLogger.info("Register user successfully");
-			 * dbLogger.info("Register user successfully");
-			 */
+			
+			//actLogger.info("Register user successfully");
+			//dbLogger.info("Register user successfully");
+		 
 			return "register-message";
 		} catch (Exception e) {
 			// actLogger.warn("Fail to register a user because" + e.getMessage());
@@ -161,10 +162,10 @@ public class UserController {
 		}
 	}
 	 **/
-	
+	//email verification for registration
 	@RequestMapping("/verify")
 	public String verifyUser(@Param("code") String code) {
-		System.out.println(code);
+		//System.out.println(code);
 		if (usi.verify(code)) {
 			return "login";
 		} else {
@@ -194,16 +195,33 @@ public class UserController {
 			model.addAttribute("error", "We are encoutring an error while sending email. Please try again.");
 		}
 		
-		return "";
+		return "forgot-password";
 	}
 	@RequestMapping("/reset_password")
-	public String resetPassword(@Param("code") String code) {
-		if(usi.verify(code)) {
+	public String resetPassword(@Param("code") String code,Model model) {
+		if(usi.verifyToken(code)) {
+			model.addAttribute("token", code);
 			return "reset-password";
+		}else {
+	        model.addAttribute("message", "Invalid Token");
+	        return "message";
 		}
-		return "redirect:/login";
+		
 	}
-	
+	@RequestMapping("/resetPasswordHandler")
+	public String resetPasswordHandler(@RequestParam(value = "token") String token, @RequestParam(value = "password") String password,
+			@RequestParam(value = "confirmpassword") String confrimpassword) throws UserNotFoundException {
+		try {
+			User user = usi.findByVerificationCode(token);
+			usi.updatePassword(user, confrimpassword);
+			return "login";
+		} catch (Exception e) {
+			return "forgot-password";
+		}
+		
+		
+		
+	}
 	// change the Password before login
 	@RequestMapping("/changePassword")
 	public String toChangePasswordPage() {

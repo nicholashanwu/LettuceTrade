@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import com.fdmgroup.Lettuce.Exceptions.DuplicatedEmailException;
 import com.fdmgroup.Lettuce.Exceptions.FailToLoginException;
 import com.fdmgroup.Lettuce.Exceptions.InvalidEmailException;
+import com.fdmgroup.Lettuce.Exceptions.UserNotFoundException;
 import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.Portfolio;
 import com.fdmgroup.Lettuce.Models.User;
@@ -83,6 +84,7 @@ public interface iUser {
 	
 	public void updatePassword(User user, String newPassword);
 	
+	public User findByVerificationCode(String code) throws UserNotFoundException;
 	
 	
 	//void takeMoneyFromBank(int userId, double moneyOut);

@@ -123,9 +123,9 @@ public class UserServiceImpl implements iUser {
 	     
 	}
 	public boolean verify(String verificationCode) {
-	    User user = userRepo.findByVerificationCode(verificationCode);
+	    User user = userRepo.findByVerificationCode(verificationCode).get();
 	    System.out.println(user);
-	    if (user == null) {
+	    if (user == null | user.getEnabled().equals("true")) {
 	        return false;
 	    } else {
 	        user.setVerificationCode(null);
@@ -136,7 +136,20 @@ public class UserServiceImpl implements iUser {
 	    }
 	     
 	}
-
+	public boolean verifyToken(String verificationCode) {
+	    User user = userRepo.findByVerificationCode(verificationCode).get();
+	    System.out.println(user);
+	    if (user == null) {
+	        return false;
+	    } else {
+	        //user.setVerificationCode(null);
+	        //user.setEnabled("true");
+	        //userRepo.save(user);
+	         
+	        return true;
+	    }
+	     
+	}
 
 	private boolean isEmailValid(String email) {
 		// TODO Validate the email
@@ -267,6 +280,16 @@ public class UserServiceImpl implements iUser {
 		User user = userRepo.getById(userId);
 		user.getOrders().add(order);
 		userRepo.save(user);
+	}
+
+	public User findByVerificationCode(String code) throws UserNotFoundException {
+		Optional<User> userOption = userRepo.findByVerificationCode(code);
+		if(userOption.isEmpty()) {
+			throw new UserNotFoundException("No user found by verification code");
+		}
+		else {
+			return userOption.get();
+		}
 	}
 
 

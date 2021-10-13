@@ -22,7 +22,7 @@ public interface UserRepo extends JpaRepository<User, Integer>{
 	@Query(getByUserNameAndPasswordQ)
 	Optional<User> getUserByEmailAndPassword(String email, String password);
     @Query("select u from User u where u.verificationCode = ?1")
-    public User findByVerificationCode(String code);
+    public Optional<User> findByVerificationCode(String code);
 
 }
 
