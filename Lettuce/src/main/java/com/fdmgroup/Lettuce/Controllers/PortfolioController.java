@@ -63,52 +63,52 @@ public class PortfolioController {
 	public static final Logger dbLogger=LogManager.getLogger("DBLogging");
 	
 	
-//	@RequestMapping("/order")
-//	public String orderPage(Model model, HttpServletRequest request) {    // equivalent to get portfolio_id
-//		actLogger.info("Landed in Order page");
-//		
-//		User user = (User) request.getSession().getAttribute("user");
-//		
-//		
-//		System.out.println(user);
-//		
-//		
-//		List<HeldCurrency> heldCurrencies = hcr.findByPortfolio(user.getPortfolio());
-//		
-////		List<Currency> currencies = new ArrayList<Currency>();
-//		
-//		HashMap<Currency, Double> currenciesAndQuantities = new HashMap<>();
-//		
-//		
-//		// users can only sell currency that they have a positive amount of
-//		for (HeldCurrency hc : heldCurrencies) {
-//			if(hc.getQuantity() > 0) {
-//				currenciesAndQuantities.put(hc.getCurrency(), hc.getQuantity());
-//			}
-//		}
-//		
-////		System.out.println(currencies);
-//		
-//		//get list of currencies and pass them to model
-//		
-//		Map<String, Double> rates;
-//		
-//		try {
-//			rates = ExchangeRate.getAllRates("USD");
-//			model.addAttribute("rates", rates);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			System.out.println("could not get rates");
-//		}
-//		
-//	
-//		model.addAttribute("portfolio", currenciesAndQuantities);
-//		model.addAttribute("currency", new Currency());
-//		model.addAttribute("quantity", 0.0);
-//		
-//		return "ordertemp";
-//	}
+	@RequestMapping("/order")
+	public String orderPage(Model model, HttpServletRequest request) {    // equivalent to get portfolio_id
+		actLogger.info("Landed in Order page");
+		
+		User user = (User) request.getSession().getAttribute("user");
+		
+		
+		System.out.println(user);
+		
+		
+		List<HeldCurrency> heldCurrencies = hcr.findByPortfolio(user.getPortfolio());
+		
+//		List<Currency> currencies = new ArrayList<Currency>();
+		
+		HashMap<Currency, Double> currenciesAndQuantities = new HashMap<>();
+		
+		
+		// users can only sell currency that they have a positive amount of
+		for (HeldCurrency hc : heldCurrencies) {
+			if(hc.getQuantity() > 0) {
+				currenciesAndQuantities.put(hc.getCurrency(), hc.getQuantity());
+			}
+		}
+		
+//		System.out.println(currencies);
+		
+		//get list of currencies and pass them to model
+		
+		Map<String, Double> rates;
+		
+		try {
+			rates = ExchangeRate.getAllRates("USD");
+			model.addAttribute("rates", rates);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("could not get rates");
+		}
+		
+		model.addAttribute("newOrder", new Order());
+		model.addAttribute("portfolio", currenciesAndQuantities);
+		model.addAttribute("currency", new Currency());
+		model.addAttribute("quantity", 0.0);
+		
+		return "ordertemp";
+	}
 //	
 //	@RequestMapping("/addPortfolioHandler")
 //	public String addPortfolioHandler(@RequestParam int userId) {
@@ -179,12 +179,12 @@ public class PortfolioController {
 		}
 	}
 	
-	@RequestMapping("/order")
-	public String orderPage(Model model) {
-		model.addAttribute("newOrder", new Order());
-		model.addAttribute("currencies", csi.getAllCurrency());
-		return "order";
-	}
+//	@RequestMapping("/order")
+//	public String orderPage(Model model) {
+//		model.addAttribute("newOrder", new Order());
+//		model.addAttribute("currencies", csi.getAllCurrency());
+//		return "order";
+//	}
 	
 	@RequestMapping("/history")
 	public String historyPage(Model model, HttpServletRequest request) {
@@ -195,10 +195,22 @@ public class PortfolioController {
 	}
 	
 	@RequestMapping("/orderHandler")
-	public String orderHandler(Order order, HttpServletRequest request, RedirectAttributes redir) {
+	public String orderHandler(@RequestParam("buy-sell-choice") String choice, @RequestParam("baseCurrency") String strBaseCurrency, @RequestParam("targetCurrency") String strTargetCurrency, Order order, HttpServletRequest request, RedirectAttributes redir) {
 		User user = (User) request.getSession().getAttribute("user");
 		order.setUser(user);
 		order.setQuantity(order.getInitialQuantity());
+		System.out.println(choice);
+		System.out.println(strBaseCurrency);
+		System.out.println(strTargetCurrency);
+		
+		
+		
+		Currency baseCurrency = csi.getCurrencyById(strBaseCurrency);
+		Currency targetCurrency = csi.getCurrencyById(strTargetCurrency);
+		
+		order.setBaseCurrency(baseCurrency);
+		order.setTargetCurrency(targetCurrency);
+		
 		order.setOrderStatus(OrderStatus.ACTIVE);
 		order.setOrderType(OrderType.SPOT); // TODO: make this submitted by the form instead
 		try {
