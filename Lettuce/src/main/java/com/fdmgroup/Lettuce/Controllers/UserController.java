@@ -57,26 +57,50 @@ public class UserController {
 
 		Portfolio portfolio = new Portfolio(user);
 
-		Currency currency1 = new Currency("USD");
-		Currency currency2 = new Currency("AUD");
-		Currency currency3 = new Currency("HKD");
-
 		psi.addPortfolio(portfolio);
-
+		
+		// Create and add the popular currencies into db
+		Currency currency1 = new Currency("AUD");
+		Currency currency2 = new Currency("USD");
+		Currency currency3 = new Currency("CAD");
+		Currency currency4 = new Currency("GBP");
+		Currency currency5 = new Currency("NZD");
+		Currency currency6 = new Currency("EUR");
+		Currency currency7 = new Currency("JPY");
+	
 		csi.addCurrency(currency1);
 		csi.addCurrency(currency2);
 		csi.addCurrency(currency3);
+		csi.addCurrency(currency4);
+		csi.addCurrency(currency5);
+		csi.addCurrency(currency6);
+		csi.addCurrency(currency7);
 		
+		// Let the new user have some money to use for test transactions
 		HeldCurrency hc1 = new HeldCurrency(portfolio, currency1);
 		HeldCurrency hc2 = new HeldCurrency(portfolio, currency2);
 		HeldCurrency hc3 = new HeldCurrency(portfolio, currency3);
+		HeldCurrency hc4 = new HeldCurrency(portfolio, currency4);
+		HeldCurrency hc5 = new HeldCurrency(portfolio, currency5);
+		HeldCurrency hc6 = new HeldCurrency(portfolio, currency6);
+		HeldCurrency hc7 = new HeldCurrency(portfolio, currency7);
 
 		hc1.setQuantity(5000.0);
 		hc2.setQuantity(2500.0);
+		hc3.setQuantity(500.0);
+		hc4.setQuantity(12500.0);
+		hc5.setQuantity(400.0);
+		hc6.setQuantity(7500.0);
+		hc7.setQuantity(0.0);		
+		//set JPY to zero to test that it does not show up as a sellable currency in order.html
 		
 		hcr.save(hc1);
 		hcr.save(hc2);
 		hcr.save(hc3);
+		hcr.save(hc4);
+		hcr.save(hc5);
+		hcr.save(hc6);
+		hcr.save(hc7);
 
 	}
 
