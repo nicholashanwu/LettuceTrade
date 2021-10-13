@@ -8,11 +8,15 @@ import org.springframework.stereotype.Repository;
 
 import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.Transaction;
+import com.fdmgroup.Lettuce.Models.TransactionStatus;
 
 @Repository
 public interface TransactionRepo extends JpaRepository<Transaction, Integer> {
 	
 	@Query("select t from Transaction t where t.order1 = ?1 or t.order2 = ?1")
 	List<Transaction> findByOrder(Order order);
+	
+	@Query("select t from Transaction t where t.status = ?1")
+	List<Transaction> findByStatus(TransactionStatus status);
 
 }

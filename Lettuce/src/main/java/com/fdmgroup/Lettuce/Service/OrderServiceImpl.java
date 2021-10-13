@@ -1,6 +1,8 @@
 package com.fdmgroup.Lettuce.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +76,12 @@ public class OrderServiceImpl implements iOrder {
 		closed.addAll(cancelled);
 		closed.addAll(expired);
 		return closed;
+	}
+	
+	@Override
+	public List<Order> getAllOrdersNotUser(User user, OrderStatus pend, OrderStatus part){
+		List<Order> outstanding = orderRepo.getAllOrdersNotUser(user, pend, part);//, ot, os);
+		return outstanding;
 	}
 
 	@Override
@@ -227,10 +235,23 @@ public class OrderServiceImpl implements iOrder {
 		// No match found. Do nothing.
 		// TODO logging
 	}
+
 	@Override
-	public List<Order> getAllOrdersNotUser(User user, OrderStatus pend, OrderStatus part){
-		List<Order> outstanding = orderRepo.getAllOrdersNotUser(user, pend, part);//, ot, os);
-		return outstanding;
+	public void expireAll() {
+		List<Order> list = getOutstandingOrders();
+		LocalDate today = LocalDate.now();
+		LocalTime now = LocalTime.now();
+		LocalTime endOfDay = LocalTime.of(17, 0);
+		for (Order order : list) {
+			// Expire all orders whose expiry dates are in the past.
+			// If the business day has ended, then also expire all orders whose expiry dates are today.
+			if (order.getExpiryDate().isBefore(today) ||
+					(now.isAfter(endOfDay) && order.getExpiryDate().isEqual(today))) {
+				expireOrder(order);
+			}
+		}
 	}
+	
+	
 
 }

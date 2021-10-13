@@ -7,8 +7,11 @@ import com.fdmgroup.Lettuce.Models.Transaction;
 
 public interface iTransaction {
 	
-	List<Transaction> getAllTransactions();
-	List<Transaction> getTransactionsForOrder(Order order);
-	Transaction getTransactionById(int id);
+	public List<Transaction> getAllTransactions();
+	public List<Transaction> getTransactionsForOrder(Order order);
+	public Transaction getTransactionById(int id);
+	
+	public void resolvePendingForwardOrder(Transaction transaction);
+	public void resolveAllPending();
 
 }

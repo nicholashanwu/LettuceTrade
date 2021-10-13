@@ -27,4 +27,5 @@ public interface iOrder {
 	public void expireOrder(Order order);
 	
 	public void tryToMatch(Order order);
+	public void expireAll();
 }
