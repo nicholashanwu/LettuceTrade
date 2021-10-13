@@ -1,6 +1,5 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <th:block th:replace="template :: setup"></th:block>
 <link th:href="@{/css/flags.css}" rel="stylesheet" />
 </head>
@@ -8,17 +7,14 @@
 
 	<th:block th:replace="template :: header"></th:block>
 
-
   <!-- Main Body -->
   <main class="flex-shrink-0">
     <div class="container">
       <div class="dashboard-container">
       
-        <h1>Market Overview</h1> <br>
-        <h4 class="green-text-v1">View list of current rates!</h4>
-        
+        <h1>View our current rates</h1> <br>
         <div class="rates-section">
-        	<table class="table">
+        	<table class="table align-middle">
         		<tr>
 	              <th colspan="2">Instrument</th>
 	              <th>Rate</th>
@@ -41,7 +37,6 @@
 	            </th:block>
         	</table>
         </div>
-
       </div>
     </div>
   </main>
