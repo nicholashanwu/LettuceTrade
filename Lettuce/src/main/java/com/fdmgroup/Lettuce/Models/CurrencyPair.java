@@ -28,4 +28,10 @@ public class CurrencyPair {
 	public void setRate(double rate) {
 		this.rate = rate;
 	}
+	public boolean equals(CurrencyPair otherPair) {
+		return (this.firstCurrency.equals(otherPair.firstCurrency) && this.secondCurrency.equals(otherPair.secondCurrency));
+	}
+	public String toString() {
+		return firstCurrency + " to " + secondCurrency + " at " + rate;
+	}
 }
