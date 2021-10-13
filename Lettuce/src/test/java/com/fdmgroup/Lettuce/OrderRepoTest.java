@@ -50,7 +50,7 @@ public class OrderRepoTest {
 	
 	@Test
 	public void saves_item_in_orderDB() {
-		Order o = or.save(new Order(u, usd, eur, OrderType.SPOT, 100.2, now));
+		Order o = or.save(new Order(u, usd, eur, OrderType.SPOT, 100.2, now, null));
 		
 		assertThat(o).hasFieldOrPropertyWithValue("user", u);
 		assertThat(o).hasFieldOrPropertyWithValue("baseCurrency", usd);
@@ -61,9 +61,9 @@ public class OrderRepoTest {
 	}
 	@Test
 	public void find_orders_of_type_SPOT() {
-		Order o1 = or.save(new Order(u, usd, eur, OrderType.SPOT, 100.2, now));
-		Order o2 = or.save(new Order(u, usd, eur, OrderType.FORWARD, 100.2, now));
-		Order o3 = or.save(new Order(u, usd, eur, OrderType.FORWARD, 1.5, now));
+		Order o1 = or.save(new Order(u, usd, eur, OrderType.SPOT, 100.2, now, null));
+		Order o2 = or.save(new Order(u, usd, eur, OrderType.FORWARD, 100.2, now, null));
+		Order o3 = or.save(new Order(u, usd, eur, OrderType.FORWARD, 1.5, now, null));
 
 		Iterable<Order> items = or.getByType(OrderType.SPOT);
 		
@@ -71,8 +71,8 @@ public class OrderRepoTest {
 	}
 	@Test
 	public void update_order_by_id() {
-		Order o1 = or.save(new Order(u, usd, eur, OrderType.SPOT, 100.2, now));
-		Order newValues = new Order(u, usd, eur, OrderType.FORWARD, 100.2, now);
+		Order o1 = or.save(new Order(u, usd, eur, OrderType.SPOT, 100.2, now, null));
+		Order newValues = new Order(u, usd, eur, OrderType.FORWARD, 100.2, now, null);
 		
 		Order o = or.findById(o1.getOrderId()).get();
 		o.setOrderType(newValues.getOrderType());
@@ -91,9 +91,9 @@ public class OrderRepoTest {
 	}
 	@Test
 	public void delete_Order_by_id() {
-		Order o1 = or.save(new Order(u, usd, eur, OrderType.SPOT, 100.2, now));
-		Order o2 = or.save(new Order(u, usd, eur, OrderType.FORWARD, 100.2, now));
-		Order o3 = or.save(new Order(u, usd, eur, OrderType.FORWARD, 1.5, now));
+		Order o1 = or.save(new Order(u, usd, eur, OrderType.SPOT, 100.2, now, null));
+		Order o2 = or.save(new Order(u, usd, eur, OrderType.FORWARD, 100.2, now, null));
+		Order o3 = or.save(new Order(u, usd, eur, OrderType.FORWARD, 1.5, now, null));
 		
 		or.deleteById(o3.getOrderId());
 		
