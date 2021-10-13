@@ -125,7 +125,7 @@ public class UserServiceImpl implements iUser {
 	public boolean verify(String verificationCode) {
 	    User user = userRepo.findByVerificationCode(verificationCode);
 	    System.out.println(user);
-	    if (user == null || user.getEnabled().equals("true")) {
+	    if (user == null) {
 	        return false;
 	    } else {
 	        user.setVerificationCode(null);
@@ -203,7 +203,7 @@ public class UserServiceImpl implements iUser {
 	    helper.setSubject(subject);
 	     
 	    content = content.replace("[[name]]", user.getFirstName());
-	    String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
+	    String verifyURL = siteURL + "/reset_password?code=" + user.getVerificationCode();
 	     
 	    content = content.replace("[[URL]]", verifyURL);
 	     

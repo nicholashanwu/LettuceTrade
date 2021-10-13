@@ -9,30 +9,30 @@
 	<main class="flex-shrink-0">
 		<div class="container">
 			<div class="dashboard-container">
-				<h1>Order History</h1>
-				<form th:action="@{/outOrderHandler}" th:object="${newOrder}" method="post">
+				<h1>All available orders</h1>
+				
 				<table class="table">
 					<tr>
 						<th colspan="2">Selling</th>
 						<th>Remaining</th>
-						<th colspan="2">Buying</th>
-						<th>Current Value</th>
-						<th>Expires</th>
 						<th>Fulfill</th>
 						<th>Buy</th>
 					</tr>
-					<th:block th:each="rate : ${outRates}">
+					<th:block th:each="rate: ${outRates}">
+					<form th:action="@{/outOrderHandler}" th:object="${newOrder}" method="post">
 						<tr>
 							<td>Image</td>
 							<td> <input type = "text" th:value ="${rate.key}" th:id="details" th:name = "details" readonly></td>
-							<td th:text = ${rate.value}></td>
+							<td th:text = "${#numbers.formatDecimal(rate.value, 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
 							
 							<td><input type="number" th:field="*{initialQuantity}"></td>						
-							<td><input type ="submit" ></td>
+							<td><input type ="submit" value = "Buy" th:data-confirm-delete="|Are you sure you want to place trade?|"
+  onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false"></td>
 						</tr>
+						</form>
 					</th:block>
 				</table>
-				</form>
+
 				<div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
 
 			</div>

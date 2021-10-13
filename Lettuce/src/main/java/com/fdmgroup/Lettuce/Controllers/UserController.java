@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.fdmgroup.Lettuce.Exceptions.DuplicatedEmailException;
+import com.fdmgroup.Lettuce.Exceptions.UserNotFoundException;
 import com.fdmgroup.Lettuce.Models.Currency;
 import com.fdmgroup.Lettuce.Models.HeldCurrency;
 import com.fdmgroup.Lettuce.Models.Portfolio;
@@ -179,6 +180,28 @@ public class UserController {
 	@RequestMapping("/forgotPasswordForm")
 	public String forgotPasswordForm() {
 		return "forgot-password";
+	}
+	
+	@RequestMapping("/forgetPasswordHandler")
+	public String forgetPasswordHandler(@RequestParam(value = "email") String email,HttpServletRequest request,Model model) throws UnsupportedEncodingException, MessagingException {
+		try {
+			usi.resetPassword(email, getSiteURL(request));
+			model.addAttribute("message","A reset password link has been sent to your email. Please use it to set up your new password");
+		} catch (UserNotFoundException e) {
+			 model.addAttribute("error", e.getMessage());
+		}
+		catch (UnsupportedEncodingException | MessagingException ex) {
+			model.addAttribute("error", "We are encoutring an error while sending email. Please try again.");
+		}
+		
+		return "";
+	}
+	@RequestMapping("/reset_password")
+	public String resetPassword(@Param("code") String code) {
+		if(usi.verify(code)) {
+			return "reset-password";
+		}
+		return "redirect:/login";
 	}
 	
 	// change the Password before login
