@@ -2,20 +2,30 @@ package com.fdmgroup.Lettuce.Controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.fdmgroup.Lettuce.Models.Currency;
+import com.fdmgroup.Lettuce.Service.CurrencyServiceImpl;
 import com.fdmgroup.Lettuce.rates.ExchangeRate;
 
 @Controller
 @SessionAttributes({"user"})
 public class RatesController {
+	@Autowired
+	private CurrencyServiceImpl csi = new CurrencyServiceImpl();
+	
 	public static final Logger actLogger=LogManager.getLogger("ActLogging");
 
 	@RequestMapping("/rates")
@@ -24,35 +34,24 @@ public class RatesController {
 		
 		actLogger.info("Landed in rates page");
 		
-		List<Double> ratelist = new ArrayList<>();
-		
 		// "AUD", "USD", "CAD", "GBP", "NZD", "EUR", "JPY"
 		
 		try {
-			ratelist.add(ExchangeRate.getRateForPair("AUD", "USD"));
-			ratelist.add(ExchangeRate.getRateForPair("AUD", "CAD"));
-			ratelist.add(ExchangeRate.getRateForPair("AUD", "GBP"));
-			ratelist.add(ExchangeRate.getRateForPair("AUD", "NZD"));
-			ratelist.add(ExchangeRate.getRateForPair("AUD", "EUR"));
-			ratelist.add(ExchangeRate.getRateForPair("AUD", "JPY"));
-			ratelist.add(ExchangeRate.getRateForPair("USD", "CAD"));
-			ratelist.add(ExchangeRate.getRateForPair("USD", "GBP"));
-			ratelist.add(ExchangeRate.getRateForPair("USD", "NZD"));
-			ratelist.add(ExchangeRate.getRateForPair("USD", "EUR"));
-			ratelist.add(ExchangeRate.getRateForPair("USD", "JPY"));
-			ratelist.add(ExchangeRate.getRateForPair("CAD", "GBP"));
-			ratelist.add(ExchangeRate.getRateForPair("CAD", "NZD"));
-			ratelist.add(ExchangeRate.getRateForPair("CAD", "EUR"));
-			ratelist.add(ExchangeRate.getRateForPair("CAD", "JPY"));
-			ratelist.add(ExchangeRate.getRateForPair("GBP", "NZD"));
-			ratelist.add(ExchangeRate.getRateForPair("GBP", "EUR"));
-			ratelist.add(ExchangeRate.getRateForPair("GBP", "JPY"));
-			ratelist.add(ExchangeRate.getRateForPair("NZD", "EUR"));
-			ratelist.add(ExchangeRate.getRateForPair("NZD", "JPY"));
-			ratelist.add(ExchangeRate.getRateForPair("EUR", "JPY"));
+			Map<String, Double> ratesAsStrings = ExchangeRate.getAllRates("USD");
+			Map<Currency, Double> rates = new HashMap<>();
+			for (Map.Entry<String, Double> rate : ratesAsStrings.entrySet()) {
+				try {
+					Currency currency = csi.getCurrencyById(rate.getKey());
+					rates.put(currency, rate.getValue());
+				} catch (EntityNotFoundException e) {
+					// API has given us a currency that we're not tracking in our database.
+					// Don't add this one to the map. Do nothing.
+				}
+			}
+			System.out.println(rates);
 			
 			actLogger.info("Showing rates");
-			model.addAttribute("ratelist", ratelist);
+			model.addAttribute("rates", rates);
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
