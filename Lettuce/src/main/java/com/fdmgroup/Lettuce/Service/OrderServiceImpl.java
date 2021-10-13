@@ -11,6 +11,7 @@ import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.OrderStatus;
 import com.fdmgroup.Lettuce.Models.OrderType;
 import com.fdmgroup.Lettuce.Models.Transaction;
+import com.fdmgroup.Lettuce.Models.TransactionStatus;
 import com.fdmgroup.Lettuce.Models.User;
 import com.fdmgroup.Lettuce.Repo.OrderRepo;
 import com.fdmgroup.Lettuce.Repo.TransactionRepo;
@@ -147,12 +148,12 @@ public class OrderServiceImpl implements iOrder {
 						if (order.getOrderType() == OrderType.SPOT) {
 							psi.increaseCurrency(order.getTargetCurrency(), firstUserWants, order.getUser().getPortfolio().getPortfolioId());
 							psi.increaseCurrency(orderFound.getTargetCurrency(), firstUserHas, orderFound.getUser().getPortfolio().getPortfolioId());
-//							trans.setResolved(true);
+							trans.setStatus(TransactionStatus.SPOT);
 						}
 						// If it's a forward order, don't move any money yet, but mark the Transaction appropriately.
 						if (order.getOrderType() == OrderType.FORWARD) {
 							trans.setScheduledDate(order.getScheduledDate());
-//							trans.setResolved(false);
+							trans.setStatus(TransactionStatus.FORWARD_PENDING);
 						}
 						transRepo.save(trans);
 
@@ -170,12 +171,12 @@ public class OrderServiceImpl implements iOrder {
 						if (order.getOrderType() == OrderType.SPOT) {
 							psi.increaseCurrency(order.getTargetCurrency(), secondUserHas, order.getUser().getPortfolio().getPortfolioId());
 							psi.increaseCurrency(orderFound.getTargetCurrency(), secondUserWants, orderFound.getUser().getPortfolio().getPortfolioId());
-//							trans.setResolved(true);
+							trans.setStatus(TransactionStatus.SPOT);
 						}
 						// If it's a forward order, don't move any money yet, but mark the Transaction appropriately.
 						if (order.getOrderType() == OrderType.FORWARD) {
 							trans.setScheduledDate(order.getScheduledDate());
-//							trans.setResolved(false);
+							trans.setStatus(TransactionStatus.FORWARD_PENDING);
 						}
 						transRepo.save(trans);
 
@@ -193,12 +194,12 @@ public class OrderServiceImpl implements iOrder {
 						if (order.getOrderType() == OrderType.SPOT) {
 							psi.increaseCurrency(order.getTargetCurrency(), firstUserWants, order.getUser().getPortfolio().getPortfolioId());
 							psi.increaseCurrency(orderFound.getTargetCurrency(), secondUserWants, orderFound.getUser().getPortfolio().getPortfolioId());
-//							trans.setResolved(true);
+							trans.setStatus(TransactionStatus.SPOT);
 						}
 						// If it's a forward order, don't move any money yet, but mark the Transaction appropriately.
 						if (order.getOrderType() == OrderType.FORWARD) {
 							trans.setScheduledDate(order.getScheduledDate());
-//							trans.setResolved(false);
+							trans.setStatus(TransactionStatus.FORWARD_PENDING);
 						}
 						transRepo.save(trans);
 					}

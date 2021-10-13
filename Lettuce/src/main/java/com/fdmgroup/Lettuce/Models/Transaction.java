@@ -46,7 +46,7 @@ public class Transaction {
 	private double quantity2;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate scheduledDate; // Intended for forward orders. Leave it null for spot orders.
-//	private boolean resolved;
+	private TransactionStatus status;
 
 	public Transaction() {
 		super();
@@ -136,13 +136,13 @@ public class Transaction {
 		this.scheduledDate = scheduledDate;
 	}
 
-//	public boolean isResolved() {
-//		return resolved;
-//	}
-//
-//	public void setResolved(boolean resolved) {
-//		this.resolved = resolved;
-//	}
+	public TransactionStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TransactionStatus status) {
+		this.status = status;
+	}
 
 	@Override
 	public String toString() {
