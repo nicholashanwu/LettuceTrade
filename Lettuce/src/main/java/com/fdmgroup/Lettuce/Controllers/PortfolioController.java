@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -62,6 +63,22 @@ public class PortfolioController {
 	public static final Logger actLogger=LogManager.getLogger("ActLogging");
 	public static final Logger dbLogger=LogManager.getLogger("DBLogging");
 	
+	// Helper method
+	private Map<Currency, Double> getFilteredRates(String currencyCode) throws IOException {
+		Map<String, Double> ratesAsStrings = ExchangeRate.getAllRates(currencyCode);
+		Map<Currency, Double> ratesAsObjects = new HashMap<>();
+		for (Map.Entry<String, Double> rate : ratesAsStrings.entrySet()) {
+			try {
+				Currency currency = csi.getCurrencyById(rate.getKey());
+				ratesAsObjects.put(currency, rate.getValue());
+			} catch (EntityNotFoundException e) {
+				// API has given us a currency that we're not tracking in our database.
+				// Don't add this one to the map. Do nothing.
+			}
+		}
+		System.out.println(ratesAsObjects);
+		return ratesAsObjects;
+	}
 	
 	@RequestMapping("/order")
 	public String orderPage(Model model, HttpServletRequest request) {    // equivalent to get portfolio_id
@@ -91,10 +108,10 @@ public class PortfolioController {
 		
 		//get list of currencies and pass them to model
 		
-		Map<String, Double> rates;
+		Map<Currency, Double> rates;
 		
 		try {
-			rates = ExchangeRate.getAllRates("USD");
+			rates = getFilteredRates("USD");
 			model.addAttribute("rates", rates);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

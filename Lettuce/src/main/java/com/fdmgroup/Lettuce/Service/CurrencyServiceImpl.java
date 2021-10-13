@@ -2,6 +2,8 @@ package com.fdmgroup.Lettuce.Service;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +23,13 @@ public class CurrencyServiceImpl implements iCurrency {
 	}
 
 	@Override
-	public Currency getCurrencyById(String id) {
-		return currencyRepo.getById(id);
+	public Currency getCurrencyById(String id) throws EntityNotFoundException {
+		// Fail fast: check whether the entity exists BEFORE getting it, rather than letting lazy initialisation happen and giving us a surprise exception later. 
+		if (currencyRepo.existsById(id)) {
+			return currencyRepo.getById(id);
+		} else {
+			throw new EntityNotFoundException();
+		}
 	}
 
 	@Override
