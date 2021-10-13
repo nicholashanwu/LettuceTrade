@@ -2,130 +2,116 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="ISO-8859-1">
-  <title>LettuceTrade</title>
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!--CSS References-->
-  <link th:href="@{/css/standard_styles.css}" rel="stylesheet" />
-  <link th:href="@{/css/dashboard_styles.css}" rel="stylesheet" />
-  <link th:href="@{/css/flags.css}" rel="stylesheet" />
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+	<th:block th:replace="template :: setup"></th:block>
+
+	<!-- Javascript -->
+	<script type="text/javascript" th:src="@{/scripts/dashboard.js}"></script>
+	<!--CSS References-->
+	<link th:href="@{/css/flags.css}" rel="stylesheet" />
+
 </head>
 
 <body class="d-flex flex-column h-100">
-  <!-- Header -->
-  <main>
-    <header class="p-3 mb-3 border-bottom">
-      <div class="container">
-        <!-- Logo -->
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <a class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none" th:href="@{/}">
-            <img id="header_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
-            <span class="dashboard-header-logo-title"> Lettuce <span class="dashboard-header-logo-title-thin">Trade</span></span>
-          </a>
-          <!-- Nav Bar Options -->
-          <div class="nav-bar-links">
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-              <li><a class="nav-link" th:href="@{/dashboard}">Dashboard</a></li>
-              <li><a class="nav-link" th:href="@{/rates}">Rates</a></li>
-              <li><a class="nav-link" th:href="@{/profile}">Profile</a></li>
-              <li><a class="nav-link" th:href="@{/order}">Order</a></li>
-              <li><a class="nav-link" th:href="@{/history}">History</a></li>
-              <li><a class="nav-link" th:href="@{/outstandingOrder}">View orders</a></li>
-              
-            </ul>
-          </div>
-          <!-- Log Out button-->
-          <div class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <a class="btn btn-primary" th:href="@{/logout}">Log Out</a>
-          </div>
+	<!-- Header -->
+	<th:block th:replace="template :: header"></th:block>
+
+
+	<!-- Main Body -->
+	<main class="flex-shrink-0">
+		<div class="container">
+			<div class="dashboard-container">
+
+				<h1>Welcome to your dashboard, <span th:text="${#strings.capitalize(#strings.toLowerCase(session.user.firstName))}"></span></h1> <br>
+				<h4 class="green-text-v1">View your portfolio and current rates!</h4>
+				<div class="dashboard-section">
+					
+					<h2>Portfolio Overview</h2>
+					<br />
+					
+					<!-- Portfolio Table -->
+					<table class="table align-middle">
+						<tr>
+							<th>Instrument</th>
+							<th>Quantity</th>
+							<th>Value ($AUD)</th>
+						</tr>
+						
+						<tr th:each="heldCurrency:${heldCurrencys}">
+							<td class="align-top"><div th:class="${'currency-flag currency-flag-' + heldCurrency.value.currency.toString().toLowerCase()}"></div>
+								<span th:text="${heldCurrency.value.currency.currencyCode}"></span></td>
+								
+								<td><span th:text="${heldCurrency.value.quantity}"></span></td>
+								<td><span th:text="${heldCurrency.key}"></span></td>
+							</tr>
+						</table>
+						
+						<!-- Portfolio Value -->
+						<p><span > Total Portfolio Value </span></p>
+						<h4> AUD <span class="green-text-v1" th:text="${TotalBalance}"></span></h4>
+					</div>
+					
+					<!-- Rates -->
+					<div class="dashboard-section">
+						<h2>Rates</h2>
+					
+        
+        <br />
+        
+        <!-- Rates Table -->
+        <table class="table align-middle" >
+        	<tr>
+        		<th colspan="2">Instrument</th>
+        		<th>Rate</th>
+        		<th></th>
+        	</tr>
+        	
+        	<tr th:each="rate:${rates}">
+
+        		<td colspan="2"><div th:class="${'currency-flag currency-flag-' + currency.toString().toLowerCase()}"></div>
+        			<div th:class="${'currency-flag currency-flag-' + rate.key.toString().toLowerCase()}"></div>
+        			<span th:text="${currency}"/>-<span th:text="${rate.key}"/></td>
+        			<td><span th:text="${rate.value}"/></td>
+        			<td><a role="button" th:href="@{/placeOrderHandler}" id = "place-order"class="btn btn-primary">Trade</a><td>
+        			</tr>
+
+
+        		</table>
+
+
+        		<!-- Rate Filter -->
+        		<form th:action="@{/getRateHandler}" method="post" >
+
+        			<select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onchange="if (this.selectedIndex) enableSubmitButton();" id="currency" name="currency">
+						<option value="" selected disabled>filter</option>
+						<option value="AUD">AUD</option>
+						<option value="CAD">CAD</option>
+						<option value="EUR">EUR</option>
+						<option value="GBP">GBP</option>
+						<option value="JPY">JPY</option>
+						<option value="NZD">NZD</option>
+						<option value="USD">USD</option>
+
+					</select>
+        			
+        			<button type="submit" class="btn btn-primary btn-lg" id="get-rate-submit-button" disabled="disable" >submit</button>
+
+        		</form>
+
+        	</div>
+
         </div>
       </div>
-    </header>
-  </main>
+    </main>
 
+    <!-- Footer -->
+    <footer class="footer mt-auto py-3 bg-light">
+    	<div class="container">
+    		<img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
+    		<span class="text-muted">&copy; 2021 Lettuce</span>
+    	</div>
+    </footer>
 
-  <!-- Main Body -->
-  <main class="flex-shrink-0">
-    <div class="container">
-      <div class="dashboard-container">
-      
-        <h1>Welcome to your dashboard, <span th:text="${#strings.capitalize(#strings.toLowerCase(session.user.firstName))}"></span></h1> <br>
-        <h4 class="green-text-v1">View your portfolio and current rates!</h4>
-        <div class="dashboard-section">
-          <h2>Portfolio overview</h2>
-          <p><span class="green-text-v1"> Current trade balance </span></p>
-          <h4> AUD <span th:text="${TotalBalance}"></span></h4>
-          <br /><br />
-          <table class="table">
-            <tr>
-              <th colspan="2">Instrument</th>
-              <th>Quantity</th>
-              <th>Value(AUD)</th>
-            </tr>
-            
-            <tr th:each="heldCurrency:${heldCurrencys}">
-				<td><div th:class="${'currency-flag currency-flag-' + heldCurrency.value.currency.toString().toLowerCase()}"></div></td>
-				<td><span th:text="${heldCurrency.value.currency.currencyCode}"></span></td>
-				<td><span th:text="${heldCurrency.value.quantity}"></span></td>
-				<td>$<span th:text="${heldCurrency.key}"></span></td>
-			</tr>
-          </table>
-        </div>
+  </body>
 
-        <div class="dashboard-section">
-          <h2>Rates</h2>
-          <form  th:action="@{/getRateHandler}" method="post" >
-          <input list="currency-choices" id="currency" name="currency" placeholder="AUD" />
-          <datalist id="currency-choices">
-            <option value="AUD">
-            <option value="USD">
-            <option value="CAD">
-            <option value="GBP">
-            <option value="NZD">
-            <option value="">
-          </datalist>
-          <button type="submit" class="btn btn-primary">submit</button>
-          </form>
-          <br /><br /><br />
-          <table class="table">
-            <tr>
-              <th colspan="2">Instrument</th>
-              <th>Rate</th>
-              <th></th>
-            </tr>
-            
-           
-			<tr th:each="rate:${rates}">
-				<td><img th:src="@{'/images/' + ${currency} + '.png'}" width="40" height="40" />
-				<img th:src="@{'/images/' + ${rate.key} + '.png'}" width="40" height="40" /></td>
-				<td><span th:text="${currency}"/>-<span th:text="${rate.key}"/></td>
-				<td><span th:text="${rate.value}"/></td>
-				<td><a role="button" th:href="@{/placeOrderHandler}" id = "place-order"class="btn btn-primary">Trade</a><td>
-			</tr>
-			
-           
-          </table>
-        </div>
-
-      </div>
-    </div>
-  </main>
-  
-  <!-- Footer -->
-  <footer class="footer mt-auto py-3 bg-light">
-    <div class="container">
-      <img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
-      <span class="text-muted">&copy; 2021 Lettuce</span>
-    </div>
-  </footer>
-
-</body>
-
-</html>
+  </html>

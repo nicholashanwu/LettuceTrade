@@ -100,11 +100,13 @@ public class DashboardController {
 	}
 	
 	@RequestMapping("/dashboard")
-	public String toDashboardPage(Model model) {
-		User user = new User();
+	public String toDashboardPage(Model model, HttpServletRequest request) {
+//		User user = new User();
 		Portfolio portfolio = new Portfolio();
+		
+		User user = (User) request.getSession().getAttribute("user");
 				
-		user = (User) model.getAttribute("user");		
+//		user = (User) model.getAttribute("user");		
 		portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
 		
 		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
@@ -159,14 +161,17 @@ public class DashboardController {
 	@RequestMapping("/getRateHandler")
 	public String getRateHandler(@RequestParam String currency, Model model) {
 		Map<String, Double> rates = new HashMap<String, Double>();
-		try {
-			rates = ExchangeRate.getPopularRates(currency);
-			rates.remove(currency);
-			model.addAttribute("currency",currency);
-			model.addAttribute("rates",rates);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		
+			try {
+				rates = ExchangeRate.getPopularRates(currency);
+				rates.remove(currency);
+				model.addAttribute("currency",currency);
+				model.addAttribute("rates",rates);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		
 			
 		return "dashboard";
 	}
