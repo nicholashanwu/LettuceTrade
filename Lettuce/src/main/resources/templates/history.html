@@ -19,6 +19,7 @@
 						<th>Expires</th>
 						<th colspan="2">Status</th>
 					</tr>
+					
 					<!-- Show all orders for this user -->
 					<th:block th:each="order : ${orders}">
 						<tr>
@@ -30,12 +31,13 @@
 							</td>
 							<td>Image</td>
 							<td th:text="${order.targetCurrency}"></td>
-							<td>?</td>
+							<td th:text="${#numbers.formatDecimal(order.quantity * rates.get(order.targetCurrency) / rates.get(order.baseCurrency), 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
 							<td th:text="${order.expiryDate}"></td>
 							<td th:text="${order.orderStatus}"></td>
-							<td th:if="${order.orderStatus.name() == 'ACTIVE' || order.orderStatus.name() == 'PARTIALLY_COMPLETE'}">
-								<a th:href="@{/cancelorder(orderId=${order.orderId})}">Cancel</a></td>
+							<td>
+								<a th:if="${order.orderStatus.name() == 'ACTIVE' || order.orderStatus.name() == 'PARTIALLY_COMPLETE'}" th:href="@{/cancelorder(orderId=${order.orderId})}">Cancel</a></td>
 						</tr>
+						
 						<!-- Show all transactions for this order -->
 						<tr th:each="trans : ${order.getTransactions()}" class="table-info">
 							<td colspan="2"></td>
@@ -67,13 +69,14 @@
 							</th:block>
 							</td>
 						</tr>
+						
 					</th:block>
 				</table>
 			</div>
 		</div>
 	</main>
 	
-	<th:block th:replace="template :: lockedfooter"></th:block>
+	<th:block th:replace="template :: footer"></th:block>
 
 </body>
 </html>

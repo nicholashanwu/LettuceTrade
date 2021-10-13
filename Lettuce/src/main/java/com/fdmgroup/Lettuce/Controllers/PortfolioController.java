@@ -77,7 +77,6 @@ public class PortfolioController {
 				// Don't add this one to the map. Do nothing.
 			}
 		}
-		System.out.println(ratesAsObjects);
 		return ratesAsObjects;
 	}
 	
@@ -211,6 +210,12 @@ public class PortfolioController {
 		orders.sort(Comparator.comparingInt(Order::getOrderId).reversed());
 		model.addAttribute("orders", orders);
 		model.addAttribute("now", LocalDate.now());
+		try {
+			model.addAttribute("rates", getFilteredRates("USD"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "history";
 	}
 	
