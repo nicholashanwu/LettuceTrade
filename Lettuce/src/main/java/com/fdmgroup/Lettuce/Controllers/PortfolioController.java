@@ -3,6 +3,7 @@ package com.fdmgroup.Lettuce.Controllers;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -206,7 +207,9 @@ public class PortfolioController {
 	@RequestMapping("/history")
 	public String historyPage(Model model, HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
-		model.addAttribute("orders", osi.getAllOrdersForUser(user));
+		List<Order> orders = osi.getAllOrdersForUser(user);
+		orders.sort(Comparator.comparingInt(Order::getOrderId).reversed());
+		model.addAttribute("orders", orders);
 		model.addAttribute("now", LocalDate.now());
 		return "history";
 	}
