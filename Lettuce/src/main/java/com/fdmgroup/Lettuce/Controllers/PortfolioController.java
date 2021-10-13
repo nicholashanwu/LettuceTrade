@@ -82,20 +82,13 @@ public class PortfolioController {
 	
 	@RequestMapping("/order")
 	public String orderPage(Model model, HttpServletRequest request) {    // equivalent to get portfolio_id
+		
 		actLogger.info("Landed in Order page");
 		
 		User user = (User) request.getSession().getAttribute("user");
 		
-		
-		System.out.println(user);
-		
-		
 		List<HeldCurrency> heldCurrencies = hcr.findByPortfolio(user.getPortfolio());
-		
-//		List<Currency> currencies = new ArrayList<Currency>();
-		
 		HashMap<Currency, Double> currenciesAndQuantities = new HashMap<>();
-		
 		
 		// users can only sell currency that they have a positive amount of
 		for (HeldCurrency hc : heldCurrencies) {
@@ -104,10 +97,7 @@ public class PortfolioController {
 			}
 		}
 		
-//		System.out.println(currencies);
-		
-		//get list of currencies and pass them to model
-		
+		//get map of currencies and pass them to model
 		Map<Currency, Double> rates;
 		
 		try {
@@ -220,16 +210,29 @@ public class PortfolioController {
 		System.out.println(strBaseCurrency);
 		System.out.println(strTargetCurrency);
 		
+		Currency baseCurrency;
+		Currency targetCurrency;
 		
+		if(choice == "Sell") {					//reverse the two currencies if selling. needs testing!
+			baseCurrency = csi.getCurrencyById(strTargetCurrency);
+			targetCurrency = csi.getCurrencyById(strBaseCurrency);
+		} else {
+			baseCurrency = csi.getCurrencyById(strBaseCurrency);
+			targetCurrency = csi.getCurrencyById(strTargetCurrency);
+		}
 		
-		Currency baseCurrency = csi.getCurrencyById(strBaseCurrency);
-		Currency targetCurrency = csi.getCurrencyById(strTargetCurrency);
+		if(order.getScheduledDate() == null) {	//if no scheduled date, then it's a spot order
+			order.setOrderType(OrderType.SPOT); 
+		} else {
+			order.setOrderType(OrderType.FORWARD); 
+		}
+		
 		
 		order.setBaseCurrency(baseCurrency);
 		order.setTargetCurrency(targetCurrency);
 		
 		order.setOrderStatus(OrderStatus.ACTIVE);
-		order.setOrderType(OrderType.SPOT); // TODO: make this submitted by the form instead
+		
 		try {
 			osi.addOrder(order);
 			return "redirect:/dashboard";

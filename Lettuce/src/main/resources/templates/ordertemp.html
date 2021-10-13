@@ -1,166 +1,216 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<th:block th:replace="template :: setup"></th:block>
 </head>
 
-<body class="d-flex flex-column h-100">
+<body onload="openSpotTabByDefault();checkDate();" class="d-flex flex-column h-100">
 	<th:block th:replace="template :: header"></th:block>
 
 	<!-- Main Body -->
 	<main class="flex-shrink-0">
 		<div class="container">
 			<div class="dashboard-container">
-				
+
 				<h1>Place Order</h1><br>
-				
+
 				<!-- Choose Options -->
 
 				<!-- AUD IS DEFAULT -->
 
 				<div class="dashboard-section">
-					
+
 					<!-- Spot/Forward Order Tab content -->
 
 					<div class="tab">
-						<button class="tablinks" onclick="chooseOrderType(event, 'Spot');checkDate();" id="defaultOpen">Spot</button>
+						<button class="tablinks" onclick="chooseOrderType(event, 'Spot')" id="defaultOpen">Spot</button>
 						<button class="tablinks" onclick="chooseOrderType(event, 'Forward')">Forward</button>
 					</div>
 
-					<!-- Tab content -->
+					<!-- SPOT Tab content -->
 					<div id="Spot" class="tabcontent">
-						
-						<form  th:action="@{/orderHandler}" th:object="${newOrder}" method="post" autocomplete="off">
-							
+
+						<form th:action="@{/orderHandler}" th:object="${newOrder}" method="post" autocomplete="off">
+
 							</br>
-							
+
 							<table cellpadding="4">
 								<tr>
 									<td>
 										<!-- Buy/Sell Option -->
-										<select class="form-control" 
-												id="buy-sell-choice" 
-												name="buy-sell-choice"
-												th:oninput="changeCurrenciesBasedOnBuySellChosen([[${rates}]], [[${portfolio}]]); changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" 
-												required>
+										<select class="form-control" id="buy-sell-choice" name="buy-sell-choice" th:oninput="changeCurrenciesBasedOnBuySellChosen([[${rates}]], [[${portfolio}]]); changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
 											<option value="Buy">Buy</option>
 											<option value="Sell">Sell</option>
 										</select>
-									
+
 									</td>
-	
+
 									<td>
 										<!-- Quantity of First Currency Option -->
-								        <input class="form-control" 
-								        		type="number"
-												name="first-currency" 
-												placeholder="Quantity" 
-												id="first-currency" 
-												th:field="*{initialQuantity}"
-												step="10"
-												th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" 
-												required></input>
+										<input class="form-control" type="number" name="first-currency" placeholder="Quantity" id="first-currency" th:field="*{initialQuantity}" th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" step="0.01"
+											required></input>
+									</td>
+
+									<td>
+										<!-- First Currency Option -->
+
+										<select class="form-control" list="first-currency-choice" id="first-currency-choice" name="targetCurrency" th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
+											<option th:each="currency, rate : ${rates}" th:value="${currency.key}" th:text="${currency.key}">
+										</select>
 
 									</td>
-									
-									<td>
-										 <!-- First Currency Option -->  	
-							          
-							          	<select class="form-control" 
-							          			list="first-currency-choice"
-							          			id="first-currency-choice" 
-							          			name="targetCurrency" 
-							          			
-							          			th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" 
-							          			required>
-							          		<option th:each="currency, rate : ${rates}"  th:value = "${currency.key}" th:text = "${currency.key}">
-							          	</select>
-				
-									</td>
-										
+
 								</tr>
-								
+
 								<tr>
-									
+
 									<td>
 										<!-- For/Using Label -->
-				          				<h5 id="for-using-label">using  </h5>
+										<h5 id="for-using-label">using </h5>
 									</td>
-									
-									<td style="text-align:center" >
-										<!-- Quantity of Second Currency Label -->	
-							          	<h3 id="second-currency-quantity-label" text="0">0</h3>
+
+									<td style="text-align:center">
+										<!-- Quantity of Second Currency Label -->
+										<h3 id="second-currency-quantity-label" text="0">0</h3>
 									</td>
-									
+
 									<td>
 										<!-- Second Currency Option -->
-							          	
-							          	<select class="form-control" 
-							          			list="second-currency-choice" 
-							          			id="second-currency-choice" 
-							          			name="baseCurrency" 
-							          			
-							          			th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" 
-							          			required>
-							          		<option th:each="currency, rate : ${portfolio}" th:value = "${currency.key}" th:text = "${currency.key}">
-							          	</select>
+										<select class="form-control" list="second-currency-choice" id="second-currency-choice" name="baseCurrency" th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
+											<option th:each="currency, rate : ${portfolio}" th:value="${currency.key}" th:text="${currency.key}">
+										</select>
 									</td>
-								
+
 								</tr>
-								
+
 								<tr>
 									<td colspan="3">
-									
+
 										<!-- Expiry Date Picker -->
-				          				<input class="form-control" 
-				          						type="text" 
-				          						placeholder="Expiry Date" 
-				          						onmouseover="(this.type='date')" 
-				          						id="expiryDatePicker" 
-				          						th:field="*{expiryDate}" 
-				          						required>
-				          				<br />
+										<input class="form-control" type="text" placeholder="Expiry Date" onmouseover="(this.type='date');(this.id='expiryDatePicker');checkDate();" id="expiryDatePicker" th:field="*{expiryDate}" required>
+										<br />
 									</td>
 								</tr>
-								
+
+
+							</table>
+
+							<!-- Submit Button -->
+							<button type="submit" class="btn btn-primary">Place Order</button>
+							<div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
+
+
+						</form>
+
+					</div>
+
+
+					<!-- FORWARD Tab content -->
+					<div id="Forward" class="tabcontent">
+
+						<form th:action="@{/orderHandler}" th:object="${newOrder}" method="post" autocomplete="off">
+
+							</br>
+
+							<table cellpadding="4">
 								<tr>
 									<td>
+										<!-- Buy/Sell Option -->
+										<select class="form-control" id="fwd-buy-sell-choice" name="buy-sell-choice" th:oninput="fwdChangeCurrenciesBasedOnBuySellChosen([[${rates}]], [[${portfolio}]]); fwdChangeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
+											<option value="Buy">Buy</option>
+											<option value="Sell">Sell</option>
+										</select>
+
+									</td>
+
+									<td>
+										<!-- Quantity of First Currency Option -->
+										<input class="form-control" type="number" name="fwd-first-currency" placeholder="Quantity" id="fwd-first-currency" th:field="*{initialQuantity}" th:oninput="fwdChangeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" step="0.01"
+											required></input>
+									</td>
+
+									<td>
+										<!-- First Currency Option -->
+
+										<select class="form-control" list="fwd-first-currency-choice" id="fwd-first-currency-choice" name="targetCurrency" th:oninput="fwdChangeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
+											<option th:each="currency, rate : ${rates}" th:value="${currency.key}" th:text="${currency.key}">
+										</select>
+
+									</td>
+
+								</tr>
+
+								<tr>
+
+									<td>
+										<!-- For/Using Label -->
+										<h5 id="fwd-for-using-label">using </h5>
+									</td>
+
+									<td style="text-align:center">
+										<!-- Quantity of Second Currency Label -->
+										<h3 id="fwd-second-currency-quantity-label" text="0">0</h3>
+									</td>
+
+									<td>
+										<!-- Second Currency Option -->
+										<select class="form-control" list="second-currency-choice" id="fwd-second-currency-choice" name="baseCurrency" th:oninput="fwdChangeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
+											<option th:each="currency, rate : ${portfolio}" th:value="${currency.key}" th:text="${currency.key}">
+										</select>
+									</td>
+
+								</tr>
+
+								<tr>
+									<td colspan="3">
+
+										<!-- Schedule Date Picker -->
+										<input class="form-control" type="text" placeholder="Scheduled Date" onmouseover="(this.type='date');fwdCheckDate();" id="fwd-scheduleDatePicker" th:field="*{scheduledDate}" required>
 										
 									</td>
-									
 								</tr>
-							
+
+
+								<tr>
+									<td colspan="3">
+
+										<!-- Expiry Date Picker -->
+										<input class="form-control" type="text" placeholder="Expiry Date" onmouseover="(this.type='date');fwdCheckDate();" id="fwd-expiryDatePicker" th:field="*{expiryDate}" required>
+										<br />
+									</td>
+								</tr>
+
+
+								
+
 							</table>
-							
+
 							<!-- Submit Button -->
-				          	<button type="submit" class="btn btn-primary">Place Order</button>
-							
-	          			</form>
-	          	
-	    
-	          	
-	          </div>
-	          
-	          
-	          <!-- Unfinished Forward Order Tab -->
-	          <div id="Forward" class="tabcontent">
-	          	<h3>Paris</h3>
-	          	<p>Paris is the capital of France.</p>
-	          </div>
-	          
-	          
-	          
-	          
-	        </div>
+							<button type="submit" class="btn btn-primary">Place Order</button>
+							<div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
 
-	        
 
-	      </div>
-	    </div>
-	  </main>
-	  
-	  <th:block th:replace="template :: footer"></th:block>
+						</form>
 
-	</body>
+					</div>
 
-	</html>
+
+
+
+
+
+
+				</div>
+
+
+
+			</div>
+		</div>
+	</main>
+
+	<th:block th:replace="template :: footer"></th:block>
+
+</body>
+
+</html>
