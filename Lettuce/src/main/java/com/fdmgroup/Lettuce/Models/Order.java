@@ -45,13 +45,13 @@ public class Order {
 	private List<Transaction> transactionsAsParty1 = new ArrayList<>();
 	@OneToMany(mappedBy = "order2")
 	private List<Transaction> transactionsAsParty2 = new ArrayList<>();
-
+	private String details;
 	public Order() {
 		super();
 	}
 
 	public Order(User user, Currency baseCurrency, Currency targetCurrency, OrderType orderType, double initialQuantity,
-			LocalDate expiryDate) {
+			LocalDate expiryDate, String details) {
 		super();
 		this.user = user;
 		this.baseCurrency = baseCurrency;
@@ -61,6 +61,7 @@ public class Order {
 		this.initialQuantity = initialQuantity;
 		this.quantity = initialQuantity;
 		this.expiryDate = expiryDate;
+		this.details = details;
 	}
 
 	public int getOrderId() {
@@ -164,6 +165,13 @@ public class Order {
 
 	public void setScheduledDate(LocalDate scheduledDate) {
 		this.scheduledDate = scheduledDate;
+	}
+	public String getDetails() {
+		return details;
+	}
+
+	public void setDetails(String details) {
+		this.details = details;
 	}
 
 	public boolean matches(Order otherOrder) {

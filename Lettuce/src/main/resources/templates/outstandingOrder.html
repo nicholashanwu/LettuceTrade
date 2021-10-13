@@ -10,6 +10,7 @@
 		<div class="container">
 			<div class="dashboard-container">
 				<h1>Order History</h1>
+				<form th:action="@{/outOrderHandler}" th:object="${newOrder}" method="post">
 				<table class="table">
 					<tr>
 						<th colspan="2">Selling</th>
@@ -17,30 +18,35 @@
 						<th colspan="2">Buying</th>
 						<th>Current Value</th>
 						<th>Expires</th>
-						<th>Status</th>
+						<th>Fulfill</th>
+						<th>Buy</th>
 					</tr>
-					<th:block th:each="order : ${outOrder}">
+					<th:block th:each="rate : ${outRates}">
 						<tr>
 							<td>Image</td>
-							<td th:text="${order.key.baseCurrency}"></td>
-							<td th:text="|${order.key.quantity}/${order.key.initialQuantity}|"></td>
-							<td>Image</td>
-							<td th:text="${order.key.targetCurrency}"></td>
-							<td th:text="${order.value}"></td>
-							<td th:text="${order.key.expiryDate}"></td>
-							<td th:text="${order.key.orderStatus}"></td>
+							<td> <input type = "text" th:value ="${rate.key}" th:id="details" th:name = "details" readonly></td>
+							<td th:text = ${rate.value}></td>
+							
+							<td><input type="number" th:field="*{initialQuantity}"></td>						
+							<td><input type ="submit" ></td>
 						</tr>
 					</th:block>
 				</table>
+				</form>
+				<div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
+
 			</div>
 		</div>
+
 	</main>
-	<footer style="bottom: 0; width: 100%; position: fixed;"class="footer mt-auto py-3 bg-light">
-    	<div class="container">
-      	<img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
-     	<span class="text-muted">&copy; 2021 Lettuce</span>
-    	</div>
-  	  </footer>
+	<footer style="bottom: 0; width: 100%; position: fixed;"
+		class="footer mt-auto py-3 bg-light">
+		<div class="container">
+			<img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}"
+				alt="Lettuce_Icon" width="40" height="48" /> <span
+				class="text-muted">&copy; 2021 Lettuce</span>
+		</div>
+	</footer>
 
 </body>
 </html>
