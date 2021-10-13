@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fdmgroup.Lettuce.Exceptions.InsufficientFundsException;
+import com.fdmgroup.Lettuce.Exceptions.InvalidDateException;
 import com.fdmgroup.Lettuce.Exceptions.RecursiveTradeException;
 import com.fdmgroup.Lettuce.Models.Currency;
 import com.fdmgroup.Lettuce.Models.HeldCurrency;
@@ -247,6 +248,9 @@ public class PortfolioController {
 			return "redirect:/order";
 		} catch (RecursiveTradeException e) {
 			redir.addFlashAttribute("recursive", "You can't trade a currency for itself!");
+			return "redirect:/order";
+		} catch (InvalidDateException e) {
+			redir.addFlashAttribute("invalidDate", "You can't choose an expiry date after the scheduled trade date!");
 			return "redirect:/order";
 		}
 	}
