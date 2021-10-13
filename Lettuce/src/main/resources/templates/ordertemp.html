@@ -7,7 +7,6 @@
 <body class="d-flex flex-column h-100">
 	<th:block th:replace="template :: header"></th:block>
 
-
 	<!-- Main Body -->
 	<main class="flex-shrink-0">
 		<div class="container">
@@ -22,8 +21,7 @@
 				<div class="dashboard-section">
 					
 					<!-- Spot/Forward Order Tab content -->
-					
-					
+
 					<div class="tab">
 						<button class="tablinks" onclick="chooseOrderType(event, 'Spot');checkDate();" id="defaultOpen">Spot</button>
 						<button class="tablinks" onclick="chooseOrderType(event, 'Forward')">Forward</button>
@@ -36,12 +34,15 @@
 							
 							</br>
 							
-							
-							<table cellpadding="8">
+							<table cellpadding="4">
 								<tr>
 									<td>
 										<!-- Buy/Sell Option -->
-										<select class="form-control" id="buy-sell-choice" th:oninput="changeCurrenciesBasedOnBuySellChosen([[${rates}]], [[${portfolio}]]); changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" name="buy-sell-choice" required>
+										<select class="form-control" 
+												id="buy-sell-choice" 
+												name="buy-sell-choice"
+												th:oninput="changeCurrenciesBasedOnBuySellChosen([[${rates}]], [[${portfolio}]]); changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" 
+												required>
 											<option value="Buy">Buy</option>
 											<option value="Sell">Sell</option>
 										</select>
@@ -50,23 +51,33 @@
 	
 									<td>
 										<!-- Quantity of First Currency Option -->
-								        <input class="form-control" type="number" name="first-currency" placeholder="Quantity" id="first-currency" th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required></input>
-						          		
-					          	
+								        <input class="form-control" 
+								        		type="number"
+												name="first-currency" 
+												placeholder="Quantity" 
+												id="first-currency" 
+												th:field="*{initialQuantity}"
+												step="10"
+												th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" 
+												required></input>
+
 									</td>
 									
 									<td>
 										 <!-- First Currency Option -->  	
 							          
-							          	<select class="form-control" th:field="*{baseCurrency}" name="baseCurrency" id="first-currency-choice" th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
+							          	<select class="form-control" 
+							          			list="first-currency-choice"
+							          			id="first-currency-choice" 
+							          			name="targetCurrency" 
+							          			
+							          			th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" 
+							          			required>
 							          		<option th:each="currency, rate : ${rates}"  th:value = "${currency.key}" th:text = "${currency.key}">
 							          	</select>
 				
 									</td>
-									
-									
-									
-									
+										
 								</tr>
 								
 								<tr>
@@ -84,12 +95,16 @@
 									<td>
 										<!-- Second Currency Option -->
 							          	
-							          	<select class="form-control" list="second-currency-choice" id="second-currency-choice" th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
+							          	<select class="form-control" 
+							          			list="second-currency-choice" 
+							          			id="second-currency-choice" 
+							          			name="baseCurrency" 
+							          			
+							          			th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" 
+							          			required>
 							          		<option th:each="currency, rate : ${portfolio}" th:value = "${currency.key}" th:text = "${currency.key}">
 							          	</select>
 									</td>
-								
-									
 								
 								</tr>
 								
@@ -97,7 +112,13 @@
 									<td colspan="3">
 									
 										<!-- Expiry Date Picker -->
-				          				<input class="form-control" type="text" placeholder="Expiry Date" onmouseover="(this.type='date')" id="expiryDatePicker" th:field="*{expiryDate}" required>
+				          				<input class="form-control" 
+				          						type="text" 
+				          						placeholder="Expiry Date" 
+				          						onmouseover="(this.type='date')" 
+				          						id="expiryDatePicker" 
+				          						th:field="*{expiryDate}" 
+				          						required>
 				          				<br />
 									</td>
 								</tr>
