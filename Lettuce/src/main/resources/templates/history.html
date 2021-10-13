@@ -23,13 +23,13 @@
 					<!-- Show all orders for this user -->
 					<th:block th:each="order : ${orders}">
 						<tr>
-							<td>Image</td>
+							<td><img th:src="@{'/images/' + ${order.baseCurrency.currencyCode} + '.png'}" width="20" height="20" /></td>
 							<td th:text="${order.baseCurrency}"></td>
 							<td><th:block th:text="${#numbers.formatDecimal(order.quantity, 1, 'DEFAULT', 2, 'DEFAULT')}"></th:block>
 								/
 								<th:block th:text="${#numbers.formatDecimal(order.initialQuantity, 1, 'DEFAULT', 2, 'DEFAULT')}"></th:block>
 							</td>
-							<td>Image</td>
+							<td><img th:src="@{'/images/' + ${order.targetCurrency.currencyCode} + '.png'}" width="20" height="20" /></td>
 							<td th:text="${order.targetCurrency}"></td>
 							<td th:text="${#numbers.formatDecimal(order.quantity * rates.get(order.targetCurrency) / rates.get(order.baseCurrency), 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
 							<td th:text="${order.expiryDate}"></td>
