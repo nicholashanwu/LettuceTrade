@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fdmgroup.Lettuce.Exceptions.InsufficientFundsException;
+import com.fdmgroup.Lettuce.Exceptions.RecursiveTradeException;
 import com.fdmgroup.Lettuce.Models.Currency;
 import com.fdmgroup.Lettuce.Models.HeldCurrency;
 import com.fdmgroup.Lettuce.Models.Order;
@@ -243,6 +244,9 @@ public class PortfolioController {
 			return "redirect:/dashboard";
 		} catch (InsufficientFundsException e) {
 			redir.addFlashAttribute("noFunds", "You don't have sufficient funds to place that order!");
+			return "redirect:/order";
+		} catch (RecursiveTradeException e) {
+			redir.addFlashAttribute("recursive", "You can't trade a currency for itself!");
 			return "redirect:/order";
 		}
 	}

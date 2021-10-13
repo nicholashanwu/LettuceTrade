@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fdmgroup.Lettuce.Exceptions.InsufficientFundsException;
+import com.fdmgroup.Lettuce.Exceptions.RecursiveTradeException;
 import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.OrderStatus;
 import com.fdmgroup.Lettuce.Models.OrderType;
@@ -80,7 +81,12 @@ public class OrderServiceImpl implements iOrder {
 	}
 
 	@Override
-	public void addOrder(Order order) throws InsufficientFundsException {
+	public void addOrder(Order order) throws InsufficientFundsException, RecursiveTradeException {
+		// Throw exception if they're trying to trade a currency for itself
+		if (order.getBaseCurrency().equals(order.getTargetCurrency())) {
+			throw new RecursiveTradeException();
+		}
+		// Throw exception if there's not enough money available
 		psi.decreaseCurrency(order.getBaseCurrency(), order.getQuantity(), order.getUser().getPortfolio().getPortfolioId());
 		orderRepo.save(order);
 		tryToMatch(order);
