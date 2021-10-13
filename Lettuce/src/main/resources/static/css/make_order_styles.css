@@ -1,5 +1,19 @@
 @charset "ISO-8859-1";
 
+/* select {
+  margin: 5px;
+  width: 150px;
+  padding: 5px 5px 5px 5px;
+  font-size: 60px;
+  border: 1px solid #33AB74;
+  height: 75px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+ */
+
+
 /* Style the tab */
 .tab {
   overflow: hidden;
