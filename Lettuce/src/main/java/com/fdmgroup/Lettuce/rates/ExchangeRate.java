@@ -15,7 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class ExchangeRate {
 
-	private static final String baseUrl = " https://v6.exchangerate-api.com/v6/45c2acbee4d3755826c8ba87/";
+	private static final String baseUrl = "https://v6.exchangerate-api.com/v6/a88fd6c303a2fb307af7cae8/";
 	
 	private static final String popularCurrencies = "USD|EUR|JPY|GBP|AUD";
 
