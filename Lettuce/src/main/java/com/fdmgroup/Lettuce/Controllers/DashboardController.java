@@ -70,18 +70,24 @@ public class DashboardController {
 		model.addAttribute("portfolio",portfolio);
 		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
 		double totalBalance = 0;
-		
+		Map<String, Double> getAllRates = new HashMap<>();
+		try {
+			getAllRates = ExchangeRate.getAllRates("AUD");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Map<Double,HeldCurrency> portfolioWithValue = new TreeMap<>(Collections.reverseOrder());
+		
 		for(HeldCurrency hc:heldcurrency) {
 			double exchangeRate = 0;
 			try {
-				exchangeRate = ExchangeRate.getRateForPair(hc.getCurrency().getCurrencyCode(), "AUD");
-				double value = hc.getQuantity()*exchangeRate;
+				exchangeRate = getAllRates.get(hc.getCurrency().getCurrencyCode());
+				double value = hc.getQuantity()*((double)1/exchangeRate);
 				BigDecimal bd = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
 				portfolioWithValue.put(bd.doubleValue(),hc);
 				
 				totalBalance +=bd.doubleValue();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -94,7 +100,7 @@ public class DashboardController {
 	}
 	
 	@RequestMapping("/dashboard")
-	public String toDashboardPage(Model model) throws IOException{
+	public String toDashboardPage(Model model) {
 		User user = new User();
 		Portfolio portfolio = new Portfolio();
 				
@@ -108,18 +114,24 @@ public class DashboardController {
 			heldcurrency = heldcurrency.subList(0, 3);
 		}	
 		double totalBalance = 0;
-		
+		Map<String, Double> getAllRates = new HashMap<>();
+		try {
+			getAllRates = ExchangeRate.getAllRates("AUD");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Map<Double,HeldCurrency> portfolioWithValue = new TreeMap<>(Collections.reverseOrder());
+		
 		for(HeldCurrency hc:heldcurrency) {
 			double exchangeRate = 0;
 			try {
-				exchangeRate = ExchangeRate.getRateForPair(hc.getCurrency().getCurrencyCode(), "AUD");
-				double value = hc.getQuantity()*exchangeRate;
+				exchangeRate = getAllRates.get(hc.getCurrency().getCurrencyCode());
+				double value = hc.getQuantity()*((double)1/exchangeRate);
 				BigDecimal bd = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
 				portfolioWithValue.put(bd.doubleValue(),hc);
 				
 				totalBalance +=bd.doubleValue();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

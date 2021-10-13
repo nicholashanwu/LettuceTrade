@@ -1,211 +1,47 @@
-<html xlmns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<meta charset="ISO-8859-1">
-  	<title>LettuceTrade</title>
-  	<!-- Bootstrap -->
-  	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-  	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
-  	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<!--CSS References-->
-  	<link th:href="@{/css/standard_styles.css}" rel="stylesheet" />
-  	<link th:href="@{/css/dashboard_styles.css}" rel="stylesheet" />
-  	<!-- Fonts -->
-  	<link rel="preconnect" href="https://fonts.googleapis.com">
-  	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<th:block th:replace="template :: setup"></th:block>
+<link th:href="@{/css/flags.css}" rel="stylesheet" />
 </head>
+<body>
 
-<body class="d-flex flex-column h-100">
-  <!-- Header -->
-  <main>
-    <header class="p-3 mb-3 border-bottom">
-      <div class="container">
-        <!-- Logo -->
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <a class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none" th:href="@{/}">
-            <img id="header_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
-            <span class="dashboard-header-logo-title"> Lettuce <span class="dashboard-header-logo-title-thin">Trade</span></span>
-          </a>
-          <!-- Nav Bar Options -->
-          <div class="nav-bar-links">
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-              <li><a class="nav-link" th:href="@{/dashboard}">Dashboard</a></li>
-              <li><a class="nav-link" th:href="@{/rates}">Rates</a></li>
-              <li><a class="nav-link" th:href="@{/profile}">Profile</a></li>
-              <li><a class="nav-link" th:href="@{/order}">Order</a></li>
-              <li><a class="nav-link" th:href="@{/history}">History</a></li>
-	          <li><a class="nav-link" th:href="@{/outstandingOrder}">View orders</a></li>
-              
-            </ul>
-          </div>
-          <!-- Log Out button-->
-          <div class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <a class="btn btn-primary" th:href="@{/logout}">Log Out</a>
-          </div>
-        </div>
-      </div>
-    </header>
-  </main>
-
+	<th:block th:replace="template :: header"></th:block>
 
   <!-- Main Body -->
   <main class="flex-shrink-0">
     <div class="container">
       <div class="dashboard-container">
       
-        <h1>Welcome to your dashboard, <span th:text="${#strings.capitalize(#strings.toLowerCase(session.user.firstName))}"</span></h1> <br>
-        <h4 class="green-text-v1">View list of current rates!</h4>
-        
+        <h1>View our current rates</h1> <br>
         <div class="rates-section">
-        	<h2>All Rates</h2>
-        	<br />
-        	<table class="table">
+        	<table class="table align-middle">
         		<tr>
 	              <th colspan="2">Instrument</th>
 	              <th>Rate</th>
 	            </tr>
 	            
-	            <tr>
-	              <td><img id="AUD_flag" th:src="@{/images/AUD.png}" width="40" height="40" />
-	              <img id="USD_flag" th:src="@{/images/USD.png}" width="40" height="40" /></td>
-	              <td>AUD-USD</td>
-	              <td><span th:text="${ratelist[0]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="AUD_flag" th:src="@{/images/AUD.png}" width="40" height="40" />
-	              <img id="CAD_flag" th:src="@{/images/CAD.png}" width="40" height="40" /></td>
-	              <td>AUD-CAD</td>
-	              <td><span th:text="${ratelist[1]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="AUD_flag" th:src="@{/images/AUD.png}" width="40" height="40" />
-	              <img id="GBP_flag" th:src="@{/images/GBP.png}" width="40" height="40" /></td>
-	              <td>AUD-GBP</td>
-	              <td><span th:text="${ratelist[2]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="AUD_flag" th:src="@{/images/AUD.png}" width="40" height="40" />
-	              <img id="NZD_flag" th:src="@{/images/NZD.png}" width="40" height="40" /></td>
-	              <td>AUD-NZD</td>
-	              <td><span th:text="${ratelist[3]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="AUD_flag" th:src="@{/images/AUD.png}" width="40" height="40" />
-	              <img id="EUR_flag" th:src="@{/images/EUR.png}" width="40" height="40" /></td>
-	              <td>AUD-EUR</td>
-	              <td><span th:text="${ratelist[4]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="AUD_flag" th:src="@{/images/AUD.png}" width="40" height="40" />
-	              <img id="JPY_flag" th:src="@{/images/JPY.png}" width="40" height="40" /></td>
-	              <td>AUD-JPY</td>
-	              <td><span th:text="${ratelist[5]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="USD_flag" th:src="@{/images/USD.png}" width="40" height="40" />
-	              <img id="CAD_flag" th:src="@{/images/CAD.png}" width="40" height="40" /></td>
-	              <td>USD-CAD</td>
-	              <td><span th:text="${ratelist[6]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="USD_flag" th:src="@{/images/USD.png}" width="40" height="40" />
-	              <img id="GBP_flag" th:src="@{/images/GBP.png}" width="40" height="40" /></td>
-	              <td>USD-GBP</td>
-	              <td><span th:text="${ratelist[7]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="USD_flag" th:src="@{/images/USD.png}" width="40" height="40" />
-	              <img id="NZD_flag" th:src="@{/images/NZD.png}" width="40" height="40" /></td>
-	              <td>USD-NZD</td>
-	              <td><span th:text="${ratelist[8]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="USD_flag" th:src="@{/images/USD.png}" width="40" height="40" />
-	              <img id="EUR_flag" th:src="@{/images/EUR.png}" width="40" height="40" /></td>
-	              <td>USD-EUR</td>
-	              <td><span th:text="${ratelist[9]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="USD_flag" th:src="@{/images/USD.png}" width="40" height="40" />
-	              <img id="JPY_flag" th:src="@{/images/JPY.png}" width="40" height="40" /></td>
-	              <td>USD-JPY</td>
-	              <td><span th:text="${ratelist[10]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="CAD_flag" th:src="@{/images/CAD.png}" width="40" height="40" />
-	              <img id="GBP_flag" th:src="@{/images/GBP.png}" width="40" height="40" /></td>
-	              <td>CAD-GBP</td>
-	              <td><span th:text="${ratelist[11]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="CAD_flag" th:src="@{/images/CAD.png}" width="40" height="40" />
-	              <img id="NZD_flag" th:src="@{/images/NZD.png}" width="40" height="40" /></td>
-	              <td>CAD-NZD</td>
-	              <td><span th:text="${ratelist[12]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="CAD_flag" th:src="@{/images/CAD.png}" width="40" height="40" />
-	              <img id="EUR_flag" th:src="@{/images/EUR.png}" width="40" height="40" /></td>
-	              <td>CAD-EUR</td>
-	              <td><span th:text="${ratelist[13]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="CAD_flag" th:src="@{/images/CAD.png}" width="40" height="40" />
-	              <img id="JPY_flag" th:src="@{/images/JPY.png}" width="40" height="40" /></td>
-	              <td>CAD-JPY</td>
-	              <td><span th:text="${ratelist[14]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="GBP_flag" th:src="@{/images/GBP.png}" width="40" height="40" />
-	              <img id="NZD_flag" th:src="@{/images/NZD.png}" width="40" height="40" /></td>
-	              <td>GBP-NZD</td>
-	              <td><span th:text="${ratelist[15]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="GBP_flag" th:src="@{/images/GBP.png}" width="40" height="40" />
-	              <img id="EUR_flag" th:src="@{/images/EUR.png}" width="40" height="40" /></td>
-	              <td>GBP-EUR</td>
-	              <td><span th:text="${ratelist[16]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="GBP_flag" th:src="@{/images/GBP.png}" width="40" height="40" />
-	              <img id="JPY_flag" th:src="@{/images/JPY.png}" width="40" height="40" /></td>
-	              <td>GBP-JPY</td>
-	              <td><span th:text="${ratelist[17]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="NZD_flag" th:src="@{/images/NZD.png}" width="40" height="40" />
-	              <img id="EUR_flag" th:src="@{/images/EUR.png}" width="40" height="40" /></td>
-	              <td>NZD-EUR</td>
-	              <td><span th:text="${ratelist[18]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="NZD_flag" th:src="@{/images/NZD.png}" width="40" height="40" />
-	              <img id="JPY_flag" th:src="@{/images/JPY.png}" width="40" height="40" /></td>
-	              <td>NZD-JPY</td>
-	              <td><span th:text="${ratelist[19]}"></span></td>
-	            </tr>
-	            <tr>
-	              <td><img id="EUR_flag" th:src="@{/images/EUR.png}" width="40" height="40" />
-	              <img id="JPY_flag" th:src="@{/images/JPY.png}" width="40" height="40" /></td>
-	              <td>EUR-JPY</td>
-	              <td><span th:text="${ratelist[20]}"></span></td>
-	            </tr>
+	            <!-- For each currency... -->
+	            <th:block th:each="firstRate : ${rates}">
+	            	<!-- ...compare it against each of the other currencies. -->
+	            	<tr th:each="secondRate : ${rates}" th:unless="${firstRate.key.equals(secondRate.key)}">
+	            		<!-- For each pair found, show the flags and calculate the rate between them. -->
+	            		<td>
+	            			<div th:class="${'currency-flag currency-flag-' + firstRate.key.toString().toLowerCase()}"></div>
+	            			<div th:class="${'currency-flag currency-flag-' + secondRate.key.toString().toLowerCase()}"></div>
+<!-- 	            			<img th:src="@{${'/images/' + firstRate.key + '.png'}}" width="40" height="40" /> -->
+<!-- 	            			<img th:src="@{${'/images/' + secondRate.key + '.png'}}" width="40" height="40" /> -->
+						</td>
+	            		<td th:text="${firstRate.key + '-' + secondRate.key}"></td>
+	            		<td th:text="${#numbers.formatDecimal(secondRate.value / firstRate.value, 1, 'DEFAULT', 4, 'DEFAULT')}"></td>
+	            	</tr>
+	            </th:block>
         	</table>
         </div>
-
       </div>
     </div>
   </main>
-  
-  <!-- Footer -->
-  <footer class="footer mt-auto py-3 bg-light">
-    <div class="container">
-      <img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
-      <span class="text-muted">&copy; 2021 Lettuce</span>
-    </div>
-  </footer>
+	
+	<th:block th:replace="template :: footer"></th:block>
 
 </body>
 </html>
