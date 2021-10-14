@@ -76,6 +76,10 @@ public class OrderController {
 		
 		User user = (User) request.getSession().getAttribute("user");
 		
+		if (null == user) {
+			return "redirect:/";
+		}
+		
 		List<HeldCurrency> heldCurrencies = hcr.findByPortfolio(user.getPortfolio());
 		HashMap<Currency, Double> currenciesAndQuantities = new HashMap<>();
 		

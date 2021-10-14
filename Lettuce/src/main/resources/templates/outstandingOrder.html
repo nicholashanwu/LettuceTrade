@@ -6,12 +6,25 @@
 <script type = "text/javascript" th:src ="@{scripts/outOrder.js}"></script>
 </head>
 <body>
-	<th:block th:replace="template :: user-header"></th:block>
+	<!-- Header -->
+    <th:block th:unless="${session.user}">
+		<th:block th:replace="template :: guest-header"></th:block>
+    </th:block>
+    <th:block th:if="${session.user}">
+		<th:block th:replace="template :: user-header"></th:block>
+    </th:block>
 
 	<main class="flex-shrink-0">
 		<div class="container">
 			<div class="dashboard-container">
 				<h1>All available orders</h1>
+				
+				
+				<th:block th:unless="${session.user}">
+				<p>You don't have permission to view this page.</p>
+				<p><a th:href="@{/}">Return to index.</a></p>
+				</th:block>
+				<th:block th:if="${session.user}">
 				
 				<table class="table" id = "myTable">
 					<tr>
@@ -42,19 +55,16 @@
 				</table>
 
 				<div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
+				
+				</th:block>
 
 			</div>
 		</div>
 
 	</main>
-	<footer style="bottom: 0; width: 100%; position: fixed;"
-		class="footer mt-auto py-3 bg-light">
-		<div class="container">
-			<img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}"
-				alt="Lettuce_Icon" width="40" height="48" /> <span
-				class="text-muted">&copy; 2021 Lettuce</span>
-		</div>
-	</footer>
+
+	<!-- Footer -->
+	<th:block th:replace="template :: screen-footer"></th:block>
 
 </body>
 </html>
