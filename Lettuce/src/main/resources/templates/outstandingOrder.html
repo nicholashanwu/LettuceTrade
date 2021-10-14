@@ -3,6 +3,7 @@
 <head>
 <th:block th:replace="template :: setup"></th:block>
 <link th:href="@{/css/flags.css}" rel="stylesheet" />
+<script type = "text/javascript" th:src ="@{scripts/outOrder.js}"></script>
 </head>
 <body>
 	<th:block th:replace="template :: header"></th:block>
@@ -12,16 +13,17 @@
 			<div class="dashboard-container">
 				<h1>All available orders</h1>
 				
-				<table class="table">
+				<table class="table" id = "myTable">
 					<tr>
 						<th colspan="2">Selling</th>
 						<th>Remaining</th>
 						<th>Fulfill</th>
+						<th>Total cost</th>
 						<th>Buy</th>
 					</tr>
 					<th:block th:each="rate: ${outRates}">
 					<form th:action="@{/outOrderHandler}" th:object="${newOrder}" method="post">
-						<tr>
+						<tr th:id= "${rate.key}">
 							<td>
 							<div th:class="${'currency-flag currency-flag-' + rate.key.substring(0,3).toLowerCase()}"></div>
 							<div th:class="${'currency-flag currency-flag-' + rate.key.substring(7,10).toLowerCase()}"></div>
@@ -29,7 +31,9 @@
 							<td> <input type = "text" th:value ="${rate.key}" th:id="details" th:name = "details" readonly></td>
 							<td th:text = "${#numbers.formatDecimal(rate.value, 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
 							
-							<td><input type="number" th:field="*{initialQuantity}"></td>						
+							<td ><input id="quant" type="number" th:field="*{initialQuantity}" th:onchange= "total([[${rate.key}]])"></td>	
+							<td><p id = "totalPrice" text = "0">0</p></td>
+												
 							<td><input type ="submit" value = "Buy" th:data-confirm-delete="|Are you sure you want to place trade?|"
   onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false"></td>
 						</tr>
