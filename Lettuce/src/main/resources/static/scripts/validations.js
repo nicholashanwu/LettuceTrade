@@ -75,7 +75,7 @@ function validate_login() {
 	var email_msg = document.getElementById('user-email-message');
 	var password_msg = document.getElementById('user-password-message');
 
-	var check = true;
+	var check = false;
 
 	// Email
 	if (email.value.length == 0) {
@@ -96,16 +96,30 @@ function validate_login() {
 	return check;
 }
 function validate_change_password() {
+	var email =  document.getElementById('user-email');
 	var oldPsd = document.getElementById('user-oldpsd');
 	var password = document.getElementById('user-password');
 	var confirmpassword = document.getElementById('user-confrimpassword');
 	
+	var email_msg = document.getElementById('user-email-message');
 	var oldpassword_msg = document.getElementById('old-password-message');
 	var password_msg = document.getElementById('user-password-message');
 	var confirm_password_msg = document.getElementById('confirm-password-message');
-	var check = true;
-
+	var check = false;
+	var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+	var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm;
 	// Email
+	if (email.value.length == 0) {
+		email_msg.innerText = "Valid email is required.";
+		check = false;
+	} else if (!email.value.match(emailRegex)) {// Check if email follows valid format 
+		email_msg.innerText = "Valid email is required.";
+		check = false;
+	} else {
+		email_msg.innerText = "";
+		check = true;
+	}
+	// old password
 	if (oldPsd.value.length == 0) {
 		oldpassword_msg.innerText = "Valid password is required.";
 		check = false;
@@ -113,10 +127,13 @@ function validate_change_password() {
 		email_msg.innerText = "";
 		check = true;
 	}
-	// Password 
+
+		// Password 
 	if (password.value.length == 0) {
 		password_msg.innerText = "Valid password is required.";
 		check = false;
+	} else if (!password.value.match(passwordRegex)) {
+		password_msg.innerText = "Password must have at least 8 characters, at least one uppercase character, and one number";	
 	} else {
 		password_msg.innerText = "";
 		check = true;
@@ -146,12 +163,15 @@ function validate_reset_password() {
 	
 	var password_msg = document.getElementById('user-password-message');
 	var confirm_password_msg = document.getElementById('confirm-password-message');
-	var check = true;
+	var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm;
+	var check = false;
 
-	// Password 
+		// Password 
 	if (password.value.length == 0) {
 		password_msg.innerText = "Valid password is required.";
 		check = false;
+	} else if (!password.value.match(passwordRegex)) {
+		password_msg.innerText = "Password must have at least 8 characters, at least one uppercase character, and one number";	
 	} else {
 		password_msg.innerText = "";
 		check = true;
