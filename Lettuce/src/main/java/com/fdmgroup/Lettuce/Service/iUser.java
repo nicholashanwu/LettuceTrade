@@ -86,7 +86,7 @@ public interface iUser {
 	
 	public User findByVerificationCode(String code) throws UserNotFoundException;
 
-	boolean isEnabled(String inputEmail, String inputPassword) throws FailToLoginException;
+	
 	
 	
 	//void takeMoneyFromBank(int userId, double moneyOut);
