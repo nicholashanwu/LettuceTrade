@@ -50,12 +50,6 @@
             <tr th:each="heldCurrency:${heldCurrencys}">
 
 
-				<td><div th:class="${'currency-flag currency-flag-' + heldCurrency.value.currency.toString().toLowerCase()}"></div><span class="currency-text" th:text="${heldCurrency.value.currency.currencyCode}"></span></td>
-				<td></td>
-				<td><span th:text="${heldCurrency.value.quantity}"></span></td>
-				<td>$<span th:text="${heldCurrency.key}"></span></td>
-
-
 				<td><div th:class="${'currency-flag currency-flag-' + heldCurrency.value.currency.toString().toLowerCase()}"></div>
 					<span class="currency-text" th:text="${heldCurrency.value.currency.currencyCode}"></span></td>
 				<td><span th:text="${#numbers.formatDecimal(heldCurrency.value.quantity, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></td>
