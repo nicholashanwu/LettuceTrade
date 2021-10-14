@@ -29,13 +29,7 @@
         <h4 class="green-text-v1">View your personal details here.</h4>
         <div class="dashboard-section">
           <h2>Your Funds</h2>
-<<<<<<< HEAD
-         
-=======
-          <p><span class="green-text-v1"> Current trade balance </span></p>
-          <h4> AUD <span th:text="${#numbers.formatDecimal(TotalBalance, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></h4>
->>>>>>> f581e1a85f402a916e5bf6ce92d162f300afc773
-          <br />
+          
         	<table class="table mytable align-middle">
             <tr>
               <th>Instrument</th>
@@ -44,24 +38,16 @@
             </tr>
             
             <tr th:each="heldCurrency:${heldCurrencys}">
-<<<<<<< HEAD
-				<td><div th:class="${'currency-flag currency-flag-' + heldCurrency.value.currency.toString().toLowerCase()}"></div><span class="currency-text" th:text="${heldCurrency.value.currency.currencyCode}"></span></td>
-				<td></td>
-				<td><span th:text="${heldCurrency.value.quantity}"></span></td>
-				<td>$<span th:text="${heldCurrency.key}"></span></td>
-=======
 				<td><div th:class="${'currency-flag currency-flag-' + heldCurrency.value.currency.toString().toLowerCase()}"></div>
 					<span class="currency-text" th:text="${heldCurrency.value.currency.currencyCode}"></span></td>
 				<td><span th:text="${#numbers.formatDecimal(heldCurrency.value.quantity, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></td>
 				<td>$<span th:text="${#numbers.formatDecimal(heldCurrency.key, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></td>
->>>>>>> f581e1a85f402a916e5bf6ce92d162f300afc773
-				
 			</tr>
             
           </table>
           
            <p><span >Total Portfolio Value </span></p>
-          <h4> AUD <span class="green-text-v1" th:text="${TotalBalance}"></span></h4>
+          <h4> AUD <span class="green-text-v1" th:text="${#numbers.formatDecimal(TotalBalance, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></h4>
           <br/>
           <a role="button" th:href="@{/addfund}" id = "add-fund"class="btn btn-primary">Top Up/Withdraw</a>
         </div>
