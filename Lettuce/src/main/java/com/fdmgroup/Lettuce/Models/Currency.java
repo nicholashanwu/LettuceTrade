@@ -4,11 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
+/**
+ * Database entity for a single currency. The currency's three-letter currency
+ * code (ISO 4217 standard) is used as the table key.
+ */
 @Entity
 @Table(name = "Lettuce_Currency")
 public class Currency {
-	
+
 	@Id
 	private String currencyCode;
 	private String fullName;
@@ -57,12 +60,8 @@ public class Currency {
 	public String toString() {
 		return currencyCode;
 	}
-	
-	
-	
+
 }
-
-
 
 //@Entity
 //@Table(name = "Lettuce_Currency")

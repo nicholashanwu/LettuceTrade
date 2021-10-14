@@ -128,11 +128,17 @@ public class OrderServiceImpl implements iOrder {
 		orderRepo.save(order);
 	}
 
+	/**
+	 * @deprecated Orders should not be deleted from the database. Use cancelOrder() or expireOrder() instead.
+	 */
 	@Override
 	public void deleteOrder(Order order) {
 		orderRepo.delete(order);
 	}
 
+	/**
+	 * @deprecated Orders should not be deleted from the database. Use cancelOrder() or expireOrder() instead.
+	 */
 	@Override
 	public void deleteOrderById(int id) {
 		orderRepo.deleteById(id);
