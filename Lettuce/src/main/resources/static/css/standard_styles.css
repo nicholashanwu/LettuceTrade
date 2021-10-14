@@ -44,6 +44,12 @@ a:hover {
   color: var(--green-main);
 }
 
+.currency-text {
+	font-weight: bold;
+	font-size: 80%;
+
+}
+
 .form-select {
 	width:50vw;
 	border-color: #33AB74;

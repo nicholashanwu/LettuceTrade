@@ -3,6 +3,9 @@
 
 <head>
 	<th:block th:replace="template :: setup"></th:block>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	
+	
 </head>
 
 <body onload="openSpotTabByDefault();checkDate();" class="d-flex flex-column h-100">
@@ -20,12 +23,31 @@
 				<!-- AUD IS DEFAULT -->
 
 				<div class="dashboard-section">
+					
 
 					<!-- Spot/Forward Order Tab content -->
 
 					<div class="tab">
 						<button class="tablinks" onclick="chooseOrderType(event, 'Spot')" id="defaultOpen">Spot</button>
 						<button class="tablinks" onclick="chooseOrderType(event, 'Forward')">Forward</button>
+					</div>
+					
+					<ul class="nav nav-tabs" id="myTab" role="tablist">
+					  <li class="nav-item" role="presentation">
+					    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Home</button>
+					  </li>
+					  <li class="nav-item" role="presentation">
+					    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
+					  </li>
+					 
+					</ul>
+					<div class="tab-content" id="myTabContent">
+					  <div class="tab-pane fade show active" id="Spot" role="tabpanel" aria-labelledby="home-tab">.hi.</div>
+					  <div class="tab-pane fade" id="Forward" role="tabpanel" aria-labelledby="profile-tab">...</div>
+					 
+					 
+					 
+					 
 					</div>
 
 					<!-- SPOT Tab content -->
@@ -39,7 +61,7 @@
 								<tr>
 									<td>
 										<!-- Buy/Sell Option -->
-										<select class="form-control" id="buy-sell-choice" name="buy-sell-choice" th:oninput="changeCurrenciesBasedOnBuySellChosen([[${rates}]], [[${portfolio}]]); changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
+										<select class="form-control" id="buy-sell-choice" name="buy-sell-choice" th:oninput="changeCurrenciesBasedOnBuySellChosen([[${rates}]], [[${portfolio}]]); changeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])" required>
 											<option value="Buy">Buy</option>
 											<option value="Sell">Sell</option>
 										</select>
@@ -48,14 +70,14 @@
 
 									<td>
 										<!-- Quantity of First Currency Option -->
-										<input class="form-control" type="number" name="first-currency" placeholder="Quantity" id="first-currency" th:field="*{initialQuantity}" th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" step="0.01"
+										<input class="form-control" type="number" name="first-currency" placeholder="Quantity" id="first-currency" th:field="*{initialQuantity}" th:oninput="changeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])" step="0.01"
 											required></input>
 									</td>
 
 									<td>
 										<!-- First Currency Option -->
 
-										<select class="form-control" list="first-currency-choice" id="first-currency-choice" name="targetCurrency" th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
+										<select class="form-control" list="first-currency-choice" id="first-currency-choice" name="targetCurrency" th:oninput="changeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])" required>
 											<option th:each="currency, rate : ${rates}" th:value="${currency.key}" th:text="${currency.key}">
 										</select>
 
@@ -77,7 +99,7 @@
 
 									<td>
 										<!-- Second Currency Option -->
-										<select class="form-control" list="second-currency-choice" id="second-currency-choice" name="baseCurrency" th:oninput="changeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
+										<select class="form-control" list="second-currency-choice" id="second-currency-choice" name="baseCurrency" th:oninput="changeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])" required>
 											<option th:each="currency, rate : ${portfolio}" th:value="${currency.key}" th:text="${currency.key}">
 										</select>
 									</td>
@@ -91,11 +113,21 @@
 										<input class="form-control" type="text" placeholder="Expiry Date" onmouseover="(this.type='date');(this.id='expiryDatePicker');checkDate();" id="expiryDatePicker" th:field="*{expiryDate}" required>
 										<br />
 									</td>
+									
+									<td class="align-middle">
+										<div class="container">
+										  <a href="#" data-toggle="popover" data-placement="right" title="If your order has not matched with any other orders by 5pm this date, it will expire and can no longer match with other orders.">hint</a>
+										</div>
+										
+									
+									</td>
 								</tr>
 
 
 							</table>
 
+							
+														
 							<!-- Submit Button -->
 							<button type="submit" class="btn btn-primary">Place Order</button>
 							<div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
@@ -117,7 +149,7 @@
 								<tr>
 									<td>
 										<!-- Buy/Sell Option -->
-										<select class="form-control" id="fwd-buy-sell-choice" name="buy-sell-choice" th:oninput="fwdChangeCurrenciesBasedOnBuySellChosen([[${rates}]], [[${portfolio}]]); fwdChangeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
+										<select class="form-control" id="fwd-buy-sell-choice" name="buy-sell-choice" th:oninput="fwdChangeCurrenciesBasedOnBuySellChosen([[${rates}]], [[${portfolio}]]); fwdChangeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])" required>
 											<option value="Buy">Buy</option>
 											<option value="Sell">Sell</option>
 										</select>
@@ -126,14 +158,14 @@
 
 									<td>
 										<!-- Quantity of First Currency Option -->
-										<input class="form-control" type="number" name="fwd-first-currency" placeholder="Quantity" id="fwd-first-currency" th:field="*{initialQuantity}" th:oninput="fwdChangeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" step="0.01"
+										<input class="form-control" type="number" name="fwd-first-currency" placeholder="Quantity" id="fwd-first-currency" th:field="*{initialQuantity}" th:oninput="fwdChangeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])" step="0.01"
 											required></input>
 									</td>
 
 									<td>
 										<!-- First Currency Option -->
 
-										<select class="form-control" list="fwd-first-currency-choice" id="fwd-first-currency-choice" name="targetCurrency" th:oninput="fwdChangeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
+										<select class="form-control" list="fwd-first-currency-choice" id="fwd-first-currency-choice" name="targetCurrency" th:oninput="fwdChangeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])" required>
 											<option th:each="currency, rate : ${rates}" th:value="${currency.key}" th:text="${currency.key}">
 										</select>
 
@@ -155,7 +187,7 @@
 
 									<td>
 										<!-- Second Currency Option -->
-										<select class="form-control" list="second-currency-choice" id="fwd-second-currency-choice" name="baseCurrency" th:oninput="fwdChangeLabelBasedOnFirstCurrency([[${rates}]], [[${portfolio}]])" required>
+										<select class="form-control" list="second-currency-choice" id="fwd-second-currency-choice" name="baseCurrency" th:oninput="fwdChangeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])" required>
 											<option th:each="currency, rate : ${portfolio}" th:value="${currency.key}" th:text="${currency.key}">
 										</select>
 									</td>
@@ -169,6 +201,14 @@
 										<input class="form-control" type="text" placeholder="Scheduled Date" onmouseover="(this.type='date');fwdCheckDate();" id="fwd-scheduleDatePicker" th:field="*{scheduledDate}" required>
 										
 									</td>
+									
+									<td class="align-middle">
+										<div class="container">
+										  <a href="#" data-toggle="popover" data-placement="right" title="Your transaction will take place on the scheduled date. The rate at which your funds will be traded will be determined when another trader accepts your order. The scheduled date must be after the expiry date.">hint</a>
+										</div>
+										
+									
+									</td>
 								</tr>
 
 
@@ -178,6 +218,14 @@
 										<!-- Expiry Date Picker -->
 										<input class="form-control" type="text" placeholder="Expiry Date" onmouseover="(this.type='date');fwdCheckDate();" id="fwd-expiryDatePicker" th:field="*{expiryDate}" required>
 										<br />
+									</td>
+									
+									<td class="align-middle">
+										<div class="container">
+										  <a href="#" data-toggle="popover" data-placement="right" title="If your order has not matched with any other orders by 5pm this date, it will expire and can no longer match with other orders.">hint</a>
+										</div>
+										
+									
 									</td>
 								</tr>
 
@@ -198,6 +246,18 @@
 
 
 
+				
+				<script>
+				$(document).ready(function(){
+				  $('[data-toggle="tooltip"]').tooltip();   
+				});
+				
+				
+				$(function () {
+				  $('[data-toggle="popover"]').popover()
+				})
+				
+				</script>
 
 
 
@@ -207,9 +267,11 @@
 
 			</div>
 		</div>
+		
+
 	</main>
 
-	<th:block th:replace="template :: footer"></th:block>
+	
 
 </body>
 

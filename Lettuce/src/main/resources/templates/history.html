@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <th:block th:replace="template :: setup"></th:block>
+	<!--CSS References-->
+	<link th:href="@{/css/flags.css}" rel="stylesheet" />
 </head>
 <body>
 	<th:block th:replace="template :: header"></th:block>
@@ -10,32 +12,42 @@
 		<div class="container">
 			<div class="dashboard-container">
 				<h1>Your Order History</h1>
-				<table class="table">
+				<table class="table align-middle" cellpadding="4">
 					<tr>
-						<th colspan="2">Selling</th>
+						<th colspan="1">Selling</th>
 						<th>Remaining</th>
-						<th colspan="2">Buying</th>
+						<th colspan="1">Buying</th>
 						<th>Current Value</th>
 						<th>Expires</th>
-						<th colspan="2">Status</th>
+						<th colspan="1">Status</th>
+						<th></th>
 					</tr>
 					
 					<!-- Show all orders for this user -->
 					<th:block th:each="order : ${orders}">
 						<tr>
-							<td><img th:src="@{'/images/' + ${order.baseCurrency.currencyCode} + '.png'}" width="20" height="20" /></td>
-							<td th:text="${order.baseCurrency}"></td>
+							<td class="align-top"><div th:class="${'currency-flag currency-flag-' + order.baseCurrency.toString().toLowerCase()}"></div>
+							<span class="currency-text" th:text="${order.baseCurrency}"></span>
+								</td>
+						
+							<!-- <td><img th:src="@{'/images/' + ${order.baseCurrency.currencyCode} + '.png'}" width="20" height="20" /></td>
+							<td th:text="${order.baseCurrency}"></td> -->
 							<td><th:block th:text="${#numbers.formatDecimal(order.quantity, 1, 'DEFAULT', 2, 'DEFAULT')}"></th:block>
 								/
 								<th:block th:text="${#numbers.formatDecimal(order.initialQuantity, 1, 'DEFAULT', 2, 'DEFAULT')}"></th:block>
 							</td>
-							<td><img th:src="@{'/images/' + ${order.targetCurrency.currencyCode} + '.png'}" width="20" height="20" /></td>
-							<td th:text="${order.targetCurrency}"></td>
+							
+							<td class="align-top"><div th:class="${'currency-flag currency-flag-' + order.targetCurrency.toString().toLowerCase()}"></div>
+							<span class="currency-text" th:text="${order.targetCurrency}"></span>
+								</td>
+							
+							<!-- <td><img th:src="@{'/images/' + ${order.targetCurrency.currencyCode} + '.png'}" width="20" height="20" /></td>
+							<td th:text="${order.targetCurrency}"></td> -->
 							<td th:text="${#numbers.formatDecimal(order.quantity * rates.get(order.targetCurrency) / rates.get(order.baseCurrency), 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
 							<td th:text="${order.expiryDate}"></td>
 							<td th:text="${order.orderStatus}"></td>
 							<td>
-								<a th:if="${order.orderStatus.name() == 'ACTIVE' || order.orderStatus.name() == 'PARTIALLY_COMPLETE'}" th:href="@{/cancelorder(orderId=${order.orderId})}">Cancel</a></td>
+								<a class="btn btn-primary" th:if="${order.orderStatus.name() == 'ACTIVE' || order.orderStatus.name() == 'PARTIALLY_COMPLETE'}" th:href="@{/cancelorder(orderId=${order.orderId})}">Cancel</a></td>
 						</tr>
 						
 						<!-- Show all transactions for this order -->
@@ -76,7 +88,7 @@
 		</div>
 	</main>
 	
-	<th:block th:replace="template :: footer"></th:block>
+	<th:block th:replace="template :: lockedfooter"></th:block>
 
 </body>
 </html>
