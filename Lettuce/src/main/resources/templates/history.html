@@ -6,12 +6,24 @@
 	<link th:href="@{/css/flags.css}" rel="stylesheet" />
 </head>
 <body>
-	<th:block th:replace="template :: header"></th:block>
+	<!-- Header -->
+    <th:block th:unless="${session.user}">
+		<th:block th:replace="template :: guest-header"></th:block>
+    </th:block>
+    <th:block th:if="${session.user}">
+		<th:block th:replace="template :: user-header"></th:block>
+    </th:block>
 
+	<!-- Main Body -->
 	<main class="flex-shrink-0">
 		<div class="container">
 			<div class="dashboard-container">
 				<h1>Your Order History</h1>
+				<th:block th:unless="${session.user}">
+					<p>You don't have permission to view this page.</p>
+					<p><a th:href="@{/}">Return to index.</a></p>
+				</th:block>
+				<th:block th:if="${session.user}">
 				<table class="table align-middle" cellpadding="4">
 					<tr>
 						<th colspan="1">Selling</th>
@@ -84,11 +96,12 @@
 						
 					</th:block>
 				</table>
+				</th:block>
 			</div>
 		</div>
 	</main>
 	
-	<th:block th:replace="template :: lockedfooter"></th:block>
+	<th:block th:replace="template :: page-footer"></th:block>
 
 </body>
 </html>
