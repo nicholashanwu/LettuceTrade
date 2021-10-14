@@ -24,6 +24,7 @@ import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.User;
 import com.fdmgroup.Lettuce.Service.CurrencyServiceImpl;
 import com.fdmgroup.Lettuce.Service.OrderServiceImpl;
+import com.fdmgroup.Lettuce.Service.TransactionServiceImpl;
 import com.fdmgroup.Lettuce.rates.ExchangeRate;
 
 @Controller
@@ -33,6 +34,8 @@ public class HistoryController {
 	private CurrencyServiceImpl csi = new CurrencyServiceImpl();
 	@Autowired
 	private OrderServiceImpl osi = new OrderServiceImpl();
+	@Autowired
+	private TransactionServiceImpl tsi = new TransactionServiceImpl();
 	
 	public static final Logger actLogger=LogManager.getLogger("ActLogging");
 	public static final Logger dbLogger=LogManager.getLogger("DBLogging");
@@ -55,6 +58,10 @@ public class HistoryController {
 	
 	@RequestMapping("/history")
 	public String historyPage(Model model, HttpServletRequest request) {
+
+		osi.expireAll();
+		tsi.resolveAllPending();
+		
 		User user = (User) request.getSession().getAttribute("user");
 		List<Order> orders = osi.getAllOrdersForUser(user);
 		orders.sort(Comparator.comparingInt(Order::getOrderId).reversed());

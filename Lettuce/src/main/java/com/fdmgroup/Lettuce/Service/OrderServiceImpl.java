@@ -107,6 +107,8 @@ public class OrderServiceImpl implements iOrder {
 	 */
 	@Override
 	public void addOrder(Order order) throws InsufficientFundsException, RecursiveTradeException, InvalidDateException {
+		// Make sure there aren't any expired orders lingering in the system.
+		expireAll();
 		// Throw exception if they're trying to trade a currency for itself
 		if (order.getBaseCurrency().equals(order.getTargetCurrency())) {
 			throw new RecursiveTradeException();

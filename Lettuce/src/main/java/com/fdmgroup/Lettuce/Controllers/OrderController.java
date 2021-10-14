@@ -32,6 +32,7 @@ import com.fdmgroup.Lettuce.Models.User;
 import com.fdmgroup.Lettuce.Repo.HeldCurrencyRepo;
 import com.fdmgroup.Lettuce.Service.CurrencyServiceImpl;
 import com.fdmgroup.Lettuce.Service.OrderServiceImpl;
+import com.fdmgroup.Lettuce.Service.TransactionServiceImpl;
 import com.fdmgroup.Lettuce.rates.ExchangeRate;
 
 @Controller
@@ -41,6 +42,8 @@ public class OrderController {
 	private CurrencyServiceImpl csi = new CurrencyServiceImpl();
 	@Autowired
 	private OrderServiceImpl osi = new OrderServiceImpl();
+	@Autowired
+	private TransactionServiceImpl tsi = new TransactionServiceImpl();
 	@Autowired
 	private HeldCurrencyRepo hcr;
 	
@@ -67,6 +70,9 @@ public class OrderController {
 	public String orderPage(Model model, HttpServletRequest request) {    // equivalent to get portfolio_id
 		
 		actLogger.info("Landed in Order page");
+		
+		osi.expireAll();
+		tsi.resolveAllPending();
 		
 		User user = (User) request.getSession().getAttribute("user");
 		
