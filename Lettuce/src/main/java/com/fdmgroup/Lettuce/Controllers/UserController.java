@@ -31,7 +31,7 @@ import com.fdmgroup.Lettuce.Service.PortfolioServiceImpl;
 import com.fdmgroup.Lettuce.Service.UserServiceImpl;
 
 @Controller
-@SessionAttributes({ "user" })
+//@SessionAttributes({ "user" })
 public class UserController {
 	// In my(Bo) project, I use this way to identify the user who is using the
 	// system,
@@ -106,10 +106,10 @@ public class UserController {
 
 	}
 
-	@ModelAttribute("user")
-	public User user() {
-		return new User();
-	}
+//	@ModelAttribute("user")
+//	public User user() {
+//		return new User();
+//	}
 
 	@RequestMapping("/")
 	public String toIndexPage() {
@@ -142,11 +142,11 @@ public class UserController {
 			//actLogger.info("Register user successfully");
 			//dbLogger.info("Register user successfully");
 		 
-			return "register-message";
+			return "redirect:/register-message";
 		} catch (Exception e) {
 			// actLogger.warn("Fail to register a user because" + e.getMessage());
 			e.printStackTrace();
-			return "register";
+			return "redirect:/register";
 		}
 	}
 
@@ -167,9 +167,9 @@ public class UserController {
 	public String verifyUser(@Param("code") String code) {
 		//System.out.println(code);
 		if (usi.verify(code)) {
-			return "login";
+			return "redirect:/login";
 		} else {
-			return "register";
+			return "redirect:/register";
 		}
 	}
 
@@ -195,13 +195,13 @@ public class UserController {
 			model.addAttribute("error", "We are encoutring an error while sending email. Please try again.");
 		}
 		
-		return "forgot-password";
+		return "redirect:/forgot-password";
 	}
 	@RequestMapping("/reset_password")
 	public String resetPassword(@Param("code") String code,Model model) {
 		if(usi.verifyToken(code)) {
 			model.addAttribute("token", code);
-			return "reset-password";
+			return "redirect:/reset-password";
 		}else {
 	        model.addAttribute("message", "Invalid Token");
 	        return "message";
@@ -214,9 +214,9 @@ public class UserController {
 		try {
 			User user = usi.findByVerificationCode(token);
 			usi.updatePassword(user, confrimpassword);
-			return "login";
+			return "redirect:/login";
 		} catch (Exception e) {
-			return "forgot-password";
+			return "redirect:/forgot-password";
 		}
 		
 		
@@ -263,15 +263,15 @@ public class UserController {
 			} catch (DataIntegrityViolationException e) {
 				// Normally, this exception will not be thrown because the email is not changed
 			}
-			return "login";
+			return "redirect:/login";
 		} else {
-			return "changePassword";
+			return "redirect:/changePassword";
 		}
 	}
 
 	@RequestMapping("/loginHandler")
 	public String handlerLogin(@RequestParam(value = "email") String email,
-			@RequestParam(value = "password") String password, Model model) {
+			@RequestParam(value = "password") String password, Model model, HttpServletRequest request) {
 
 		boolean verified;
 		boolean isAdmin;
@@ -301,12 +301,14 @@ public class UserController {
 //		        dbLogger.info(" log in successfully as a user");
 //		        adminLogger.info(" log in successfully as a user");
 				User user = usi.getUserById(currentUserId);
-				model.addAttribute("user", user);
+//				model.addAttribute("user", user);
+				
+				request.getSession().setAttribute("user", user);
 
 				return "redirect:/dashboard";
 			}
 		} else {
-			return "login";
+			return "redirect:/login";
 		}
 	}
 
@@ -332,19 +334,13 @@ public class UserController {
 //		   	userLogger.info("("+currentUserId+")Fail to update user");
 //		    dbLogger.info("Fail to update user("+currentUserId+")");
 		}
-		return "userDashboard";
+		return "redirect:/dashboard";
 	}
 
 	@RequestMapping("/logout")
-	public String logOutHandler(SessionStatus status) {
-		status.setComplete();
-		return "index";
+	public String logOutHandler(HttpServletRequest request) {
+		request.getSession().invalidate();
+		return "redirect:/";
 	}
-
-	/*
-	 * I don't know how to transfer funds from bank account to trade portfolio. It
-	 * seems that it need place an order first, and then transfer the money
-	 * according to the order.
-	 */
 
 }
