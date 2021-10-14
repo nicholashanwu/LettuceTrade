@@ -28,27 +28,11 @@
 					<!-- Spot/Forward Order Tab content -->
 
 					<div class="tab">
-						<button class="tablinks" onclick="chooseOrderType(event, 'Spot')" id="defaultOpen">Spot</button>
-						<button class="tablinks" onclick="chooseOrderType(event, 'Forward')">Forward</button>
+						<button class="tablinks" onclick="chooseOrderType(event, 'Spot')" id="defaultOpen">SPOT</button>
+						<button class="tablinks" onclick="chooseOrderType(event, 'Forward')">FORWARD</button>
 					</div>
 					
-					<ul class="nav nav-tabs" id="myTab" role="tablist">
-					  <li class="nav-item" role="presentation">
-					    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Home</button>
-					  </li>
-					  <li class="nav-item" role="presentation">
-					    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
-					  </li>
-					 
-					</ul>
-					<div class="tab-content" id="myTabContent">
-					  <div class="tab-pane fade show active" id="Spot" role="tabpanel" aria-labelledby="home-tab">.hi.</div>
-					  <div class="tab-pane fade" id="Forward" role="tabpanel" aria-labelledby="profile-tab">...</div>
-					 
-					 
-					 
-					 
-					</div>
+					
 
 					<!-- SPOT Tab content -->
 					<div id="Spot" class="tabcontent">
@@ -87,14 +71,14 @@
 
 								<tr>
 
-									<td>
+									<td class="align:middle">
 										<!-- For/Using Label -->
-										<h5 id="for-using-label">using </h5>
+										<span class="text" id="for-using-label">using </span>
 									</td>
 
 									<td style="text-align:center">
 										<!-- Quantity of Second Currency Label -->
-										<h3 id="second-currency-quantity-label" text="0">0</h3>
+										<h1 class="green-text-v1-light" id="second-currency-quantity-label" text="0">0</h1>
 									</td>
 
 									<td>
@@ -175,9 +159,9 @@
 
 								<tr>
 
-									<td>
+									<td class="align:middle">
 										<!-- For/Using Label -->
-										<h5 id="fwd-for-using-label">using </h5>
+										<span class="text" id="fwd-for-using-label">using </span>
 									</td>
 
 									<td style="text-align:center">

@@ -1,54 +1,5 @@
 @charset "ISO-8859-1";
 
-/* select {
-  margin: 5px;
-  width: 150px;
-  padding: 5px 5px 5px 5px;
-  font-size: 60px;
-  border: 1px solid #33AB74;
-  height: 75px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
- */
-
-
-/* Style the tab */
-.tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
-}
-
-/* Style the buttons that are used to open the tab content */
-.tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-}
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-  background-color: #ddd;
-}
-
-/* Create an active/current tablink class */
-.tab button.active {
-  background-color: #ccc;
-}
-
-/* Style the tab content */
-.tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-top: none;
-}
 
 .datepicker {
 	border: none;
@@ -64,23 +15,25 @@
 
 
 .tooltip {
-  position:relative; making the .tooltip span a container for the tooltip text
-  border-bottom:1px dashed #000; little indicater to indicate it's hoverable
+  position:relative; /* making the .tooltip span a container for the tooltip text */
+  border-bottom:1px dashed #000; /* little indicater to indicate it's hoverable */
 }
 
+
+
 .tooltip:before {
-  content: attr(data-text); here's the magic
+  content: attr(data-text); /* here's the magic */
   position:absolute;
   
-  vertically center
+  /* vertically center */
   top:50%;
   transform:translateY(-50%);
   
-  move to right
+  /* move to right */
   left:100%;
-  margin-left:15px; and add a small left margin
+  margin-left:15px; /* and add a small left margin */
   
-  basic styles
+  /* basic styles */
   width:200px;
   padding:10px;
   border-radius:10px;
@@ -88,9 +41,79 @@
   color: #fff;
   text-align:center;
 
-  display:none; hide by default
+  display:none; /* hide by default */
 }
 
 .tooltip:hover:before {
   display:block;
 } 
+
+/* TAB STYLING */
+
+.tabcontent {
+  animation: fadeEffect 1s; /* Fading effect takes 1 second */
+}
+
+/* Go from zero to full opacity */
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  
+  /* border: 1px solid #ccc; */
+  /* background-color: #f1f1f1; */
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  border-bottom: 0px solid var(--green-main) !important;
+  color: var(--subtext);
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #EEEEEE;
+  border-bottom: 0px solid var(--green-main) !important;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  /* background-color: #ccc; */
+  border-bottom: 4px solid var(--green-main) !important;
+  color: var(--green-main);
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  /* border: 1px solid #ccc; */
+  border-top: none;
+}
+
+.form-control {
+	color: var(--subtext);
+	/* border-color: var(--green-highlight) !important; */
+	outline: none !important;
+}
+
+.text {
+	color: var(--subtext);
+	
+}
+
+.date {
+	color: var(--subtext);
+}
