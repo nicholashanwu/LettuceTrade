@@ -210,8 +210,7 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [orderId=" + orderId + ", baseCurrency=" + baseCurrency + ", targetCurrency=" + targetCurrency
-				+ ", quantity=" + quantity + "]";
+		return "(orderId " + orderId + ": " + quantity + " " + baseCurrency + "->" + targetCurrency + ")";
 	}
 
 }

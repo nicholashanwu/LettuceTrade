@@ -32,6 +32,7 @@
 						<th colspan="1">Buying</th>
 						<th>Current Value</th>
 						<th>Expires</th>
+						<th>Exchange</th>
 						<th colspan="1">Status</th>
 						<th></th>
 					</tr>
@@ -58,6 +59,8 @@
 							<td th:text="${order.targetCurrency}"></td> -->
 							<td th:text="${#numbers.formatDecimal(order.quantity * rates.get(order.targetCurrency) / rates.get(order.baseCurrency), 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
 							<td th:text="${order.expiryDate}"></td>
+							<td><th:block th:if="${order.orderType.name() == 'FORWARD'}" th:text="${order.scheduledDate}"></th:block>
+								<th:block th:if="${order.orderType.name() == 'SPOT'}">Immediately</th:block></td>
 							<td th:text="${order.orderStatus}"></td>
 							<td>
 								<a class="btn btn-primary" th:if="${order.orderStatus.name() == 'ACTIVE' || order.orderStatus.name() == 'PARTIALLY_COMPLETE'}" th:href="@{/cancelorder(orderId=${order.orderId})}">Cancel</a></td>
