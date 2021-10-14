@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fdmgroup.Lettuce.Exceptions.InsufficientFundsException;
 import com.fdmgroup.Lettuce.Models.Currency;
 import com.fdmgroup.Lettuce.Models.User;
-import com.fdmgroup.Lettuce.Repo.CurrencyRepo;
+import com.fdmgroup.Lettuce.Service.CurrencyServiceImpl;
 import com.fdmgroup.Lettuce.Service.PortfolioServiceImpl;
 
 @Controller
@@ -24,7 +24,7 @@ public class PortfolioController {
 	@Autowired
 	private PortfolioServiceImpl psi = new PortfolioServiceImpl();
 	@Autowired
-	private CurrencyRepo cr;
+	private CurrencyServiceImpl csi = new CurrencyServiceImpl();
 	
 	public static final Logger actLogger=LogManager.getLogger("ActLogging");
 	public static final Logger dbLogger=LogManager.getLogger("DBLogging");
@@ -38,7 +38,7 @@ public class PortfolioController {
 	public String addFundHandler(@RequestParam double amount, HttpServletRequest request) {
 		User user = (User) request.getSession().getAttribute("user");
 		int pid = user.getPortfolio().getPortfolioId();
-		Currency aud = cr.getById("AUD");
+		Currency aud = csi.getCurrencyById("AUD");
 		psi.increaseCurrency(aud, amount, pid);
 		return "redirect:/profile";
 	}
@@ -47,7 +47,7 @@ public class PortfolioController {
 	public String withdrawFundHandler(@RequestParam double amount, HttpServletRequest request, RedirectAttributes redir) throws InsufficientFundsException {
 		User user = (User) request.getSession().getAttribute("user");
 		int pid = user.getPortfolio().getPortfolioId();
-		Currency aud = cr.getById("AUD");
+		Currency aud = csi.getCurrencyById("AUD");
 		try {
 			psi.decreaseCurrency(aud, amount, pid);
 			return "redirect:/profile";
