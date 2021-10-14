@@ -50,6 +50,7 @@ function validate_signUp() {
 		check = false;
 	} else if (!password.value.match(passwordRegex)) {
 		password_msg.innerText = "Password must have at least 8 characters, at least one uppercase character, and one number";	
+		check = false;
 	} else {
 		password_msg.innerText = "";
 		check = true;
