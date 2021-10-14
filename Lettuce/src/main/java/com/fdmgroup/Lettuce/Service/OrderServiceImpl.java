@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ import com.fdmgroup.Lettuce.rates.ExchangeRate;
 
 @Service
 public class OrderServiceImpl implements iOrder {
+	public static final Logger dbLogger=LogManager.getLogger("DBLogging");
+	
 	@Autowired
 	OrderRepo orderRepo;
 
@@ -122,6 +126,7 @@ public class OrderServiceImpl implements iOrder {
 		psi.decreaseCurrency(order.getBaseCurrency(), order.getQuantity(),
 				order.getUser().getPortfolio().getPortfolioId());
 		orderRepo.save(order);
+		dbLogger.info("Saved new order " + order);
 		tryToMatch(order);
 	}
 
@@ -158,6 +163,7 @@ public class OrderServiceImpl implements iOrder {
 				order.getUser().getPortfolio().getPortfolioId());
 		order.setOrderStatus(OrderStatus.CANCELLED);
 		orderRepo.save(order);
+		dbLogger.info("Cancelled order " + order);
 	}
 
 	/**
@@ -173,6 +179,7 @@ public class OrderServiceImpl implements iOrder {
 				order.getUser().getPortfolio().getPortfolioId());
 		order.setOrderStatus(OrderStatus.EXPIRED);
 		orderRepo.save(order);
+		dbLogger.info("Expired order " + order);
 	}
 
 	/**
@@ -203,6 +210,7 @@ public class OrderServiceImpl implements iOrder {
 			List<Order> orders = getOutstandingOrders();
 			for (Order orderFound : orders) {
 				if (order.matches(orderFound)) {
+					dbLogger.info("Found a match between " + order + " and " + orderFound);
 					// We've found a match!
 					// Determine how much currency to exchange.
 
@@ -298,6 +306,11 @@ public class OrderServiceImpl implements iOrder {
 					orderRepo.save(order);
 					orderRepo.save(orderFound);
 					// TODO logging
+					
+					// If the order is all used up, stop iterating through the loop.
+					if (order.getOrderStatus() == OrderStatus.COMPLETE) {
+						break;
+					}
 				}
 			}
 			// No match found. Do nothing.

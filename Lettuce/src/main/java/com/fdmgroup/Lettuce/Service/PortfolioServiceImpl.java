@@ -2,6 +2,8 @@ package com.fdmgroup.Lettuce.Service;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import com.fdmgroup.Lettuce.Repo.PortfolioRepo;
 
 @Service
 public class PortfolioServiceImpl implements iPortfolio {
+	public static final Logger dbLogger=LogManager.getLogger("DBLogging");
+	
 	@Autowired
 	private PortfolioRepo portfolioRepo;
 
@@ -71,6 +75,7 @@ public class PortfolioServiceImpl implements iPortfolio {
 				double newBalance = item.getQuantity() + quantity;
 				item.setQuantity(newBalance);
 				portfolioRepo.save(portfolio);
+				dbLogger.info("Added " + currency + " " + quantity + " to portfolio " + portfolio_id);
 				return;
 			}
 		}
@@ -79,6 +84,7 @@ public class PortfolioServiceImpl implements iPortfolio {
 		newItem.setQuantity(quantity);
 		heldCurrencies.add(newItem);
 		portfolioRepo.save(portfolio);
+		dbLogger.info("Added " + currency + " " + quantity + " to portfolio " + portfolio_id);
 	}
 
 	/**
@@ -120,6 +126,7 @@ public class PortfolioServiceImpl implements iPortfolio {
 					// If they have enough, decrease it, then save changes and exit.
 					item.setQuantity(newBalance);
 					portfolioRepo.save(portfolio);
+					dbLogger.info("Subtracted " + currency + " " + quantity + " from portfolio " + portfolio_id);
 					return;
 				}
 			}
