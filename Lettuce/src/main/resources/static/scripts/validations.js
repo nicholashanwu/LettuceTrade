@@ -14,6 +14,7 @@ function validate_signUp() {
 
 	// http://zparacha.com/validate-email-address-using-javascript-regular-expression
 	var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+	var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm;
 	var check = true;
 
 	// First Name 
@@ -47,6 +48,8 @@ function validate_signUp() {
 	if (password.value.length == 0) {
 		password_msg.innerText = "Valid password is required.";
 		check = false;
+	} else if (!password.value.match(passwordRegex)) {
+		password_msg.innerText = "Password must have at least 8 characters, at least one uppercase character, and one number";	
 	} else {
 		password_msg.innerText = "";
 		check = true;
