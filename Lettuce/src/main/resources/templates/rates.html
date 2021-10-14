@@ -19,7 +19,7 @@
       
         <h1>View our current rates</h1> <br>
         <div class="rates-section">
-        	<table class="table align-middle" >
+        	<table class="table mytable align-middle" >
 	        	<tr>
 	        		<th>Instrument</th>
 	        		<th>Rate</th>
@@ -29,7 +29,7 @@
 	
 	        		<td><div th:class="${'currency-flag currency-flag-' + currency.toString().toLowerCase()}"></div>
         			<div th:class="${'currency-flag currency-flag-' + rate.key.toString().toLowerCase()}"></div>
-        			<span th:text="${currency}"></span>-<span th:text="${rate.key}"></span></td>
+        			<span class="currency-text" th:text="${currency}"></span>-<span class="currency-text" th:text="${rate.key}"></span></td>
         			<td><span th:text="${rate.value}"/></span></td>
 	        			
 	        	</tr>

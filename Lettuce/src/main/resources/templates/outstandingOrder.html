@@ -18,6 +18,7 @@
 		<div class="container">
 			<div class="dashboard-container">
 				<h1>All available orders</h1>
+				<br/>
 				
 				
 				<th:block th:unless="${session.user}">
@@ -26,7 +27,7 @@
 				</th:block>
 				<th:block th:if="${session.user}">
 				
-				<table class="table" id = "myTable">
+				<table class="table mytable" id = "myTable">
 					<tr>
 						<th colspan="2">Selling</th>
 						<th>Remaining</th>

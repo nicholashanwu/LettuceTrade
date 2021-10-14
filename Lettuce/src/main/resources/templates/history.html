@@ -19,12 +19,13 @@
 		<div class="container">
 			<div class="dashboard-container">
 				<h1>Your Order History</h1>
+				<br/>
 				<th:block th:unless="${session.user}">
 					<p>You don't have permission to view this page.</p>
 					<p><a th:href="@{/}">Return to index.</a></p>
 				</th:block>
 				<th:block th:if="${session.user}">
-				<table class="table align-middle" cellpadding="4">
+				<table class="table mytable align-middle" cellpadding="4">
 					<tr>
 						<th colspan="1">Selling</th>
 						<th>Remaining</th>

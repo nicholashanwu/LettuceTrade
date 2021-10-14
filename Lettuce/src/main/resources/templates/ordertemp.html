@@ -4,51 +4,41 @@
 <head>
 	<th:block th:replace="template :: setup"></th:block>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	
-	
+
 </head>
 
 <body onload="openSpotTabByDefault();checkDate();" class="d-flex flex-column h-100">
 	<!-- Header -->
-    <th:block th:unless="${session.user}">
+	<th:block th:unless="${session.user}">
 		<th:block th:replace="template :: guest-header"></th:block>
-    </th:block>
-    <th:block th:if="${session.user}">
+	</th:block>
+	<th:block th:if="${session.user}">
 		<th:block th:replace="template :: user-header"></th:block>
-    </th:block>
+	</th:block>
 
 	<!-- Main Body -->
 	<main class="flex-shrink-0">
 		<div class="container">
 			<div class="dashboard-container">
 
+				<!-- Heading -->
 				<h1>Place Order</h1><br>
-				
-
-				<!-- Choose Options -->
-
-				<!-- AUD IS DEFAULT -->
 
 				<div class="dashboard-section">
-					
 
-					<!-- Spot/Forward Order Tab content -->
+					<!-- Spot/Forward Order Tab Buttons -->
 
 					<div class="tab">
 						<button class="tablinks" onclick="chooseOrderType(event, 'Spot')" id="defaultOpen">SPOT</button>
 						<button class="tablinks" onclick="chooseOrderType(event, 'Forward')">FORWARD</button>
 					</div>
-					
-					
 
 					<!-- SPOT Tab content -->
 					<div id="Spot" class="tabcontent">
-
 						<form th:action="@{/orderHandler}" th:object="${newOrder}" method="post" autocomplete="off">
-
 							</br>
 
-							<table cellpadding="4">
+							<table class="mytable">
 								<tr>
 									<td>
 										<!-- Buy/Sell Option -->
@@ -56,7 +46,6 @@
 											<option value="Buy">Buy</option>
 											<option value="Sell">Sell</option>
 										</select>
-
 									</td>
 
 									<td>
@@ -67,17 +56,13 @@
 
 									<td>
 										<!-- First Currency Option -->
-
 										<select class="form-control" list="first-currency-choice" id="first-currency-choice" name="targetCurrency" th:oninput="changeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])" required>
 											<option th:each="currency, rate : ${rates}" th:value="${currency.key}" th:text="${currency.key}">
 										</select>
-
 									</td>
-
 								</tr>
 
 								<tr>
-
 									<td class="align:middle">
 										<!-- For/Using Label -->
 										<span class="text" id="for-using-label">using </span>
@@ -94,35 +79,27 @@
 											<option th:each="currency, rate : ${portfolio}" th:value="${currency.key}" th:text="${currency.key}">
 										</select>
 									</td>
-
 								</tr>
 
 								<tr>
 									<td colspan="3">
-
 										<!-- Expiry Date Picker -->
 										<input class="form-control" type="text" placeholder="Expiry Date" onmouseover="(this.type='date');(this.id='expiryDatePicker');checkDate();" id="expiryDatePicker" th:field="*{expiryDate}" required>
 										<br />
 									</td>
-									
-									<td class="align-middle">
-										<div class="container">
-										  <a href="#" data-toggle="popover" data-placement="right" title="If your order has not matched with any other orders by 5pm this date, it will expire and can no longer match with other orders.">hint</a>
-										</div>
-										
-									
+
+									<td class="align-top">
+										<!-- Tooltip -->
+										<span class="tool text" data-tip="If your order has not matched with any other orders by 5pm this date, it will expire and can no longer match with other orders." tabindex="1">hint
+										</span>
 									</td>
 								</tr>
 
-
 							</table>
 
-							
-														
-							<!-- Submit Button -->
+							<!-- Place Order Button -->
 							<button type="submit" class="btn btn-primary">Place Order</button>
 							<div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
-
 
 						</form>
 
@@ -131,41 +108,36 @@
 
 					<!-- FORWARD Tab content -->
 					<div id="Forward" class="tabcontent">
-
 						<form th:action="@{/orderHandler}" th:object="${newOrder}" method="post" autocomplete="off">
-
 							</br>
 
-							<table cellpadding="4">
+							<table class="mytable">
 								<tr>
 									<td>
 										<!-- Buy/Sell Option -->
-										<select class="form-control" id="fwd-buy-sell-choice" name="buy-sell-choice" th:oninput="fwdChangeCurrenciesBasedOnBuySellChosen([[${rates}]], [[${portfolio}]]); fwdChangeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])" required>
+										<select class="form-control" id="fwd-buy-sell-choice" name="buy-sell-choice" th:oninput="fwdChangeCurrenciesBasedOnBuySellChosen([[${rates}]], [[${portfolio}]]); fwdChangeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])"
+											required>
 											<option value="Buy">Buy</option>
 											<option value="Sell">Sell</option>
 										</select>
-
 									</td>
 
 									<td>
 										<!-- Quantity of First Currency Option -->
-										<input class="form-control" type="number" name="fwd-first-currency" placeholder="Quantity" id="fwd-first-currency" th:field="*{initialQuantity}" th:oninput="fwdChangeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])" step="0.01"
-											required></input>
+										<input class="form-control" type="number" name="fwd-first-currency" placeholder="Quantity" id="fwd-first-currency" th:field="*{initialQuantity}" th:oninput="fwdChangeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])"
+											step="0.01" required></input>
 									</td>
 
 									<td>
 										<!-- First Currency Option -->
-
 										<select class="form-control" list="fwd-first-currency-choice" id="fwd-first-currency-choice" name="targetCurrency" th:oninput="fwdChangeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])" required>
 											<option th:each="currency, rate : ${rates}" th:value="${currency.key}" th:text="${currency.key}">
 										</select>
-
 									</td>
 
 								</tr>
 
 								<tr>
-
 									<td class="align:middle">
 										<!-- For/Using Label -->
 										<span class="text" id="fwd-for-using-label">using </span>
@@ -173,7 +145,7 @@
 
 									<td style="text-align:center">
 										<!-- Quantity of Second Currency Label -->
-										<h3 id="fwd-second-currency-quantity-label" text="0">0</h3>
+										<h1 class="green-text-v1-light" id="fwd-second-currency-quantity-label" text="0">0</h1>
 									</td>
 
 									<td>
@@ -182,46 +154,36 @@
 											<option th:each="currency, rate : ${portfolio}" th:value="${currency.key}" th:text="${currency.key}">
 										</select>
 									</td>
-
 								</tr>
 
 								<tr>
 									<td colspan="3">
-
 										<!-- Schedule Date Picker -->
 										<input class="form-control" type="text" placeholder="Scheduled Date" onmouseover="(this.type='date');fwdCheckDate();" id="fwd-scheduleDatePicker" th:field="*{scheduledDate}" required>
-										
 									</td>
-									
+
 									<td class="align-middle">
-										<div class="container">
-										  <a href="#" data-toggle="popover" data-placement="right" title="Your transaction will take place on the scheduled date. The rate at which your funds will be traded will be determined when another trader accepts your order. The scheduled date must be after the expiry date.">hint</a>
-										</div>
-										
-									
+										<!-- Tooltip -->
+										<span class="tool text"
+											data-tip="Your transaction will take place on the scheduled date. The rate at which your funds will be traded will be determined when another trader accepts your order. The scheduled date must be after the expiry date."
+											tabindex="1">hint
+										</span>
 									</td>
 								</tr>
-
-
+								
 								<tr>
 									<td colspan="3">
-
 										<!-- Expiry Date Picker -->
 										<input class="form-control" type="text" placeholder="Expiry Date" onmouseover="(this.type='date');fwdCheckDate();" id="fwd-expiryDatePicker" th:field="*{expiryDate}" required>
 										<br />
 									</td>
-									
+
 									<td class="align-middle">
-										<div class="container">
-										  <a href="#" data-toggle="popover" data-placement="right" title="If your order has not matched with any other orders by 5pm this date, it will expire and can no longer match with other orders.">hint</a>
-										</div>
-										
-									
+										<!-- Tooltip -->
+										<span class="tool text" data-tip="If your order has not matched with any other orders by 5pm this date, it will expire and can no longer match with other orders." tabindex="1">hint
+										</span>
 									</td>
 								</tr>
-
-
-								
 
 							</table>
 
@@ -237,18 +199,21 @@
 
 
 
-				
-				<script>
-				$(document).ready(function(){
-				  $('[data-toggle="tooltip"]').tooltip();   
-				});
-				
-				
-				$(function () {
-				  $('[data-toggle="popover"]').popover()
-				})
-				
-				</script>
+
+
+
+
+
+					<script>
+						$(document).ready(function() {
+							$('[data-toggle="tooltip"]').tooltip();
+						});
+
+
+						$(function() {
+							$('[data-toggle="popover"]').popover()
+						})
+					</script>
 
 
 
@@ -257,11 +222,11 @@
 
 			</div>
 		</div>
-		
+
 
 	</main>
 
-	
+
 	<!-- Footer -->
 	<th:block th:replace="template :: page-footer"></th:block>
 
