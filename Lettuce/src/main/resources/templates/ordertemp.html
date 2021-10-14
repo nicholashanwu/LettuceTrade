@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
 	<th:block th:replace="template :: setup"></th:block>
@@ -9,7 +9,13 @@
 </head>
 
 <body onload="openSpotTabByDefault();checkDate();" class="d-flex flex-column h-100">
-	<th:block th:replace="template :: header"></th:block>
+	<!-- Header -->
+    <th:block th:unless="${session.user}">
+		<th:block th:replace="template :: guest-header"></th:block>
+    </th:block>
+    <th:block th:if="${session.user}">
+		<th:block th:replace="template :: user-header"></th:block>
+    </th:block>
 
 	<!-- Main Body -->
 	<main class="flex-shrink-0">
@@ -17,6 +23,7 @@
 			<div class="dashboard-container">
 
 				<h1>Place Order</h1><br>
+				
 
 				<!-- Choose Options -->
 
@@ -248,7 +255,6 @@
 				</div>
 
 
-
 			</div>
 		</div>
 		
@@ -256,6 +262,8 @@
 	</main>
 
 	
+	<!-- Footer -->
+	<th:block th:replace="template :: page-footer"></th:block>
 
 </body>
 
