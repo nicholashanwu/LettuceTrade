@@ -1,7 +1,7 @@
 /**
  * 
  */
-
+// Self-explanatory
 function openSpotTabByDefault() {
 	document.getElementsByClassName('tablinks')[0].click();
 	checkDate();
@@ -9,7 +9,7 @@ function openSpotTabByDefault() {
 
 
 /*updates the value in the label to reflect changes in currencies selected*/
-function changeLabelBasedOnFirstCurrency(rates, portfolio) {
+function changeLabelBasedOnVariables(rates, portfolio) {
 	
 	//Converts the rates and portfolio Objects to arrays
 	var rates = Object.entries(rates).map(([key, value]) => ({key,value}));				
@@ -35,7 +35,7 @@ function changeLabelBasedOnFirstCurrency(rates, portfolio) {
 	
 }
 
-function fwdChangeLabelBasedOnFirstCurrency(rates, portfolio) {
+function fwdChangeLabelBasedOnVariables(rates, portfolio) {
 	
 	//Converts the rates and portfolio Objects to arrays
 	var rates = Object.entries(rates).map(([key, value]) => ({key,value}));				
@@ -60,7 +60,7 @@ function fwdChangeLabelBasedOnFirstCurrency(rates, portfolio) {
 	
 }
 
-function chooseOrderType(evt, cityName) {
+function chooseOrderType(evt, type) {
   // Declare all variables
   var i, tabcontent, tablinks;
 
@@ -77,10 +77,9 @@ function chooseOrderType(evt, cityName) {
   }
 
   // Show the current tab, and add an "active" class to the button that opened the tab
-  document.getElementById(cityName).style.display = "block";
+  document.getElementById(type).style.display = "block";
   evt.currentTarget.className += " active";
 
-/*  document.getElementById("defaultOpen").click();*/
 }
 
 
@@ -183,14 +182,12 @@ function checkDate() {
 	var todayEndOfDay = new Date().setHours(17,00,0); //5:00pm
 
 	/*if it's past 5pm, then force expiry date to be tomorrow or later*/
-	// bug: 
+	
 	if(todayTime < todayEndOfDay) {
-		datePicker.value = today;
 		datePicker.setAttribute("min", today);
 		console.log("today");
 	} else {
 		datePicker.setAttribute('min', tomorrow);
-		datePicker.value = tomorrow;
 		datePicker.setAttribute('min', tomorrow);
 		console.log("tomorrow");
 	}	
@@ -220,38 +217,18 @@ function fwdCheckDate() {
 	var todayEndOfDay = new Date().setHours(17,00,0); //5:00pm
 
 	/*if it's past 5pm, then force expiry date to be tomorrow or later*/
-	// bug: 
 	if(todayTime < todayEndOfDay) {
-		sDatePicker.value = today;
-		sDatePicker.setAttribute("min", today);
-		eDatePicker.value = today;
 		eDatePicker.setAttribute("min", today);
+		sDatePicker.setAttribute("min", today);
 		console.log("today");
 	} else {
-		sDatePicker.value = tomorrow;
 		sDatePicker.setAttribute('min', tomorrow);
-		eDatePicker.value = tomorrow;
 		eDatePicker.setAttribute('min', tomorrow);
 		console.log("tomorrow");
 	}	
 }
 
 
-function today() {
-	return new Date();
-}
-
-function tomorrow() {
-	return today().getTime() + 24 * 60 * 60 * 1000;
-}
-
-function getFormattedDate(date) {
-    return date.getFullYear()
-        + "-"
-        + ("0" + (date.getMonth() + 1)).slice(-2)
-        + "-"
-        + ("0" + date.getDate()).slice(-2);
-}
 
 
 
