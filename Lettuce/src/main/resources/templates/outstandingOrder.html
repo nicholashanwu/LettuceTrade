@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <th:block th:replace="template :: setup"></th:block>
+<link th:href="@{/css/flags.css}" rel="stylesheet" />
 </head>
 <body>
 	<th:block th:replace="template :: header"></th:block>
@@ -21,7 +22,10 @@
 					<th:block th:each="rate: ${outRates}">
 					<form th:action="@{/outOrderHandler}" th:object="${newOrder}" method="post">
 						<tr>
-							<td>Image</td>
+							<td>
+							<div th:class="${'currency-flag currency-flag-' + rate.key.substring(0,3).toLowerCase()}"></div>
+							<div th:class="${'currency-flag currency-flag-' + rate.key.substring(7,10).toLowerCase()}"></div>
+							</td>
 							<td> <input type = "text" th:value ="${rate.key}" th:id="details" th:name = "details" readonly></td>
 							<td th:text = "${#numbers.formatDecimal(rate.value, 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
 							
