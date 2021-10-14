@@ -84,7 +84,7 @@
 								<tr>
 									<td colspan="3">
 										<!-- Expiry Date Picker -->
-										<input class="form-control" type="text" placeholder="Expiry Date" onmouseover="(this.type='date');(this.id='expiryDatePicker');checkDate();" id="expiryDatePicker" th:field="*{expiryDate}" required>
+										<input class="form-control" type="text" placeholder="Expiry Date" onclick="(this.type='date');(this.id='expiryDatePicker');checkDate();" id="expiryDatePicker" th:field="*{expiryDate}" required>
 										<br />
 									</td>
 
@@ -159,7 +159,7 @@
 								<tr>
 									<td colspan="3">
 										<!-- Schedule Date Picker -->
-										<input class="form-control" type="text" placeholder="Scheduled Date" onmouseover="(this.type='date');fwdCheckDate();" id="fwd-scheduleDatePicker" th:field="*{scheduledDate}" required>
+										<input class="form-control" type="text" placeholder="Scheduled Date" onclick="(this.type='date');(this.id='expiryDatePicker');checkDate();" id="fwd-scheduleDatePicker" th:field="*{scheduledDate}" required>
 									</td>
 
 									<td class="align-middle">
@@ -174,7 +174,7 @@
 								<tr>
 									<td colspan="3">
 										<!-- Expiry Date Picker -->
-										<input class="form-control" type="text" placeholder="Expiry Date" onmouseover="(this.type='date');fwdCheckDate();" id="fwd-expiryDatePicker" th:field="*{expiryDate}" required>
+										<input class="form-control" type="text" placeholder="Expiry Date" onclick="(this.type='date');(this.id='expiryDatePicker');checkDate();" id="fwd-expiryDatePicker" th:field="*{expiryDate}" required>
 										<br />
 									</td>
 

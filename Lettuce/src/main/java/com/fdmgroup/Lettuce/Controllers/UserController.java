@@ -337,17 +337,18 @@ public class UserController {
 	public String handlerLogin(@RequestParam(value = "email") String email,
 			@RequestParam(value = "password") String password, Model model, HttpServletRequest request) {
 
-		boolean verified;
+		boolean verified = true;
 		boolean isAdmin;
-		boolean isEnabled=false;
+		boolean isEnabled= true;
 		try {
 			verified = usi.loginWithEmailAndPassword(email, password);
 			isAdmin = false;
 //			isAdmin=usi.isAdmin(email);											may not have admin features in final product
 			currentUserId = usi.getUserByEmail(email).getUserId();
-			if(usi.getUserByEmail(email).getEnabled().equals("true")) {
-				isEnabled = true;
-			}
+			/*
+			 * if(usi.getUserByEmail(email).getEnabled().equals("true")) { isEnabled = true;
+			 * }
+			 */
 		} catch (Exception e) {
 			verified = false;
 			isAdmin = false;

@@ -91,20 +91,6 @@ a:hover {
     padding: 12px;
 }
 
-/* .greentable>tbody>tr>td, .mytable>tbody>tr>th, .mytable>tfoot>tr>td, .mytable>tfoot>tr>th, .mytable>thead>tr>td, .mytable>thead>tr>th {
-    padding: 12px;
-    border: 1px solid #dddddd;
-} */
 
-.table-bordered > thead > tr > th,
-.table-bordered > tbody > tr > th,
-.table-bordered > tfoot > tr > th,
-.table-bordered > thead > tr > td,
-.table-bordered > tbody > tr > td,
-.table-bordered > tfoot > tr > td {
-  border: 2px solid #dddddd;
-  border-right-width:2px;
-  border-left-width:2px;
-}
 
 

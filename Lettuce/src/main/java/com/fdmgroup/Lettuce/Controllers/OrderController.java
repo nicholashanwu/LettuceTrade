@@ -122,7 +122,7 @@ public class OrderController {
 		Currency baseCurrency;
 		Currency targetCurrency;
 		
-		if(choice == "Sell") {					//reverse the two currencies if selling. needs testing!
+		if(choice.equals("Sell")) {					//reverse the two currencies if selling. needs testing!
 			baseCurrency = csi.getCurrencyById(strTargetCurrency);
 			targetCurrency = csi.getCurrencyById(strBaseCurrency);
 		} else {

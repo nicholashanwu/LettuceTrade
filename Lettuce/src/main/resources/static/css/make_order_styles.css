@@ -77,14 +77,15 @@
   cursor: pointer;
   padding: 14px 16px;
   transition: 0.3s;
-  border-bottom: 0px solid var(--green-main) !important;
+  border-bottom: 4px solid var(--subtext) !important;
   color: var(--subtext);
+  font-size: 36px;
 }
 
 /* Change background color of buttons on hover */
 .tab button:hover {
   background-color: #EEEEEE;
-  border-bottom: 0px solid var(--green-main) !important;
+  border-bottom: 4px solid var(--subtext) !important;
 }
 
 /* Create an active/current tablink class */
