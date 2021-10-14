@@ -1,6 +1,10 @@
 package com.fdmgroup.Lettuce.Controllers;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +33,7 @@ import com.fdmgroup.Lettuce.Repo.PortfolioRepo;
 import com.fdmgroup.Lettuce.Service.CurrencyServiceImpl;
 import com.fdmgroup.Lettuce.Service.PortfolioServiceImpl;
 import com.fdmgroup.Lettuce.Service.UserServiceImpl;
+import com.fdmgroup.Lettuce.rates.ExchangeRate;
 
 @Controller
 @SessionAttributes({ "user" })
@@ -112,11 +117,37 @@ public class UserController {
 	}
 
 	@RequestMapping("/")
-	public String toIndexPage() {
+	public String toIndexPage(Model model) {
 //		actLogger.info("Landed in Home Page")
+		Map<String, Double> rates = new HashMap<String, Double>();
+		String currency ="AUD";
+		try {
+			rates = ExchangeRate.getPopularRates("AUD");
+			rates.remove(currency);
+			model.addAttribute("currency",currency);
+			model.addAttribute("rates",rates);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return "index";
 	}
-
+	@RequestMapping("/changeRateHandler")
+	public String getRateHandler(@RequestParam String currency, Model model,HttpServletRequest request) {
+		
+		Map<String, Double> rates = new HashMap<String, Double>();
+			try {
+				rates = ExchangeRate.getPopularRates(currency);
+				rates.remove(currency);
+				model.addAttribute("currency",currency);
+				model.addAttribute("rates",rates);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		return "index";
+	}
+	
+	
+	
 	@RequestMapping("/login")
 	public String toLoginPage() {
 //		actLogger.info("Landed in login Page")
