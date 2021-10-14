@@ -208,7 +208,7 @@ public class UserController {
 			usi.registerUser(user,getSiteURL(request)); 
 			setUpNewTestUser(user);
 
-			return "register-message"; 
+			return "redirect:/register-message"; 
 
 
 			//return "register-message"; 
@@ -244,7 +244,7 @@ public class UserController {
 	}
 	
 	@RequestMapping("/forgetPasswordHandler")
-	public String forgetPasswordHandler(@RequestParam(value = "email") String email,HttpServletRequest request,Model model) throws UnsupportedEncodingException, MessagingException {
+	public String forgetPasswordHandler(@RequestParam(value = "email") String email,HttpServletRequest request,Model model) throws UnsupportedEncodingException, MessagingException, UserNotFoundException{
 		try {
 			usi.resetPassword(email, getSiteURL(request));
 			model.addAttribute("message","A reset password link has been sent to your email. Please use it to set up your new password");
