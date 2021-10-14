@@ -1,12 +1,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <th:block th:replace="template :: setup"></th:block>
-<link th:href="@{/css/flags.css}" rel="stylesheet" />
 <script type="text/javascript" th:src="@{/scripts/dashboard.js}"></script>
 </head>
 <body>
-
-	<th:block th:replace="template :: header"></th:block>
+	<!-- Header -->
+    <th:block th:unless="${session.user}">
+		<th:block th:replace="template :: guest-header"></th:block>
+    </th:block>
+    <th:block th:if="${session.user}">
+		<th:block th:replace="template :: user-header"></th:block>
+    </th:block>
 
   <!-- Main Body -->
   <main class="flex-shrink-0">
@@ -59,7 +63,7 @@
     </div>
   </main>
 	
-	<th:block th:replace="template :: footer"></th:block>
+	<th:block th:replace="template :: page-footer"></th:block>
 
 </body>
 </html>

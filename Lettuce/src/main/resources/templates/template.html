@@ -23,6 +23,7 @@
 	  <link th:href="@{/css/index_styles.css}" rel="stylesheet" />
 	  <link th:href="@{/css/dashboard_styles.css}" rel="stylesheet" />
 	  <link th:href="@{/css/make_order_styles.css}" rel="stylesheet" />
+	  <link th:href="@{/css/flags.css}" rel="stylesheet" />
 	  <!-- Javascript -->
   	  <script type="text/javascript" th:src="@{/scripts/order_tabs.js}"></script>
 	  <!-- Fonts -->
@@ -94,7 +95,8 @@
 	    </header>
 	</th:block>
 	
-	<th:block th:fragment="lockedfooter">
+	<!-- Use to lock the footer to the bottom of the screen (useful for short pages). -->
+	<th:block th:fragment="screen-footer">
 	  <footer style="bottom: 0; width: 100%; position: fixed;" class="footer mt-auto py-3 bg-light">
     	<div class="container">
       	<img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
@@ -103,7 +105,8 @@
   	  </footer>
   	</th:block>
 	
-	<th:block th:fragment="footer">
+	<!-- Use to lock the footer to the bottom of the page. -->
+	<th:block th:fragment="page-footer">
 	  <footer class="footer mt-auto py-3 bg-light">
     	<div class="container">
       	<img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />

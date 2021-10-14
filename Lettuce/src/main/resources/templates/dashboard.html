@@ -7,20 +7,29 @@
 
 	<!-- Javascript -->
 	<script type="text/javascript" th:src="@{/scripts/dashboard.js}"></script>
-	<!--CSS References-->
-	<link th:href="@{/css/flags.css}" rel="stylesheet" />
 
 </head>
 
 <body class="d-flex flex-column h-100">
 	<!-- Header -->
-	<th:block th:replace="template :: header"></th:block>
+    <th:block th:unless="${session.user}">
+		<th:block th:replace="template :: guest-header"></th:block>
+    </th:block>
+    <th:block th:if="${session.user}">
+		<th:block th:replace="template :: user-header"></th:block>
+    </th:block>
 
 
 	<!-- Main Body -->
 	<main class="flex-shrink-0">
 		<div class="container">
 			<div class="dashboard-container">
+				<th:block th:unless="${session.user}">
+				<h1>Dashboard</h1>
+				<p>You don't have permission to view this page.</p>
+				<p><a th:href="@{/}">Return to index.</a></p>
+				</th:block>
+				<th:block th:if="${session.user}">
 
 				<h1>Welcome to your dashboard, <span th:text="${#strings.capitalize(#strings.toLowerCase(session.user.firstName))}"></span></h1> <br>
 				<h4 class="green-text-v1">View your portfolio and current rates!</h4>
@@ -98,18 +107,13 @@
         		</form>
 
         	</div>
-
+		</th:block>
         </div>
       </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer mt-auto py-3 bg-light">
-    	<div class="container">
-    		<img id="footer_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
-    		<span class="text-muted">&copy; 2021 Lettuce</span>
-    	</div>
-    </footer>
+	<!-- Footer -->
+	<th:block th:replace="template :: page-footer"></th:block>
 
   </body>
 

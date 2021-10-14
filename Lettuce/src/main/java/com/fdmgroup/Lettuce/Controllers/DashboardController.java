@@ -45,6 +45,9 @@ public class DashboardController {
 	@RequestMapping("/profile")
 	public String toProfilePage(Model model) {
 		User user = (User) model.getAttribute("user");
+		if (null == user) {
+			return "profile";
+		}
 		Portfolio portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
 		model.addAttribute("portfolio",portfolio);
 		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
@@ -57,6 +60,9 @@ public class DashboardController {
 	public String toDashboardPage(Model model, HttpServletRequest request) {
 		Portfolio portfolio = new Portfolio();
 		User user = (User) request.getSession().getAttribute("user");
+		if (null == user) {
+			return "dashboard";
+		}
 		portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
 		
 		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
