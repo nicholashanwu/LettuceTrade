@@ -111,12 +111,6 @@ public class DashboardController {
 		return "dashboard";
 	}
 	
-	@RequestMapping("/placeOrderHandler")
-	public String toplaceOrderPage(Model model){
-		Order order = new Order();
-		model.addAttribute("order",order);
-		return "placeOrder";
-	}
 	
 	public void printPortfolio(List<HeldCurrency> heldcurrency,Model model) {
 		double totalBalance = 0;
