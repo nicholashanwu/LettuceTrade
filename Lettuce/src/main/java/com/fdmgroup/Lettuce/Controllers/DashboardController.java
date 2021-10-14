@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +49,7 @@ public class DashboardController {
 		Portfolio portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
 		model.addAttribute("portfolio",portfolio);
 		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
-		printPortfolio(heldcurrency,model);
+		printPortfolio(heldcurrency,model,false);
 		
 		return "profile";
 	}
@@ -60,13 +61,8 @@ public class DashboardController {
 		portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
 		
 		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
-		// show  only first 4 heldcurrency
-		
-		if(heldcurrency.size()>3) {
-			heldcurrency = heldcurrency.subList(0, 3);
-		}	
-		
-		printPortfolio(heldcurrency,model);
+	
+		printPortfolio(heldcurrency,model,true);
 		//show the popular rates with AUD
 		Map<String, Double> rates = new HashMap<String, Double>();
 		String currency ="AUD";
@@ -90,13 +86,9 @@ public class DashboardController {
 		portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
 		
 		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
-		// show  only first 4 heldcurrency
+	
 		
-		if(heldcurrency.size()>3) {
-			heldcurrency = heldcurrency.subList(0, 3);
-		}	
-		
-		printPortfolio(heldcurrency,model);
+		printPortfolio(heldcurrency,model,true);
 		Map<String, Double> rates = new HashMap<String, Double>();
 			try {
 				rates = ExchangeRate.getPopularRates(currency);
@@ -112,7 +104,7 @@ public class DashboardController {
 	}
 	
 	
-	public void printPortfolio(List<HeldCurrency> heldcurrency,Model model) {
+	public void printPortfolio(List<HeldCurrency> heldcurrency,Model model,boolean limit) {
 		double totalBalance = 0;
 		Map<String, Double> getAllRates = new HashMap<>();
 		try {
@@ -137,8 +129,25 @@ public class DashboardController {
 		}
 		BigDecimal total = new BigDecimal(totalBalance).setScale(2, RoundingMode.HALF_UP);
 		
-		model.addAttribute("heldCurrencys", portfolioWithValue);
+			if(limit) {
+				Map<Double,HeldCurrency> limitMap = new TreeMap<>(Collections.reverseOrder());
+				
+				int count=0;
+				for (Double k : portfolioWithValue.keySet()) {
+					if(count ==3) {
+						break;
+					}
+					HeldCurrency value = portfolioWithValue.get(k);
+				    limitMap.put(k,value);
+				    count++;
+				}
+				model.addAttribute("heldCurrencys", limitMap);
+			}else {
+				model.addAttribute("heldCurrencys", portfolioWithValue);
+			}
+			
 		model.addAttribute("TotalBalance", total.doubleValue());
+		}
 	}
 	
-}
+
