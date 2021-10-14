@@ -7,10 +7,12 @@
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+  <script type="text/javascript" th:src="@{/scripts/dashboard.js}"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--CSS References-->
   <link th:href="@{/css/standard_styles.css}" rel="stylesheet" />
   <link th:href="@{/css/index_styles.css}" rel="stylesheet" />
+  <link th:href="@{/css/flags.css}" rel="stylesheet" />
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -59,54 +61,43 @@
         <h2 class="index-header-2">Un-<span class="green-text-v1">beet</span>-able rates.</h2>
         <p>Exclusive exchange rates.</p>
         
-        <input class="form-control" list="currency-choices" id="currency" name="currency" placeholder="AUD"/>
-        <datalist id="currency-choices">
-        	<option value="AUD">
-        	<option value="USD">
-        	<option value="CAD">
-        	<option value="GBP">
-        	<option value="NZD">
-        	<option value="JPY">
-        	<option value="RMB">
-        </datalist>
-        <br/><br/><br/>
+        <table class="table align-middle" >
+        	<tr>
+        		<th>Instrument</th>
+        		<th>Rate</th>
+        	</tr>
+        	
+        	<tr th:each="rate:${rates}">
 
-        <table class="table">
-          <tr>
-            <th colspan="2">Instrument</th>
-            <th>Bid</th>
-            <th>Ask</th>
-            <th>Spread</th>
-          </tr>
-          <tr>
-            <td>IMAGE</td>
-            <td>Instrument</td>
-            <td>Bid</td>
-            <td>Ask</td>
-            <td>Spread</td>
-          </tr>
-          <tr>
-            <td>IMAGE</td>
-            <td>Instrument</td>
-            <td>Bid</td>
-            <td>Ask</td>
-            <td>Spread</td>
-          </tr>
-          <tr>
-            <td>IMAGE</td>
-            <td>Instrument</td>
-            <td>Bid</td>
-            <td>Ask</td>
-            <td>Spread</td>
-          </tr>
-          <tr>
-            <td>IMAGE</td>
-            <td>Instrument</td>
-            <td>Bid</td>
-            <td>Ask</td>
-            <td>Spread</td>
-          </tr>
-        </table>
+        		<td><div th:class="${'currency-flag currency-flag-' + currency.toString().toLowerCase()}"></div>
+        			<div th:class="${'currency-flag currency-flag-' + rate.key.toString().toLowerCase()}"></div>
+        			<span th:text="${currency}"></span>-<span th:text="${rate.key}"></span></td>
+        			<td><span th:text="${rate.value}"/></span></td>
+        			
+        			</tr>
+
+
+        		</table>
+
+
+        		<!-- Rate Filter -->
+        		<form th:action="@{/changeRateHandler}" method="post" >
+
+        			<select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onchange="if (this.selectedIndex) enableSubmitButton();" id="currency" name="currency">
+						<option value="" selected disabled>filter</option>
+						<option value="AUD">AUD</option>
+						<option value="CAD">CAD</option>
+						<option value="EUR">EUR</option>
+						<option value="GBP">GBP</option>
+						<option value="JPY">JPY</option>
+						<option value="NZD">NZD</option>
+						<option value="USD">USD</option>
+
+					</select>
+        			
+        			<button type="submit" class="btn btn-primary btn-lg" id="get-rate-submit-button" disabled="disable" >submit</button>
+
+        		</form>
       </div>
     </section>
 	<!-- Footer -->

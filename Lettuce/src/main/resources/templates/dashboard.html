@@ -39,7 +39,7 @@
 						
 						<tr th:each="heldCurrency:${heldCurrencys}">
 							<td class="align-top"><div th:class="${'currency-flag currency-flag-' + heldCurrency.value.currency.toString().toLowerCase()}"></div>
-								<span th:text="${heldCurrency.value.currency.currencyCode}"></span></td>
+								<span class="currency-text" th:text="${heldCurrency.value.currency.currencyCode}"></span></td>
 								
 								<td><span th:text="${heldCurrency.value.quantity}"></span></td>
 								<td><span th:text="${heldCurrency.key}"></span></td>
@@ -69,9 +69,9 @@
 
         		<td><div th:class="${'currency-flag currency-flag-' + currency.toString().toLowerCase()}"></div>
         			<div th:class="${'currency-flag currency-flag-' + rate.key.toString().toLowerCase()}"></div>
-        			<span th:text="${currency}"></span>-<span th:text="${rate.key}"></span></td>
+        			<span class="currency-text"  th:text="${currency}"/></span>-<span class="currency-text" th:text="${rate.key}"/></span></td>
         			<td><span th:text="${rate.value}"/></span></td>
-        			
+        			<td><a role="button" th:href="@{/placeOrderHandler}" id = "place-order"class="btn btn-primary">Trade</a><td>
         			</tr>
 
 

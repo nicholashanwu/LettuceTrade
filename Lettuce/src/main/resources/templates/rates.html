@@ -2,6 +2,7 @@
 <head>
 <th:block th:replace="template :: setup"></th:block>
 <link th:href="@{/css/flags.css}" rel="stylesheet" />
+<script type="text/javascript" th:src="@{/scripts/dashboard.js}"></script>
 </head>
 <body>
 
@@ -14,28 +15,45 @@
       
         <h1>View our current rates</h1> <br>
         <div class="rates-section">
-        	<table class="table align-middle">
-        		<tr>
-	              <th colspan="2">Instrument</th>
-	              <th>Rate</th>
-	            </tr>
-	            
-	            <!-- For each currency... -->
-	            <th:block th:each="firstRate : ${rates}">
-	            	<!-- ...compare it against each of the other currencies. -->
-	            	<tr th:each="secondRate : ${rates}" th:unless="${firstRate.key.equals(secondRate.key)}">
-	            		<!-- For each pair found, show the flags and calculate the rate between them. -->
-	            		<td>
-	            			<div th:class="${'currency-flag currency-flag-' + firstRate.key.toString().toLowerCase()}"></div>
-	            			<div th:class="${'currency-flag currency-flag-' + secondRate.key.toString().toLowerCase()}"></div>
-<!-- 	            			<img th:src="@{${'/images/' + firstRate.key + '.png'}}" width="40" height="40" /> -->
-<!-- 	            			<img th:src="@{${'/images/' + secondRate.key + '.png'}}" width="40" height="40" /> -->
-						</td>
-	            		<td th:text="${firstRate.key + '-' + secondRate.key}"></td>
-	            		<td th:text="${#numbers.formatDecimal(secondRate.value / firstRate.value, 1, 'DEFAULT', 4, 'DEFAULT')}"></td>
-	            	</tr>
-	            </th:block>
-        	</table>
+        	<table class="table align-middle" >
+	        	<tr>
+	        		<th>Instrument</th>
+	        		<th>Rate</th>
+	        	</tr>
+	        	
+	        	<tr th:each="rate:${rates}">
+	
+	        		<td><div th:class="${'currency-flag currency-flag-' + currency.toString().toLowerCase()}"></div>
+        			<div th:class="${'currency-flag currency-flag-' + rate.key.toString().toLowerCase()}"></div>
+        			<span th:text="${currency}"></span>-<span th:text="${rate.key}"></span></td>
+        			<td><span th:text="${rate.value}"/></span></td>
+	        			
+	        	</tr>
+	
+	
+	        	</table>
+
+        		<!-- Rate Filter -->
+        		<form th:action="@{/ratesHandler}" method="post" >
+
+        			<select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onchange="if (this.selectedIndex) enableSubmitButton();" id="currency" name="currency">
+						<option value="" selected disabled>filter</option>
+						<option value="AUD">AUD</option>
+						<option value="CAD">CAD</option>
+						<option value="CHF">CHF</option>
+						<option value="CNY">CNY</option>
+						<option value="EUR">EUR</option>
+						<option value="GBP">GBP</option>
+						<option value="HKD">HKD</option>
+						<option value="JPY">JPY</option>
+						<option value="NZD">NZD</option>
+						<option value="USD">USD</option>
+
+					</select>
+        			
+        			<button type="submit" class="btn btn-primary btn-lg" id="get-rate-submit-button" disabled="disable" >submit</button>
+
+        		</form>
         </div>
       </div>
     </div>
