@@ -60,7 +60,11 @@ public class UserController {
 	public void setUpNewTestUser(User user) throws DuplicatedEmailException {
 
 
-		
+
+
+		//usi.addUser(user);
+
+	
 		
 		Portfolio portfolio = new Portfolio(user);
 
@@ -179,6 +183,7 @@ public class UserController {
 		return "register";
 	}
 	
+
 	/*
 	 * @RequestMapping("/registerHandler") public String handlerRegister(User user)
 	 * { try { // PLEASE remember the password - there are no decryption process
@@ -192,14 +197,25 @@ public class UserController {
 	 * return "redirect:/register-message"; } catch (Exception e) { //
 	 * actLogger.warn("Fail to register a user because" + e.getMessage());
 	 * e.printStackTrace(); return "redirect:/register"; } }
+	 
 	 */
+
+
 
 	@RequestMapping("/registerHandler") 
 	public String registerHandler(User user, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException, DuplicatedEmailException { 
 		try { 
 			usi.registerUser(user,getSiteURL(request)); 
 			setUpNewTestUser(user);
-			return "redirect:/register-message"; 
+
+			return "register-message"; 
+
+
+			//return "register-message"; 
+
+		
+
+
 		} catch (Exception e) {
 			e.printStackTrace(); 
 			return "redirect:/register"; 
@@ -239,13 +255,13 @@ public class UserController {
 			model.addAttribute("error", "We are encoutring an error while sending email. Please try again.");
 		}
 		
-		return "redirect:/forgot-password";
+		return "forgot-password";
 	}
 	@RequestMapping("/reset_password")
 	public String resetPassword(@Param("code") String code,Model model) {
 		if(usi.verifyToken(code)) {
 			model.addAttribute("token", code);
-			return "redirect:/reset-password";
+			return "reset-password";
 		}else {
 	        model.addAttribute("message", "Invalid Token");
 	        return "message";
@@ -255,6 +271,8 @@ public class UserController {
 	@RequestMapping("/resetPasswordHandler")
 	public String resetPasswordHandler(@RequestParam(value = "token") String token, @RequestParam(value = "password") String password,
 			@RequestParam(value = "confirmpassword") String confrimpassword) throws UserNotFoundException {
+		boolean isConfirmed = password.equals(confrimpassword);
+		if(isConfirmed) {
 		try {
 			User user = usi.findByVerificationCode(token);
 			usi.updatePassword(user, confrimpassword);
@@ -262,7 +280,9 @@ public class UserController {
 		} catch (Exception e) {
 			return "redirect:/forgot-password";
 		}
-		
+		}else {
+			return "redirect:/forgot-password";
+		}
 		
 		
 	}
@@ -319,19 +339,26 @@ public class UserController {
 
 		boolean verified;
 		boolean isAdmin;
+		boolean isEnabled=false;
 		try {
 			verified = usi.loginWithEmailAndPassword(email, password);
 			isAdmin = false;
 //			isAdmin=usi.isAdmin(email);											may not have admin features in final product
 			currentUserId = usi.getUserByEmail(email).getUserId();
+			if(usi.getUserByEmail(email).getEnabled().equals("true")) {
+				isEnabled = true;
+			}
 		} catch (Exception e) {
 			verified = false;
 			isAdmin = false;
+			model.addAttribute("error", "Please enter the correct password");
 			e.printStackTrace();
+			return "login";
+			
 //		    actLogger.warn("Fail to login because EXCEPTION " + e.getClass()+" "+e.getMessage());
 		}
 
-		if (verified) {
+		if (verified && isEnabled) {
 			if (isAdmin) {
 				currentAdmin = true;
 //		        actLogger.info(" log in successfully as an admin");
@@ -352,7 +379,8 @@ public class UserController {
 				return "redirect:/dashboard";
 			}
 		} else {
-			return "redirect:/login";
+			model.addAttribute("message", "Please check your mail box to verify your account");
+			return "login";
 		}
 	}
 

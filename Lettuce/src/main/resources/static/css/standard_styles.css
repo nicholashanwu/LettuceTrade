@@ -51,7 +51,7 @@ a:hover {
 }
 
 .currency-text {
-	font-weight: bold;
+	font-family: 'Roboto Medium', sans-serif;
 	font-size: 80%;
 
 }
@@ -85,6 +85,10 @@ a:hover {
 
 .select:hover {
 	background-color: red;
+}
+
+.mytable>tbody>tr>td, .mytable>tbody>tr>th, .mytable>tfoot>tr>td, .mytable>tfoot>tr>th, .mytable>thead>tr>td, .mytable>thead>tr>th {
+    padding: 12px;
 }
 
 
