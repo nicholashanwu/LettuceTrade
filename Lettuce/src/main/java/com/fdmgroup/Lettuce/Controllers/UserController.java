@@ -373,5 +373,10 @@ public class UserController {
 		request.getSession().invalidate();
 		return "redirect:/";
 	}
+	
+	@RequestMapping("/register-message")
+	public String registerMessagePage() {
+		return "register-message";
+	}
 
 }
