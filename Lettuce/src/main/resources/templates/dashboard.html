@@ -54,8 +54,11 @@
 							<td><span th:text="${#numbers.formatDecimal(heldCurrency.key, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></td>
 						</tr>
 						
-						<tr><td colspan="3"><a class="btn btn-primary" th:href="@{/profile}">See More</a></td></tr>
+						
 					</table>
+					<a class="btn btn-primary" th:href="@{/profile}">See More</a>
+					<br/><br/><br/>
+					
 						
 					<!-- Portfolio Value -->
 					<p><span > Total Portfolio Value </span></p>

@@ -24,7 +24,7 @@
         </th:block>
         <th:block th:if="${session.user}">
 	        <form class="form" id="fund-form" th:action = "@{/fundHandler}" th:object = "${amount}" method="post" novalidate>
-	        <input type = "number" onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 ? true : !isNaN(Number(event.key))" id="amount" name="amount" placeholder="Quantity" /><label style="margin:15px;"><b>AUD</b></label><br>
+	        <input class="form-control" min="0" type = "number" onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 ? true : !isNaN(Number(event.key))" id="amount" name="amount" placeholder="Quantity" required/><label style="margin:15px;"><b>AUD</b></label><br>
 	          <button type="submit" id = "top-up" class="btn btn-primary" name = "top-up" value = "top-up">Top Up</button>
 	          <button style="margin:15px;" type="submit" id = "withdraw" class="btn btn-primary" name = "withdraw" value = "withdraw">Withdraw</button>  
 	        </form>

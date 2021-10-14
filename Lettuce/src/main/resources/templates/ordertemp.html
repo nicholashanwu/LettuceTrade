@@ -124,7 +124,7 @@
 
 									<td>
 										<!-- Quantity of First Currency Option -->
-										<input class="form-control" type="number" name="fwd-first-currency" placeholder="Quantity" id="fwd-first-currency" th:field="*{initialQuantity}" th:oninput="fwdChangeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])"
+										<input class="form-control" type="number" name="fwd-first-currency" min="0" placeholder="Quantity" id="fwd-first-currency" th:field="*{initialQuantity}" th:oninput="fwdChangeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])"
 											step="0.01" required></input>
 									</td>
 
