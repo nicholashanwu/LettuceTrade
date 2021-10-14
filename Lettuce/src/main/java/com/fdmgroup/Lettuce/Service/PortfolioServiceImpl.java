@@ -46,11 +46,23 @@ public class PortfolioServiceImpl implements iPortfolio {
 		portfolioRepo.deleteAll();
 	}
 
+	/**
+	 * Adds money to a user's portfolio, storing it in the correct HeldCurrency
+	 * object. If the user has no money in that currency at all yet, a new
+	 * HeldCurrency will be created.
+	 * <p>
+	 * This method does not verify where the money is coming from. It simply trusts
+	 * you to ensure that the money isn't coming from thin air.
+	 * 
+	 * @param currency     The currency to add to the portfolio.
+	 * @param quantity     The amount to add, expressed in that currency.
+	 * @param portfolio_id The ID number of the portfolio to add it to.
+	 */
 	@Override
 	public void increaseCurrency(Currency currency, double quantity, int portfolio_id) {
 		Portfolio portfolio = portfolioRepo.getById(portfolio_id);
 		List<HeldCurrency> heldCurrencies = portfolio.getHeldCurrencies();
-		
+
 		// Search through all the held currencies.
 		for (HeldCurrency item : heldCurrencies) {
 			// Check whether each one contains the desired currency.
@@ -69,11 +81,33 @@ public class PortfolioServiceImpl implements iPortfolio {
 		portfolioRepo.save(portfolio);
 	}
 
+	/**
+	 * Takes money from a user's portfolio, subtracting from the correct
+	 * HeldCurrency object.
+	 * <p>
+	 * This method does not verify where the money is going. It simply trusts you to
+	 * ensure the money isn't being thrown into a black hole.
+	 * <p>
+	 * NOTE: It is recommended that you call this method BEFORE any other methods
+	 * that might modify the database, to ensure that the insufficient funds problem
+	 * is discovered early and the operation is aborted before any changes are made.
+	 * Alternatively, annotate your method with @Transactional(rollbackFor =
+	 * {InsufficentFundsException.class}) to ensure it will be aborted safely
+	 * regardless of when the problem is discovered.
+	 * 
+	 * @param currency     The currency to subtract from the portfolio.
+	 * @param quantity     The amount to subtract, expressed in that currency.
+	 * @param portfolio_id The ID number of the portfolio to add it to.
+	 * 
+	 * @throws InsufficientFundsException if the user doesn't have enough (or if
+	 *                                    they have none at all) of that currency.
+	 */
 	@Override
-	public void decreaseCurrency(Currency currency, double quantity, int portfolio_id) throws InsufficientFundsException {
+	public void decreaseCurrency(Currency currency, double quantity, int portfolio_id)
+			throws InsufficientFundsException {
 		Portfolio portfolio = portfolioRepo.getById(portfolio_id);
 		List<HeldCurrency> heldCurrencies = portfolio.getHeldCurrencies();
-		
+
 		// Search through all the held currencies.
 		for (HeldCurrency item : heldCurrencies) {
 			// Check whether each one contains the desired currency.
@@ -94,5 +128,4 @@ public class PortfolioServiceImpl implements iPortfolio {
 		throw new InsufficientFundsException();
 	}
 
-	
 }

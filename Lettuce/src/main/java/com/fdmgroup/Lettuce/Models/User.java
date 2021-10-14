@@ -12,6 +12,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * Database entity for a single user of the platform. 
+ */
 @Entity
 @Table(name = "Lettuce_User")
 public class User {

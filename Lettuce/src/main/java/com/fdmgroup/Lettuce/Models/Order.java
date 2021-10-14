@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -17,9 +15,12 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+/**
+ * Database entity for when a user places a foreign exchange order. When an
+ * order is resolved, the results will be recorded in a Transaction object.
+ */
 @Entity
 @Table(name = "Lettuce_Order")
-@Inheritance(strategy = InheritanceType.JOINED)
 public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -46,6 +47,7 @@ public class Order {
 	@OneToMany(mappedBy = "order2")
 	private List<Transaction> transactionsAsParty2 = new ArrayList<>();
 	private String details;
+
 	public Order() {
 		super();
 	}
@@ -151,14 +153,14 @@ public class Order {
 	public void setTransactionsAsParty2(List<Transaction> transactionsAsParty2) {
 		this.transactionsAsParty2 = transactionsAsParty2;
 	}
-	
+
 	public List<Transaction> getTransactions() {
 		List<Transaction> list = new ArrayList<>();
 		list.addAll(transactionsAsParty1);
 		list.addAll(transactionsAsParty2);
 		return list;
 	}
-	
+
 	public LocalDate getScheduledDate() {
 		return scheduledDate;
 	}
@@ -166,6 +168,7 @@ public class Order {
 	public void setScheduledDate(LocalDate scheduledDate) {
 		this.scheduledDate = scheduledDate;
 	}
+
 	public String getDetails() {
 		return details;
 	}
@@ -174,9 +177,23 @@ public class Order {
 		this.details = details;
 	}
 
+	/**
+	 * Determines whether two orders 'match', based on the following criteria:
+	 * <ul>
+	 * <li>Each order must have the same currencies, but reversed. For example, a
+	 * USD->EUR order matches with an EUR->USD order.</li>
+	 * <li>Both orders must be the same OrderType.</li>
+	 * <li>If they're OrderType.FORWARD then they must be scheduled for the same
+	 * date.</li>
+	 * </ul>
+	 * 
+	 * @param otherOrder The order to compare this one against.
+	 * @return whether the two orders match.
+	 */
 	public boolean matches(Order otherOrder) {
-		// To 'match', each Order must have the same currencies except REVERSED.
-		// Additionally, Forward Orders must be scheduled for the same day.
+		if (this.orderType != otherOrder.orderType) {
+			return false;
+		}
 		boolean firstCurrencyMatches = this.baseCurrency.equals(otherOrder.targetCurrency);
 		boolean secondCurrencyMatches = this.targetCurrency.equals(otherOrder.baseCurrency);
 		switch (orderType) {
@@ -196,6 +213,5 @@ public class Order {
 		return "Order [orderId=" + orderId + ", baseCurrency=" + baseCurrency + ", targetCurrency=" + targetCurrency
 				+ ", quantity=" + quantity + "]";
 	}
-	
-	
+
 }

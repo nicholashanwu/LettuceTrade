@@ -20,8 +20,6 @@ import org.springframework.format.annotation.DateTimeFormat;
  * order2, because two different end users can view the same Transaction object.
  * However, sequence is internally consistent: order1 sold quantity1 of
  * currency1.
- * 
- * @author Simon Whelan
  */
 @Entity
 @Table(name = "Lettuce_Transaction")

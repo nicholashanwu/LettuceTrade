@@ -61,14 +61,13 @@
         <!-- Rates Table -->
         <table class="table align-middle" >
         	<tr>
-        		<th colspan="2">Instrument</th>
+        		<th>Instrument</th>
         		<th>Rate</th>
-        		<th></th>
         	</tr>
         	
         	<tr th:each="rate:${rates}">
 
-        		<td colspan="2"><div th:class="${'currency-flag currency-flag-' + currency.toString().toLowerCase()}"></div>
+        		<td><div th:class="${'currency-flag currency-flag-' + currency.toString().toLowerCase()}"></div>
         			<div th:class="${'currency-flag currency-flag-' + rate.key.toString().toLowerCase()}"></div>
         			<span class="currency-text"  th:text="${currency}"/></span>-<span class="currency-text" th:text="${rate.key}"/></span></td>
         			<td><span th:text="${rate.value}"/></span></td>
