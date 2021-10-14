@@ -15,12 +15,16 @@ import com.google.gson.reflect.TypeToken;
 
 public class ExchangeRate {
 
-	private static final String baseUrl = "https://v6.exchangerate-api.com/v6/a88fd6c303a2fb307af7cae8/";
-	
+	private static final String baseUrl = "https://v6.exchangerate-api.com/v6/cc37a39f20c8916713e95b8c/";
+
 	private static final String popularCurrencies = "USD|EUR|JPY|GBP|AUD";
 
 	/**
 	 * Contacts external API and gets the conversion rate between two currencies.
+	 * <p>
+	 * WARNING: To avoid spamming the API, this method should never be called from a
+	 * loop. If you need a large number of rates, use getAllRates() and then filter
+	 * out the ones you need.
 	 * 
 	 * @param baseCurrency   the currency you are spending, as a 3-letter string.
 	 * @param targetCurrency the currency you are buying, as a 3-letter string.
