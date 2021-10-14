@@ -27,7 +27,6 @@ import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.Portfolio;
 import com.fdmgroup.Lettuce.Models.User;
 
-
 @Service
 public class UserServiceImpl implements iUser {
 
@@ -35,6 +34,7 @@ public class UserServiceImpl implements iUser {
 	UserRepo userRepo;
 	@Autowired
 	JavaMailSender mailSender;
+
 	@Override
 	public User getUserById(int userId) {
 		User user = userRepo.getById(userId);
@@ -44,111 +44,133 @@ public class UserServiceImpl implements iUser {
 	@Override
 	public User getUserByEmail(String email) throws InvalidEmailException {
 		Optional<User> oUser = userRepo.getByEmail(email.toLowerCase());
-		if(oUser.isEmpty()) {
+		if (oUser.isEmpty()) {
 			throw new InvalidEmailException();
 		}
 		return oUser.get();
 	}
 
+	/**
+	 * Adds a new user to the database.
+	 * 
+	 * @param user The new user to be added.
+	 * @throws DuplicatedEmailException if there is already a user with that
+	 *                                  address.
+	 * @deprecated Use registerUser() instead, for email verification.
+	 */
 	@Override
 	public void addUser(User user) throws DuplicatedEmailException {
 		// you can just use userRepo without check if the email is duplicated
 		// because the email is defined to be unique, add a user with
 		// duplicated email will throw DataIntegrityViolationException
-		
+
 		String email = user.getEmail();
-		//TODO validate email. Assumed to be true now
-		if(!isEmailDuplicated(user.getEmail()) && isEmailValid(email)) {
-			//encrypt the password
+		// TODO validate email. Assumed to be true now
+		if (!isEmailDuplicated(user.getEmail()) && isEmailValid(email)) {
+			// encrypt the password
 			String originPassword = user.getPassword();
 			String encryptedPassword = encryptPassword(originPassword);
 			user.setPassword(encryptedPassword);
-			
-			//because the email address is not case sensitive
+
+			// because the email address is not case sensitive
 			user.setEmail(email.toLowerCase());
 
 			userRepo.save(user);
-			
-		};
-		
+
+		}
+		;
+
 	}
-	//For sending email verification when register.
+
+	/**
+	 * Registers a new user and sends them a verification email.
+	 * 
+	 * @param user    The new user to be registered.
+	 * @param siteURL
+	 * 
+	 * @throws DuplicatedEmailException     if there is already a user with that
+	 *                                      address.
+	 * @throws UnsupportedEncodingException if the email client does not support
+	 *                                      that character encoding.
+	 * @throws MessagingException           if there is an error creating the email.
+	 */
+	// For sending email verification when register.
 	@Override
-	public void registerUser(User user, String siteURL) throws UnsupportedEncodingException, DuplicatedEmailException, MessagingException{
+	public void registerUser(User user, String siteURL)
+			throws UnsupportedEncodingException, DuplicatedEmailException, MessagingException {
 		String email = user.getEmail();
-		if(!isEmailDuplicated(user.getEmail()) && isEmailValid(email)) {
+		if (!isEmailDuplicated(user.getEmail()) && isEmailValid(email)) {
 			String originPassword = user.getPassword();
 			String encryptedPassword = encryptPassword(originPassword);
 			user.setPassword(encryptedPassword);
-		     
-		    String randomCode = RandomString.make(16);
-		    user.setVerificationCode(randomCode);
-		    user.setEnabled("false");
-		    user.setEmail(email.toLowerCase());
-		    userRepo.save(user);
-		     
-		    sendVerificationEmail(user, siteURL);
+
+			String randomCode = RandomString.make(16);
+			user.setVerificationCode(randomCode);
+			user.setEnabled("false");
+			user.setEmail(email.toLowerCase());
+			userRepo.save(user);
+
+			sendVerificationEmail(user, siteURL);
 		}
 
 	}
 
 	private void sendVerificationEmail(User user, String siteURL)
-	        throws MessagingException, UnsupportedEncodingException {
-	    String toAddress = user.getEmail();
-	    String fromAddress = "lettucetradingteam@gmail.com";
-	    String senderName = "Lettuce Group";
-	    String subject = "Please verify your registration";
-	    String content = "Dear [[name]],<br>"
-	            + "Please click the link below to verify your registration:<br>"
-	            + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-	            + "Thank you,<br>"
-	            + "The Lettuce Team.";
-	     
-	   //MimeMessage message = mailSender.createMimeMessage();
-	    MimeMessage message = mailSender.createMimeMessage();
-	    MimeMessageHelper helper = new MimeMessageHelper(message);
-	     
-	    helper.setFrom(fromAddress, senderName);
-	    helper.setTo(toAddress);
-	    helper.setSubject(subject);
-	     
-	    content = content.replace("[[name]]", user.getFirstName());
-	    String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
-	     
-	    content = content.replace("[[URL]]", verifyURL);
-	     
-	    helper.setText(content, true);
-	     
-	    mailSender.send(message);
-	     
+			throws MessagingException, UnsupportedEncodingException {
+		String toAddress = user.getEmail();
+		String fromAddress = "lettucetradingteam@gmail.com";
+		String senderName = "Lettuce Group";
+		String subject = "Please verify your registration";
+		String content = "Dear [[name]],<br>" + "Please click the link below to verify your registration:<br>"
+				+ "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>" + "Thank you,<br>" + "The Lettuce Team.";
+
+		// MimeMessage message = mailSender.createMimeMessage();
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom(fromAddress, senderName);
+		helper.setTo(toAddress);
+		helper.setSubject(subject);
+
+		content = content.replace("[[name]]", user.getFirstName());
+		String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
+
+		content = content.replace("[[URL]]", verifyURL);
+
+		helper.setText(content, true);
+
+		mailSender.send(message);
+
 	}
+
 	public boolean verify(String verificationCode) {
-	    User user = userRepo.findByVerificationCode(verificationCode).get();
-	    System.out.println(user);
-	    if (user == null | user.getEnabled().equals("true")) {
-	        return false;
-	    } else {
-	        user.setVerificationCode(null);
-	        user.setEnabled("true");
-	        userRepo.save(user);
-	         
-	        return true;
-	    }
-	     
+		User user = userRepo.findByVerificationCode(verificationCode).get();
+		System.out.println(user);
+		if (user == null || user.getEnabled().equals("true")) {
+			return false;
+		} else {
+			user.setVerificationCode(null);
+			user.setEnabled("true");
+			userRepo.save(user);
+
+			return true;
+		}
+
 	}
+
 	public boolean verifyToken(String verificationCode) {
-	    User user = userRepo.findByVerificationCode(verificationCode).get();
-	    System.out.println(user);
-	    if (user == null) {
-	        return false;
-	    } else {
-	        //user.setVerificationCode(null);
-	        //user.setEnabled("true");
-	        //userRepo.save(user);
-	         
-	        return true;
-	    }
-	     
+		User user = userRepo.findByVerificationCode(verificationCode).get();
+		System.out.println(user);
+		if (user == null) {
+			return false;
+		} else {
+			// user.setVerificationCode(null);
+			// user.setEnabled("true");
+			// userRepo.save(user);
+
+			return true;
+		}
+
 	}
 
 	private boolean isEmailValid(String email) {
@@ -158,97 +180,94 @@ public class UserServiceImpl implements iUser {
 
 	private boolean isEmailDuplicated(String email) throws DuplicatedEmailException {
 		Optional<User> oUser = userRepo.getByEmail(email.toLowerCase());
-		if(oUser.isPresent()) {
+		if (oUser.isPresent()) {
 			throw new DuplicatedEmailException();
 		}
-		return false;	
+		return false;
 	}
-	
+
 	private String encryptPassword(String originPassword) {
 		String encryptedPassword = "";
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA-1");
 			md.update(originPassword.getBytes("UTF-8"));
 			byte[] result = md.digest();
-			encryptedPassword=String.format("%040x",new BigInteger(1,result));
+			encryptedPassword = String.format("%040x", new BigInteger(1, result));
 		} catch (Exception e) {
 			// error in encrypting password
 			e.printStackTrace();
 		}
 		return encryptedPassword;
 	}
-	
-	public void resetPassword(String email,String siteURL) throws UserNotFoundException, UnsupportedEncodingException, MessagingException {
+
+	public void resetPassword(String email, String siteURL)
+			throws UserNotFoundException, UnsupportedEncodingException, MessagingException {
 		String randomCode = RandomString.make(16);
-		Optional<User> userOption= userRepo.getByEmail(email);
+		Optional<User> userOption = userRepo.getByEmail(email);
 		User user;
 		if (userOption.isEmpty()) {
 			throw new UserNotFoundException();
-		}else {
-			user=userOption.get();
+		} else {
+			user = userOption.get();
 			user.setVerificationCode(randomCode);
 			userRepo.save(user);
-			sendResetPasswordVerificationEmail(user,siteURL);
+			sendResetPasswordVerificationEmail(user, siteURL);
 		}
-		
-		
-		
-		
+
 	}
+
 	private void sendResetPasswordVerificationEmail(User user, String siteURL)
-	        throws MessagingException, UnsupportedEncodingException {
-	    String toAddress = user.getEmail();
-	    String fromAddress = "lettucetradingteam@gmail.com";
-	    String senderName = "Lettuce Group";
-	    String subject = "Please reset your password";
-	    String content = "Dear [[name]],<br>"
-	            + "Please click the link below to reset your password:<br>"
-	            + "<h3><a href=\"[[URL]]\" target=\"_self\">RESET YOUR PASSWORD</a></h3>"
-	            + "Thank you,<br>"
-	            + "The Lettuce Team.";
-	     
-	   //MimeMessage message = mailSender.createMimeMessage();
-	    MimeMessage message = mailSender.createMimeMessage();
-	    MimeMessageHelper helper = new MimeMessageHelper(message);
-	     
-	    helper.setFrom(fromAddress, senderName);
-	    helper.setTo(toAddress);
-	    helper.setSubject(subject);
-	     
-	    content = content.replace("[[name]]", user.getFirstName());
-	    String verifyURL = siteURL + "/reset_password?code=" + user.getVerificationCode();
-	     
-	    content = content.replace("[[URL]]", verifyURL);
-	     
-	    helper.setText(content, true);
-	     
-	    mailSender.send(message);
-	     
+			throws MessagingException, UnsupportedEncodingException {
+		String toAddress = user.getEmail();
+		String fromAddress = "lettucetradingteam@gmail.com";
+		String senderName = "Lettuce Group";
+		String subject = "Please reset your password";
+		String content = "Dear [[name]],<br>" + "Please click the link below to reset your password:<br>"
+				+ "<h3><a href=\"[[URL]]\" target=\"_self\">RESET YOUR PASSWORD</a></h3>" + "Thank you,<br>"
+				+ "The Lettuce Team.";
+
+		// MimeMessage message = mailSender.createMimeMessage();
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom(fromAddress, senderName);
+		helper.setTo(toAddress);
+		helper.setSubject(subject);
+
+		content = content.replace("[[name]]", user.getFirstName());
+		String verifyURL = siteURL + "/reset_password?code=" + user.getVerificationCode();
+
+		content = content.replace("[[URL]]", verifyURL);
+
+		helper.setText(content, true);
+
+		mailSender.send(message);
+
 	}
-	
+
 	public void updatePassword(User user, String newPassword) {
 		String encryptedPassword = encryptPassword(newPassword);
 		user.setPassword(encryptedPassword);
 		user.setVerificationCode(null);
 		userRepo.save(user);
 	}
+
 	@Override
 	public boolean loginWithEmailAndPassword(String inputEmail, String inputPassword) throws FailToLoginException {
 		String encryptedInputPassword = encryptPassword(inputPassword);
 		Optional<User> oUser = userRepo.getUserByEmailAndPassword(inputEmail.toLowerCase(), encryptedInputPassword);
-		if(oUser.isEmpty()) {
+		if (oUser.isEmpty()) {
 			throw new FailToLoginException();
 		} else {
 			return true;
 		}
 	}
 
-
 	@Override
 	public boolean isAdmin(String email) throws InvalidEmailException {
 		User user = this.getUserByEmail(email.toLowerCase());
-		String adminStatus=user.isAdmin();
-		
+		String adminStatus = user.isAdmin();
+
 		return adminStatus.equals("yes");
 	}
 
@@ -268,7 +287,7 @@ public class UserServiceImpl implements iUser {
 
 	@Override
 	public void updateUser(int userId, User user) throws DataIntegrityViolationException {
-		//because the email address is not case sensitive
+		// because the email address is not case sensitive
 		String email = user.getEmail();
 		user.setEmail(email.toLowerCase());
 		user.setUserId(userId);
@@ -284,15 +303,12 @@ public class UserServiceImpl implements iUser {
 
 	public User findByVerificationCode(String code) throws UserNotFoundException {
 		Optional<User> userOption = userRepo.findByVerificationCode(code);
-		if(userOption.isEmpty()) {
+		if (userOption.isEmpty()) {
 			throw new UserNotFoundException("No user found by verification code");
-		}
-		else {
+		} else {
 			return userOption.get();
 		}
 	}
-
-
 
 //	@Override
 //	public void takeMoneyFromBank(int userId, double moneyOut) {
