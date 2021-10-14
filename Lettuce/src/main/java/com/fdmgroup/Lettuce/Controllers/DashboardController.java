@@ -40,27 +40,6 @@ public class DashboardController {
 	@Autowired
 	UserServiceImpl usi = new UserServiceImpl();
 	
-	
-//	@RequestMapping("/")
-//	public String indexPage() {
-////		actLogger.info("Landed in Home Page")
-//		return "index";
-//	}
-//	DUPLICATE
-
-
-	
-	@RequestMapping("/portfolio")
-	public String toPortfolioPage(Model model) {
-		User user = (User) model.getAttribute("user");
-		Portfolio portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
-		model.addAttribute("portfolio",portfolio);
-		
-		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
-	
-		model.addAttribute("heldCurrencys", heldcurrency); 
-		return "portfolio";
-	}
 
 	
 	@RequestMapping("/profile")
@@ -69,44 +48,15 @@ public class DashboardController {
 		Portfolio portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
 		model.addAttribute("portfolio",portfolio);
 		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
-		double totalBalance = 0;
-		Map<String, Double> getAllRates = new HashMap<>();
-		try {
-			getAllRates = ExchangeRate.getAllRates("AUD");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		Map<Double,HeldCurrency> portfolioWithValue = new TreeMap<>(Collections.reverseOrder());
-		
-		for(HeldCurrency hc:heldcurrency) {
-			double exchangeRate = 0;
-			try {
-				exchangeRate = getAllRates.get(hc.getCurrency().getCurrencyCode());
-				double value = hc.getQuantity()*((double)1/exchangeRate);
-				BigDecimal bd = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
-				portfolioWithValue.put(bd.doubleValue(),hc);
-				
-				totalBalance +=bd.doubleValue();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		BigDecimal total = new BigDecimal(totalBalance).setScale(2, RoundingMode.HALF_UP);
-		
-		model.addAttribute("heldCurrencys", portfolioWithValue);
-		model.addAttribute("TotalBalance", total.doubleValue());
+		printPortfolio(heldcurrency,model);
 		
 		return "profile";
 	}
 	
 	@RequestMapping("/dashboard")
 	public String toDashboardPage(Model model, HttpServletRequest request) {
-//		User user = new User();
 		Portfolio portfolio = new Portfolio();
-		
 		User user = (User) request.getSession().getAttribute("user");
-				
-//		user = (User) model.getAttribute("user");		
 		portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
 		
 		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
@@ -115,33 +65,8 @@ public class DashboardController {
 		if(heldcurrency.size()>3) {
 			heldcurrency = heldcurrency.subList(0, 3);
 		}	
-		double totalBalance = 0;
-		Map<String, Double> getAllRates = new HashMap<>();
-		try {
-			getAllRates = ExchangeRate.getAllRates("AUD");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		Map<Double,HeldCurrency> portfolioWithValue = new TreeMap<>(Collections.reverseOrder());
 		
-		for(HeldCurrency hc:heldcurrency) {
-			double exchangeRate = 0;
-			try {
-				exchangeRate = getAllRates.get(hc.getCurrency().getCurrencyCode());
-				double value = hc.getQuantity()*((double)1/exchangeRate);
-				BigDecimal bd = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
-				portfolioWithValue.put(bd.doubleValue(),hc);
-				
-				totalBalance +=bd.doubleValue();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		BigDecimal total = new BigDecimal(totalBalance).setScale(2, RoundingMode.HALF_UP);
-		
-		model.addAttribute("heldCurrencys", portfolioWithValue);
-		model.addAttribute("TotalBalance", total.doubleValue());
-		
+		printPortfolio(heldcurrency,model);
 		//show the popular rates with AUD
 		Map<String, Double> rates = new HashMap<String, Double>();
 		String currency ="AUD";
@@ -159,10 +84,20 @@ public class DashboardController {
 	}
 	
 	@RequestMapping("/getRateHandler")
-	public String getRateHandler(@RequestParam String currency, Model model) {
+	public String getRateHandler(@RequestParam String currency, Model model,HttpServletRequest request) {
+		Portfolio portfolio = new Portfolio();
+		User user = (User) request.getSession().getAttribute("user");
+		portfolio = psi.getPortfolioById(user.getPortfolio().getPortfolioId());
+		
+		List<HeldCurrency> heldcurrency = portfolio.getHeldCurrencies();
+		// show  only first 4 heldcurrency
+		
+		if(heldcurrency.size()>3) {
+			heldcurrency = heldcurrency.subList(0, 3);
+		}	
+		
+		printPortfolio(heldcurrency,model);
 		Map<String, Double> rates = new HashMap<String, Double>();
-		
-		
 			try {
 				rates = ExchangeRate.getPopularRates(currency);
 				rates.remove(currency);
@@ -183,6 +118,33 @@ public class DashboardController {
 		return "placeOrder";
 	}
 	
-	
+	public void printPortfolio(List<HeldCurrency> heldcurrency,Model model) {
+		double totalBalance = 0;
+		Map<String, Double> getAllRates = new HashMap<>();
+		try {
+			getAllRates = ExchangeRate.getAllRates("AUD");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Map<Double,HeldCurrency> portfolioWithValue = new TreeMap<>(Collections.reverseOrder());
+		
+		for(HeldCurrency hc:heldcurrency) {
+			double exchangeRate = 0;
+			try {
+				exchangeRate = getAllRates.get(hc.getCurrency().getCurrencyCode());
+				double value = hc.getQuantity()*((double)1/exchangeRate);
+				BigDecimal bd = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
+				portfolioWithValue.put(bd.doubleValue(),hc);
+				
+				totalBalance +=bd.doubleValue();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		BigDecimal total = new BigDecimal(totalBalance).setScale(2, RoundingMode.HALF_UP);
+		
+		model.addAttribute("heldCurrencys", portfolioWithValue);
+		model.addAttribute("TotalBalance", total.doubleValue());
+	}
 	
 }
