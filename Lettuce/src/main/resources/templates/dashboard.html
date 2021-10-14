@@ -39,7 +39,7 @@
 					<br />
 					
 					<!-- Portfolio Table -->
-					<table class="table align-middle">
+					<table class="table mytable align-middle">
 						<tr>
 							<th>Instrument</th>
 							<th>Quantity</th>
@@ -68,10 +68,11 @@
         <br />
         
         <!-- Rates Table -->
-        <table class="table align-middle" >
+        <table class="table mytable align-middle" >
         	<tr>
         		<th>Instrument</th>
         		<th>Rate</th>
+        		
         	</tr>
         	
         	<tr th:each="rate:${rates}">
@@ -80,7 +81,7 @@
         			<div th:class="${'currency-flag currency-flag-' + rate.key.toString().toLowerCase()}"></div>
         			<span class="currency-text"  th:text="${currency}"/></span>-<span class="currency-text" th:text="${rate.key}"/></span></td>
         			<td><span th:text="${rate.value}"/></span></td>
-        			<td><a role="button" th:href="@{/placeOrderHandler}" id = "place-order"class="btn btn-primary">Trade</a><td>
+        			
         			</tr>
 
 
