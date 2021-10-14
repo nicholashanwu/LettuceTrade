@@ -30,20 +30,20 @@
         <div class="dashboard-section">
           <h2>Your Funds</h2>
           <p><span class="green-text-v1"> Current trade balance </span></p>
-          <h4> AUD <span th:text="${TotalBalance}"></span></h4>
+          <h4> AUD <span th:text="${#numbers.formatDecimal(TotalBalance, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></h4>
           <br />
         	<table class="table align-middle">
             <tr>
-              <th colspan="2">Instrument</th>
+              <th>Instrument</th>
               <th>Quantity</th>
               <th>Value(AUD)</th>
             </tr>
             
             <tr th:each="heldCurrency:${heldCurrencys}">
-				<td><div th:class="${'currency-flag currency-flag-' + heldCurrency.value.currency.toString().toLowerCase()}"></div></td>
-				<td><span th:text="${heldCurrency.value.currency.currencyCode}"></span></td>
-				<td><span th:text="${heldCurrency.value.quantity}"></span></td>
-				<td>$<span th:text="${heldCurrency.key}"></span></td>
+				<td><div th:class="${'currency-flag currency-flag-' + heldCurrency.value.currency.toString().toLowerCase()}"></div>
+					<span class="currency-text" th:text="${heldCurrency.value.currency.currencyCode}"></span></td>
+				<td><span th:text="${#numbers.formatDecimal(heldCurrency.value.quantity, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></td>
+				<td>$<span th:text="${#numbers.formatDecimal(heldCurrency.key, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></td>
 				
 			</tr>
             

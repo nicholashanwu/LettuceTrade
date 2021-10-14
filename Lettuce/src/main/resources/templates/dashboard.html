@@ -35,7 +35,7 @@
 				<h4 class="green-text-v1">View your portfolio and current rates!</h4>
 				<div class="dashboard-section">
 					
-					<h2>Portfolio Overview</h2>
+					<h2>Portfolio Summary</h2>
 					<br />
 					
 					<!-- Portfolio Table -->
@@ -50,14 +50,16 @@
 							<td class="align-top"><div th:class="${'currency-flag currency-flag-' + heldCurrency.value.currency.toString().toLowerCase()}"></div>
 								<span class="currency-text" th:text="${heldCurrency.value.currency.currencyCode}"></span></td>
 								
-								<td><span th:text="${heldCurrency.value.quantity}"></span></td>
-								<td><span th:text="${heldCurrency.key}"></span></td>
-							</tr>
-						</table>
+							<td><span th:text="${#numbers.formatDecimal(heldCurrency.value.quantity, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></td>
+							<td><span th:text="${#numbers.formatDecimal(heldCurrency.key, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></td>
+						</tr>
 						
-						<!-- Portfolio Value -->
-						<p><span > Total Portfolio Value </span></p>
-						<h4> AUD <span class="green-text-v1" th:text="${TotalBalance}"></span></h4>
+						<tr><td colspan="3"><a class="btn btn-primary" th:href="@{/profile}">See More</a></td></tr>
+					</table>
+						
+					<!-- Portfolio Value -->
+					<p><span > Total Portfolio Value </span></p>
+					<h4> AUD <span class="green-text-v1" th:text="${#numbers.formatDecimal(TotalBalance, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></h4>
 					</div>
 					
 					<!-- Rates -->
