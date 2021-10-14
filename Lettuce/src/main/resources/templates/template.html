@@ -22,7 +22,39 @@
 	</th:block>
 </head>
 <body>
-	<th:block th:fragment="header">
+
+
+	<th:block th:fragment="guest-header">
+	  <!-- Header -->
+      <main>
+        <header class="p-3 mb-3 border-bottom">
+          <div class="container">
+            <!-- Logo -->
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+              <a class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none" th:href="@{/}">
+                <img id="header_logo" th:src="@{/images/lettuce_logo_dark.png}" alt="Lettuce_Icon" width="40" height="48" />
+                <span class="index-header-logo-title"> Lettuce <span class="index-header-logo-title-thin">Trade</span></span>
+              </a>
+	          <!-- Nav Bar Options -->
+	          <div class="nav-bar-links">
+	            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+	              <li><a class="nav-link" th:href="@{/rates}">Rates</a></li>
+	            </ul>
+	          </div>
+              <!-- Sign Up and Log In buttons -->
+              <div class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <div>
+                  <a class="btn btn-primary" th:href="@{/register}">Sign Up</a>
+                  <a class="btn btn-outline-light me-2" th:href="@{/login}">Log In</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+      </main>
+	</th:block>
+	
+	<th:block th:fragment="user-header">
 		<header class="p-3 mb-3 border-bottom">
 	      <div class="container">
 	        <!-- Logo -->
@@ -52,6 +84,7 @@
 	    </header>
 	</th:block>
 	
+	<!-- For when the footer should be locked to the bottom of the page -->
 	<th:block th:fragment="footer">
 	  <footer class="footer mt-auto py-3 bg-light">
     	<div class="container">
@@ -61,6 +94,7 @@
   	  </footer>
 	</th:block>
 	
+	<!-- For when the footer should be locked to the bottom of the screen (useful for very short pages) -->
 	<th:block th:fragment="lockedfooter">
 	  <footer style="bottom: 0; width: 100%; position: fixed;" class="footer mt-auto py-3 bg-light">
     	<div class="container">
