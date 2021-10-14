@@ -59,7 +59,7 @@ public class UserController {
 	// When adding currencies to a user's portfolio, please follow this process!
 	public void setUpNewTestUser(User user) throws DuplicatedEmailException {
 
-		usi.addUser(user);
+
 		
 		
 		Portfolio portfolio = new Portfolio(user);
@@ -74,6 +74,9 @@ public class UserController {
 		Currency currency5 = new Currency("NZD");
 		Currency currency6 = new Currency("EUR");
 		Currency currency7 = new Currency("JPY");
+		Currency currency8 = new Currency("CHF");
+		Currency currency9 = new Currency("CNY");
+		Currency currency10 = new Currency("HKD");
 	
 		csi.addCurrency(currency1);
 		csi.addCurrency(currency2);
@@ -82,6 +85,10 @@ public class UserController {
 		csi.addCurrency(currency5);
 		csi.addCurrency(currency6);
 		csi.addCurrency(currency7);
+		csi.addCurrency(currency8);
+		csi.addCurrency(currency9);
+		csi.addCurrency(currency10);
+		
 		
 		// Let the new user have some money to use for test transactions
 		HeldCurrency hc1 = new HeldCurrency(portfolio, currency1);
@@ -91,6 +98,9 @@ public class UserController {
 		HeldCurrency hc5 = new HeldCurrency(portfolio, currency5);
 		HeldCurrency hc6 = new HeldCurrency(portfolio, currency6);
 		HeldCurrency hc7 = new HeldCurrency(portfolio, currency7);
+		HeldCurrency hc8 = new HeldCurrency(portfolio, currency8);
+		HeldCurrency hc9 = new HeldCurrency(portfolio, currency9);
+		HeldCurrency hc10 = new HeldCurrency(portfolio, currency10);
 
 		hc1.setQuantity(5000.0);
 		hc2.setQuantity(2500.0);
@@ -98,7 +108,11 @@ public class UserController {
 		hc4.setQuantity(12500.0);
 		hc5.setQuantity(400.0);
 		hc6.setQuantity(7500.0);
-		hc7.setQuantity(0.0);		
+		hc7.setQuantity(0.0);
+		hc8.setQuantity(500.0);
+		hc9.setQuantity(700.0);
+		hc10.setQuantity(9000.0);
+		
 		//set JPY to zero to test that it does not show up as a sellable currency in order.html
 		
 		hcr.save(hc1);
@@ -108,6 +122,9 @@ public class UserController {
 		hcr.save(hc5);
 		hcr.save(hc6);
 		hcr.save(hc7);
+		hcr.save(hc8);
+		hcr.save(hc9);
+		hcr.save(hc10);
 
 	}
 
@@ -162,37 +179,33 @@ public class UserController {
 		return "register";
 	}
 	
-	@RequestMapping("/registerHandler")
-	public String handlerRegister(User user) {
-		try {
-			// PLEASE remember the password - there are no decryption process
+	/*
+	 * @RequestMapping("/registerHandler") public String handlerRegister(User user)
+	 * { try { // PLEASE remember the password - there are no decryption process
+	 * 
+	 * setUpNewTestUser(user);
+	 * 
+	 * 
+	 * //actLogger.info("Register user successfully");
+	 * //dbLogger.info("Register user successfully");
+	 * 
+	 * return "redirect:/register-message"; } catch (Exception e) { //
+	 * actLogger.warn("Fail to register a user because" + e.getMessage());
+	 * e.printStackTrace(); return "redirect:/register"; } }
+	 */
 
-			setUpNewTestUser(user);
-
-			
-			//actLogger.info("Register user successfully");
-			//dbLogger.info("Register user successfully");
-		 
-			return "redirect:/register-message";
-		} catch (Exception e) {
-			// actLogger.warn("Fail to register a user because" + e.getMessage());
-			e.printStackTrace();
-			return "redirect:/register";
-		}
-	}
-
-	/**
 	@RequestMapping("/registerHandler") 
 	public String registerHandler(User user, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException, DuplicatedEmailException { 
 		try { 
 			usi.registerUser(user,getSiteURL(request)); 
-			return "register-message"; 
+			setUpNewTestUser(user);
+			return "redirect:/register-message"; 
 		} catch (Exception e) {
 			e.printStackTrace(); 
-			return "register"; 
+			return "redirect:/register"; 
 		}
 	}
-	 **/
+	 
 	//email verification for registration
 	@RequestMapping("/verify")
 	public String verifyUser(@Param("code") String code) {
