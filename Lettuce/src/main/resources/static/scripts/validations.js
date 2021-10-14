@@ -119,6 +119,7 @@ function validate_change_password() {
 	var check_first_password = false;
 	var check_confirm_password = false;
 	var check_email = false; 
+	var check=false;
 	// Email
 	if (email.value.length == 0) {
 		email_msg.innerText = "Valid email is required.";
@@ -162,7 +163,7 @@ function validate_change_password() {
 		check_confirm_password = true;
 	}
 
-	return (check_email&&check_first_password && check_confirm_password);
+	return (check_email&&check&&check_first_password && check_confirm_password);
 }
 function validate_reset_password() {
 	var password = document.getElementById('user-password');

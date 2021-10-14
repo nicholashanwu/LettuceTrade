@@ -244,6 +244,31 @@ public class UserServiceImpl implements iUser {
 		mailSender.send(message);
 
 	}
+	public void sendResetPassworConfimationEmail(User user)
+			throws MessagingException, UnsupportedEncodingException {
+		String toAddress = user.getEmail();
+		String fromAddress = "lettucetradingteam@gmail.com";
+		String senderName = "Lettuce Group";
+		String subject = "Please reset your password";
+		String content = "Dear [[name]],<br><br>" + "Your password has been sucessfully updated<br><br>"
+				+ "If this action is not done by you. Please reset your passowrd as soon as possible.<br><br>" + "Thank you,<br>"
+				+ "The Lettuce Team.";
+
+		// MimeMessage message = mailSender.createMimeMessage();
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+
+		helper.setFrom(fromAddress, senderName);
+		helper.setTo(toAddress);
+		helper.setSubject(subject);
+
+		content = content.replace("[[name]]", user.getFirstName());
+
+		helper.setText(content, true);
+
+		mailSender.send(message);
+
+	}
 
 	public void updatePassword(User user, String newPassword) {
 		String encryptedPassword = encryptPassword(newPassword);

@@ -276,6 +276,7 @@ public class UserController {
 		try {
 			User user = usi.findByVerificationCode(token);
 			usi.updatePassword(user, confrimpassword);
+			usi.sendResetPassworConfimationEmail(user);
 			return "redirect:/login";
 		} catch (Exception e) {
 			return "redirect:/forgot-password";
@@ -298,8 +299,8 @@ public class UserController {
 	public String handlerChangePassword(@RequestParam(value = "email") String email,
 			@RequestParam(value = "oldPassword") String oldPassword,
 			@RequestParam(value = "newPassword") String newPassword,
-			@RequestParam(value = "confirmPassword") String confirmPassword) {
-
+			@RequestParam(value = "confirmPassword") String confirmPassword,Model model) {
+		System.out.println("landing on changePassowrdHandler");
 		boolean isConfirmed = (newPassword.equals(confirmPassword));
 		boolean verified;
 		User user;
@@ -307,27 +308,29 @@ public class UserController {
 		try {
 			verified = usi.loginWithEmailAndPassword(email, oldPassword);
 			user = usi.getUserByEmail(email);
+			//System.out.println(user);
+			usi.sendResetPassworConfimationEmail(user);
+			
 		} catch (Exception e) {
 			verified = false;
 			user = new User();
-			/*
-			 * possible situation: 1. the email do not exist 2. the password do not match
-			 * the email
-			 */
+			model.addAttribute("error", "The username or passowrd is not correct.");
+			return "changePassword";
 //		    actLogger.warn("Fail to change password because EXCEPTION " + e.getClass()+" "+e.getMessage());
 		}
 
 		if (isConfirmed && verified) {
-			user.setPassword(newPassword);
-			try {
-				int userId = user.getUserId();
-				usi.updateUser(userId, user);
+			
+
+			usi.updatePassword(user, newPassword);
 //			    actLogger.info("Change password successfully");
 //			    dbLogger.info("Change password successfully");
-			} catch (DataIntegrityViolationException e) {
-				// Normally, this exception will not be thrown because the email is not changed
-			}
-			return "redirect:/login";
+				return "redirect:/login";
+
+				
+
+			
+			
 		} else {
 			return "redirect:/changePassword";
 		}
@@ -352,7 +355,7 @@ public class UserController {
 		} catch (Exception e) {
 			verified = false;
 			isAdmin = false;
-			model.addAttribute("error", "Please enter the correct password");
+			model.addAttribute("error", "The username or passowrd is not correct.");
 			e.printStackTrace();
 			return "login";
 			
