@@ -1,7 +1,10 @@
 package com.fdmgroup.Lettuce.Controllers;
 
 
+
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,7 +64,7 @@ public class OutstandingController {
 	}
 	
 	@RequestMapping("/outstandingOrder")
-	public String outOrderPage(Model model, HttpServletRequest request) throws IOException {
+	public String outOrderPage(Model model, HttpServletRequest request) throws IOException, ParseException {
 	User user = (User) request.getSession().getAttribute("user");
 	
 	Map<String, Double> quantRates = new HashMap<String, Double>();
@@ -69,7 +72,8 @@ public class OutstandingController {
 	Map<Currency, Double> rates = getFilteredRates("USD");
 	
 	for (Order order : osi.getAllOrdersNotUser(user, OrderStatus.ACTIVE, OrderStatus.PARTIALLY_COMPLETE)) {
-		Double t = rates.get(order.getTargetCurrency()) / rates.get(order.getBaseCurrency()); // Calculates exchange rate from base to target.
+		DecimalFormat f = new DecimalFormat("###.0000");
+		Double t = (Double) f.parse(f.format(rates.get(order.getTargetCurrency()) / rates.get(order.getBaseCurrency()))); // Calculates exchange rate from base to target.
 		String r = order.getBaseCurrency().toString()+ " to " + order.getTargetCurrency().toString();
 		Double quant = quantRates.get(r + " at " + t);
 		
@@ -90,6 +94,7 @@ public class OutstandingController {
 	public String outOrderHandler(Order newOrder, HttpServletRequest request, RedirectAttributes redir) throws IOException, RecursiveTradeException, InvalidDateException {
 		User user = (User) request.getSession().getAttribute("user");
 		newOrder.setUser(user);
+		System.out.println(newOrder.getDetails());
 		Scanner sc = new Scanner(newOrder.getDetails());
 		List<String> word = new ArrayList<>();
 		while (sc.hasNext()) {
