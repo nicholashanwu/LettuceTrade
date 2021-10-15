@@ -250,8 +250,8 @@ public class UserServiceImpl implements iUser {
 		String fromAddress = "lettucetradingteam@gmail.com";
 		String senderName = "Lettuce Group";
 		String subject = "Please reset your password";
-		String content = "Dear [[name]],<br><br>" + "Your password has been sucessfully updated<br><br>"
-				+ "If this action is not done by you. Please reset your passowrd as soon as possible.<br><br>" + "Thank you,<br>"
+		String content = "Dear [[name]],<br><br>" + "Your password has been successfully updated.<br><br>"
+				+ "If this was not you, please reset your password immediately.<br><br>" + "Thank you,<br>"
 				+ "The Lettuce Team.";
 
 		// MimeMessage message = mailSender.createMimeMessage();
