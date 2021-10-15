@@ -51,7 +51,7 @@
 									<td>
 										<!-- Quantity of First Currency Option -->
 										<input class="form-control" type="number" name="first-currency" placeholder="Quantity" id="first-currency" th:field="*{initialQuantity}" th:oninput="changeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])" step="0.01"
-											required></input>
+											min = "0"onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 ? true : !isNaN(Number(event.key))" required></input>
 									</td>
 
 									<td>
@@ -124,8 +124,8 @@
 
 									<td>
 										<!-- Quantity of First Currency Option -->
-										<input class="form-control" type="number" name="fwd-first-currency" min="0" placeholder="Quantity" id="fwd-first-currency" th:field="*{initialQuantity}" th:oninput="fwdChangeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])"
-											step="0.01" required></input>
+										<input class="form-control" type="number" name="fwd-first-currency" placeholder="Quantity" id="fwd-first-currency" th:field="*{initialQuantity}" th:oninput="fwdChangeLabelBasedOnVariables([[${rates}]], [[${portfolio}]])"
+											min = "0"onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 ? true : !isNaN(Number(event.key))" step="0.01" required></input>
 									</td>
 
 									<td>
@@ -189,12 +189,7 @@
 
 							<!-- Submit Button -->
 							<button type="submit" class="btn btn-primary">Place Order</button>
-							
-							<!-- Flash attributes -->
 							<div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
-							<div class="validation-message" th:text="${recursive}" th:if="${recursive}"></div>
-							<div class="validation-message" th:text="${invalidDate}" th:if="${invalidDate}"></div>
-							<div class="validation-message" th:text="${invalidNumber}" th:if="${invalidNumber}"></div>
 
 
 						</form>

@@ -48,7 +48,7 @@
 							</td>
 							<td th:text = "${#numbers.formatDecimal(rate.value, 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
 							
-							<td ><input id="quant" type="number" th:field="*{initialQuantity}" th:oninput= "total([[${rate.key}]])"></td>	
+							<td ><input id="quant" type="number" min = "0" th:field="*{initialQuantity}" th:oninput= "total([[${rate.key}]])" onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 ? true : !isNaN(Number(event.key))"></td>	
 							<td>
 								<span
 									id="totalPrice" th:text="0">0</span>		
@@ -60,9 +60,7 @@
 					</th:block>
 				</table>
 
-				<!-- Flash attributes -->
 				<div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
-				<div class="validation-message" th:text="${invalidNumber}" th:if="${invalidNumber}"></div>
 				
 				</th:block>
 
