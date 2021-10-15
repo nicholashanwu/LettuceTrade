@@ -27,7 +27,7 @@
 				</th:block>
 				<th:block th:if="${session.user}">
 				
-				<table class="table mytable" id = "myTable">
+				<table class="table mytable align-middle" id = "myTable">
 					<tr>
 						<th colspan="2">Selling</th>
 						<th>Remaining</th>
@@ -43,24 +43,28 @@
 							<div th:class="${'currency-flag currency-flag-' + rate.key.substring(7,10).toLowerCase()}"></div>
 							</td>
 							<td> 
-							<input type = "text" th:value ="${rate.key}" th:id="details" th:name = "details" readonly>
+								<span th:text="${rate.key}"></span>
+							
+								<input hidden class="form-control" type = "text" th:value ="${rate.key}" th:id="details" th:name = "details" readonly>
 							 
 							</td>
 							<td th:text = "${#numbers.formatDecimal(rate.value, 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
 							
-							<td ><input id="quant" type="number" min = "0" th:field="*{initialQuantity}" th:oninput= "total([[${rate.key}]])" onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 ? true : !isNaN(Number(event.key))"></td>	
+							<td ><input class="form-control" id="quant" type="number" th:field="*{initialQuantity}" th:oninput= "total([[${rate.key}]])"></td>	
 							<td>
 								<span
 									id="totalPrice" th:text="0">0</span>		
 							</td>		
-							<td><input type ="submit" value = "Buy" th:data-confirm-delete="|Are you sure you want to place trade?|"
+							<td><input class="btn btn-primary" type="submit" value = "Buy" th:data-confirm-delete="|Are you sure you want to place trade?|"
   onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false"></td>
 						</tr>
 						</form>
 					</th:block>
 				</table>
 
+				<!-- Flash attributes -->
 				<div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
+				<div class="validation-message" th:text="${invalidNumber}" th:if="${invalidNumber}"></div>
 				
 				</th:block>
 
