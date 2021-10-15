@@ -249,7 +249,7 @@ public class UserServiceImpl implements iUser {
 		String toAddress = user.getEmail();
 		String fromAddress = "lettucetradingteam@gmail.com";
 		String senderName = "Lettuce Group";
-		String subject = "Please reset your password";
+		String subject = "Your password is updated";
 		String content = "Dear [[name]],<br><br>" + "Your password has been successfully updated.<br><br>"
 				+ "If this was not you, please reset your password immediately.<br><br>" + "Thank you,<br>"
 				+ "The Lettuce Team.";
