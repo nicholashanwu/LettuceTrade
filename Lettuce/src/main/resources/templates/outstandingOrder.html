@@ -69,7 +69,9 @@
 					</th:block>
 				</table>
 
+				<!-- Flash attributes -->
 				<div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
+				<div class="validation-message" th:text="${invalidNumber}" th:if="${invalidNumber}"></div>
 				
 				</th:block>
 

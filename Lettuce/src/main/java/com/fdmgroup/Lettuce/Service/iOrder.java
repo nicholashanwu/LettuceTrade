@@ -5,6 +5,7 @@ import java.util.List;
 import com.fdmgroup.Lettuce.Exceptions.RecursiveTradeException;
 import com.fdmgroup.Lettuce.Exceptions.InsufficientFundsException;
 import com.fdmgroup.Lettuce.Exceptions.InvalidDateException;
+import com.fdmgroup.Lettuce.Exceptions.InvalidNumberException;
 import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.OrderStatus;
 import com.fdmgroup.Lettuce.Models.User;
@@ -19,7 +20,7 @@ public interface iOrder {
 	public List<Order> getAllOrdersNotUser(User user, OrderStatus pend, OrderStatus part);
 	public Order getOrderById(int id);
 	
-	public void addOrder(Order order) throws InsufficientFundsException, RecursiveTradeException, InvalidDateException;
+	public void addOrder(Order order) throws InsufficientFundsException, RecursiveTradeException, InvalidDateException, InvalidNumberException;
 	public void updateOrder(Order order);
 	public void deleteOrder(Order order);
 	public void deleteOrderById(int id);

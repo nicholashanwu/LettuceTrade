@@ -3,23 +3,19 @@ package com.fdmgroup.Lettuce.Controllers;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fdmgroup.Lettuce.Exceptions.DuplicatedEmailException;
 import com.fdmgroup.Lettuce.Exceptions.UserNotFoundException;
@@ -27,7 +23,6 @@ import com.fdmgroup.Lettuce.Models.Currency;
 import com.fdmgroup.Lettuce.Models.HeldCurrency;
 import com.fdmgroup.Lettuce.Models.Portfolio;
 import com.fdmgroup.Lettuce.Models.User;
-import com.fdmgroup.Lettuce.Repo.CurrencyRepo;
 import com.fdmgroup.Lettuce.Repo.HeldCurrencyRepo;
 import com.fdmgroup.Lettuce.Repo.PortfolioRepo;
 import com.fdmgroup.Lettuce.Service.CurrencyServiceImpl;
@@ -59,17 +54,12 @@ public class UserController {
 	// When adding currencies to a user's portfolio, please follow this process!
 	public void setUpNewTestUser(User user) throws DuplicatedEmailException {
 
+		// usi.addUser(user);
 
-
-
-		//usi.addUser(user);
-
-	
-		
 		Portfolio portfolio = new Portfolio(user);
 
 		psi.addPortfolio(portfolio);
-		
+
 		// Create and add the popular currencies into db
 		Currency currency1 = new Currency("AUD");
 		Currency currency2 = new Currency("USD");
@@ -81,7 +71,7 @@ public class UserController {
 		Currency currency8 = new Currency("CHF");
 		Currency currency9 = new Currency("CNY");
 		Currency currency10 = new Currency("HKD");
-	
+
 		csi.addCurrency(currency1);
 		csi.addCurrency(currency2);
 		csi.addCurrency(currency3);
@@ -92,8 +82,7 @@ public class UserController {
 		csi.addCurrency(currency8);
 		csi.addCurrency(currency9);
 		csi.addCurrency(currency10);
-		
-		
+
 		// Let the new user have some money to use for test transactions
 		HeldCurrency hc1 = new HeldCurrency(portfolio, currency1);
 		HeldCurrency hc2 = new HeldCurrency(portfolio, currency2);
@@ -112,13 +101,12 @@ public class UserController {
 		hc4.setQuantity(12500.0);
 		hc5.setQuantity(400.0);
 		hc6.setQuantity(7500.0);
-		hc7.setQuantity(0.0);
+		hc7.setQuantity(0.0); // set JPY to zero to test that it does not show up as a sellable currency in
+								// order.html
 		hc8.setQuantity(500.0);
 		hc9.setQuantity(700.0);
 		hc10.setQuantity(9000.0);
-		
-		//set JPY to zero to test that it does not show up as a sellable currency in order.html
-		
+
 		hcr.save(hc1);
 		hcr.save(hc2);
 		hcr.save(hc3);
@@ -141,34 +129,33 @@ public class UserController {
 	public String toIndexPage(Model model) {
 //		actLogger.info("Landed in Home Page")
 		Map<String, Double> rates = new HashMap<String, Double>();
-		String currency ="AUD";
+		String currency = "AUD";
 		try {
 			rates = ExchangeRate.getPopularRates("AUD");
 			rates.remove(currency);
-			model.addAttribute("currency",currency);
-			model.addAttribute("rates",rates);
+			model.addAttribute("currency", currency);
+			model.addAttribute("rates", rates);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return "index";
 	}
+
 	@RequestMapping("/changeRateHandler")
-	public String getRateHandler(@RequestParam String currency, Model model,HttpServletRequest request) {
-		
+	public String getRateHandler(@RequestParam String currency, Model model, HttpServletRequest request) {
+
 		Map<String, Double> rates = new HashMap<String, Double>();
-			try {
-				rates = ExchangeRate.getPopularRates(currency);
-				rates.remove(currency);
-				model.addAttribute("currency",currency);
-				model.addAttribute("rates",rates);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		try {
+			rates = ExchangeRate.getPopularRates(currency);
+			rates.remove(currency);
+			model.addAttribute("currency", currency);
+			model.addAttribute("rates", rates);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return "index";
 	}
-	
-	
-	
+
 	@RequestMapping("/login")
 	public String toLoginPage() {
 //		actLogger.info("Landed in login Page")
@@ -182,7 +169,6 @@ public class UserController {
 		model.addAttribute("user", user);
 		return "register";
 	}
-	
 
 	/*
 	 * @RequestMapping("/registerHandler") public String handlerRegister(User user)
@@ -197,35 +183,30 @@ public class UserController {
 	 * return "redirect:/register-message"; } catch (Exception e) { //
 	 * actLogger.warn("Fail to register a user because" + e.getMessage());
 	 * e.printStackTrace(); return "redirect:/register"; } }
-	 
+	 * 
 	 */
 
-
-
-	@RequestMapping("/registerHandler") 
-	public String registerHandler(User user, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException, DuplicatedEmailException { 
-		try { 
-			usi.registerUser(user,getSiteURL(request)); 
+	@RequestMapping("/registerHandler")
+	public String registerHandler(User user, HttpServletRequest request)
+			throws UnsupportedEncodingException, MessagingException, DuplicatedEmailException {
+		try {
+			usi.registerUser(user, getSiteURL(request));
 			setUpNewTestUser(user);
 
-			return "redirect:/register-message"; 
+			return "redirect:/register-message";
 
-
-			//return "register-message"; 
-
-		
-
+			// return "register-message";
 
 		} catch (Exception e) {
-			e.printStackTrace(); 
-			return "redirect:/register"; 
+			e.printStackTrace();
+			return "redirect:/register";
 		}
 	}
-	 
-	//email verification for registration
+
+	// email verification for registration
 	@RequestMapping("/verify")
 	public String verifyUser(@Param("code") String code) {
-		//System.out.println(code);
+		// System.out.println(code);
 		if (usi.verify(code)) {
 			return "redirect:/login";
 		} else {
@@ -242,51 +223,56 @@ public class UserController {
 	public String forgotPasswordForm() {
 		return "forgot-password";
 	}
-	
+
 	@RequestMapping("/forgetPasswordHandler")
-	public String forgetPasswordHandler(@RequestParam(value = "email") String email,HttpServletRequest request,Model model) throws UnsupportedEncodingException, MessagingException, UserNotFoundException{
+	public String forgetPasswordHandler(@RequestParam(value = "email") String email, HttpServletRequest request,
+			Model model, RedirectAttributes redir)
+			throws UnsupportedEncodingException, MessagingException, UserNotFoundException {
 		try {
 			usi.resetPassword(email, getSiteURL(request));
-			model.addAttribute("message","A reset password link has been sent to your email. Please use it to set up your new password");
+			redir.addFlashAttribute("message",
+					"A reset password link has been sent to your email. Please use it to set up your new password");
 		} catch (UserNotFoundException e) {
-			 model.addAttribute("error", e.getMessage());
+			redir.addFlashAttribute("error", e.getMessage());
+		} catch (UnsupportedEncodingException | MessagingException ex) {
+			redir.addFlashAttribute("error", "We are encountering an error while sending email. Please try again.");
 		}
-		catch (UnsupportedEncodingException | MessagingException ex) {
-			model.addAttribute("error", "We are encoutring an error while sending email. Please try again.");
-		}
-		
+
 		return "forgot-password";
 	}
+
 	@RequestMapping("/reset_password")
-	public String resetPassword(@Param("code") String code,Model model) {
-		if(usi.verifyToken(code)) {
+	public String resetPassword(@Param("code") String code, Model model, RedirectAttributes redir) {
+		if (usi.verifyToken(code)) {
 			model.addAttribute("token", code);
 			return "reset-password";
-		}else {
-	        model.addAttribute("message", "Invalid Token");
-	        return "message";
+		} else {
+			redir.addFlashAttribute("message", "Invalid Token");
+			return "message";
 		}
-		
+
 	}
+
 	@RequestMapping("/resetPasswordHandler")
-	public String resetPasswordHandler(@RequestParam(value = "token") String token, @RequestParam(value = "password") String password,
+	public String resetPasswordHandler(@RequestParam(value = "token") String token,
+			@RequestParam(value = "password") String password,
 			@RequestParam(value = "confirmpassword") String confrimpassword) throws UserNotFoundException {
 		boolean isConfirmed = password.equals(confrimpassword);
-		if(isConfirmed) {
-		try {
-			User user = usi.findByVerificationCode(token);
-			usi.updatePassword(user, confrimpassword);
-			usi.sendResetPassworConfimationEmail(user);
-			return "redirect:/login";
-		} catch (Exception e) {
+		if (isConfirmed) {
+			try {
+				User user = usi.findByVerificationCode(token);
+				usi.updatePassword(user, confrimpassword);
+				usi.sendResetPassworConfimationEmail(user);
+				return "redirect:/login";
+			} catch (Exception e) {
+				return "redirect:/forgot-password";
+			}
+		} else {
 			return "redirect:/forgot-password";
 		}
-		}else {
-			return "redirect:/forgot-password";
-		}
-		
-		
+
 	}
+
 	// change the Password before login
 	@RequestMapping("/changePassword")
 	public String toChangePasswordPage() {
@@ -299,7 +285,7 @@ public class UserController {
 	public String handlerChangePassword(@RequestParam(value = "email") String email,
 			@RequestParam(value = "oldPassword") String oldPassword,
 			@RequestParam(value = "newPassword") String newPassword,
-			@RequestParam(value = "confirmPassword") String confirmPassword,Model model) {
+			@RequestParam(value = "confirmPassword") String confirmPassword, Model model, RedirectAttributes redir) {
 		System.out.println("landing on changePassowrdHandler");
 		boolean isConfirmed = (newPassword.equals(confirmPassword));
 		boolean verified;
@@ -308,29 +294,24 @@ public class UserController {
 		try {
 			verified = usi.loginWithEmailAndPassword(email, oldPassword);
 			user = usi.getUserByEmail(email);
-			//System.out.println(user);
+			// System.out.println(user);
 			usi.sendResetPassworConfimationEmail(user);
-			
+
 		} catch (Exception e) {
 			verified = false;
 			user = new User();
-			model.addAttribute("error", "The username or passowrd is not correct.");
+			redir.addFlashAttribute("error", "The username or passowrd is not correct.");
 			return "changePassword";
 //		    actLogger.warn("Fail to change password because EXCEPTION " + e.getClass()+" "+e.getMessage());
 		}
 
 		if (isConfirmed && verified) {
-			
 
 			usi.updatePassword(user, newPassword);
 //			    actLogger.info("Change password successfully");
 //			    dbLogger.info("Change password successfully");
-				return "redirect:/login";
+			return "redirect:/login";
 
-				
-
-			
-			
 		} else {
 			return "redirect:/changePassword";
 		}
@@ -338,11 +319,11 @@ public class UserController {
 
 	@RequestMapping("/loginHandler")
 	public String handlerLogin(@RequestParam(value = "email") String email,
-			@RequestParam(value = "password") String password, Model model, HttpServletRequest request) {
+			@RequestParam(value = "password") String password, Model model, HttpServletRequest request, RedirectAttributes redir) {
 
 		boolean verified = true;
 		boolean isAdmin;
-		boolean isEnabled= true;
+		boolean isEnabled = true;
 		try {
 			verified = usi.loginWithEmailAndPassword(email, password);
 			isAdmin = false;
@@ -355,10 +336,10 @@ public class UserController {
 		} catch (Exception e) {
 			verified = false;
 			isAdmin = false;
-			model.addAttribute("error", "The username or passowrd is not correct.");
+			redir.addFlashAttribute("error", "The username or password is not correct.");
 			e.printStackTrace();
 			return "login";
-			
+
 //		    actLogger.warn("Fail to login because EXCEPTION " + e.getClass()+" "+e.getMessage());
 		}
 
@@ -377,13 +358,13 @@ public class UserController {
 //		        adminLogger.info(" log in successfully as a user");
 				User user = usi.getUserById(currentUserId);
 //				model.addAttribute("user", user);
-				
+
 				request.getSession().setAttribute("user", user);
 
 				return "redirect:/dashboard";
 			}
 		} else {
-			model.addAttribute("message", "Please check your mail box to verify your account");
+			redir.addFlashAttribute("message", "Please check your mail box to verify your account");
 			return "login";
 		}
 	}
@@ -418,7 +399,7 @@ public class UserController {
 		request.getSession().invalidate();
 		return "redirect:/";
 	}
-	
+
 	@RequestMapping("/register-message")
 	public String registerMessagePage() {
 		return "register-message";
