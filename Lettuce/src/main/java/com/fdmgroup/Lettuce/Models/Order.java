@@ -180,9 +180,10 @@ public class Order {
 	/**
 	 * Determines whether two orders 'match', based on the following criteria:
 	 * <ul>
+	 * <li>The orders must not have the same owner.</li>
+	 * <li>The orders must be the same OrderType.</li>
 	 * <li>Each order must have the same currencies, but reversed. For example, a
 	 * USD->EUR order matches with an EUR->USD order.</li>
-	 * <li>Both orders must be the same OrderType.</li>
 	 * <li>If they're OrderType.FORWARD then they must be scheduled for the same
 	 * date.</li>
 	 * </ul>
@@ -191,6 +192,9 @@ public class Order {
 	 * @return whether the two orders match.
 	 */
 	public boolean matches(Order otherOrder) {
+		if (this.user.equals(otherOrder.user)) {
+			return false;
+		}
 		if (this.orderType != otherOrder.orderType) {
 			return false;
 		}
