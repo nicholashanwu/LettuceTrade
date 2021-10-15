@@ -1,11 +1,9 @@
 package com.fdmgroup.Lettuce.Controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fdmgroup.Lettuce.Exceptions.InsufficientFundsException;
 import com.fdmgroup.Lettuce.Exceptions.InvalidDateException;
+import com.fdmgroup.Lettuce.Exceptions.InvalidNumberException;
 import com.fdmgroup.Lettuce.Exceptions.RecursiveTradeException;
 import com.fdmgroup.Lettuce.Models.Currency;
 import com.fdmgroup.Lettuce.Models.HeldCurrency;
@@ -142,6 +141,7 @@ public class OrderController {
 		
 		try {
 			osi.addOrder(order);
+			redir.addFlashAttribute("orderSuccess", "Order placed: trading " + order.getBaseCurrency() + " for " + order.getTargetCurrency());
 			return "redirect:/dashboard";
 		} catch (InsufficientFundsException e) {
 			redir.addFlashAttribute("noFunds", "You don't have sufficient funds to place that order!");
@@ -151,6 +151,9 @@ public class OrderController {
 			return "redirect:/order";
 		} catch (InvalidDateException e) {
 			redir.addFlashAttribute("invalidDate", "You can't choose an expiry date after the scheduled trade date!");
+			return "redirect:/order";
+		} catch (InvalidNumberException e) {
+			redir.addFlashAttribute("invalidNumber", "You must enter a positive number!");
 			return "redirect:/order";
 		}
 	}

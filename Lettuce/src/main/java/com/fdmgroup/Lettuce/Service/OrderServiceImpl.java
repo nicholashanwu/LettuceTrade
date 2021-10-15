@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.fdmgroup.Lettuce.Exceptions.InsufficientFundsException;
 import com.fdmgroup.Lettuce.Exceptions.InvalidDateException;
+import com.fdmgroup.Lettuce.Exceptions.InvalidNumberException;
 import com.fdmgroup.Lettuce.Exceptions.RecursiveTradeException;
 import com.fdmgroup.Lettuce.Models.Order;
 import com.fdmgroup.Lettuce.Models.OrderStatus;
@@ -25,8 +26,8 @@ import com.fdmgroup.Lettuce.rates.ExchangeRate;
 
 @Service
 public class OrderServiceImpl implements iOrder {
-	public static final Logger dbLogger=LogManager.getLogger("DBLogging");
-	
+	public static final Logger dbLogger = LogManager.getLogger("DBLogging");
+
 	@Autowired
 	OrderRepo orderRepo;
 
@@ -108,14 +109,21 @@ public class OrderServiceImpl implements iOrder {
 	 *                                    should not remain on the market,
 	 *                                    un-expired, if its scheduled date has
 	 *                                    already passed.
+	 * @throws InvalidNumberException     If the order's quantity is zero or
+	 *                                    negative.
 	 */
 	@Override
-	public void addOrder(Order order) throws InsufficientFundsException, RecursiveTradeException, InvalidDateException {
+	public void addOrder(Order order)
+			throws InsufficientFundsException, RecursiveTradeException, InvalidDateException, InvalidNumberException {
 		// Make sure there aren't any expired orders lingering in the system.
 		expireAll();
 		// Throw exception if they're trying to trade a currency for itself
 		if (order.getBaseCurrency().equals(order.getTargetCurrency())) {
 			throw new RecursiveTradeException();
+		}
+		// Throw exception if they try to place a negative order
+		if (order.getQuantity() <= 0) {
+			throw new InvalidNumberException();
 		}
 		// Throw exception if the market posting is scheduled to stick around even after
 		// the scheduled trade date
@@ -136,7 +144,8 @@ public class OrderServiceImpl implements iOrder {
 	}
 
 	/**
-	 * @deprecated Orders should not be deleted from the database. Use cancelOrder() or expireOrder() instead.
+	 * @deprecated Orders should not be deleted from the database. Use cancelOrder()
+	 *             or expireOrder() instead.
 	 */
 	@Override
 	public void deleteOrder(Order order) {
@@ -144,7 +153,8 @@ public class OrderServiceImpl implements iOrder {
 	}
 
 	/**
-	 * @deprecated Orders should not be deleted from the database. Use cancelOrder() or expireOrder() instead.
+	 * @deprecated Orders should not be deleted from the database. Use cancelOrder()
+	 *             or expireOrder() instead.
 	 */
 	@Override
 	public void deleteOrderById(int id) {
@@ -306,7 +316,7 @@ public class OrderServiceImpl implements iOrder {
 					orderRepo.save(order);
 					orderRepo.save(orderFound);
 					// TODO logging
-					
+
 					// If the order is all used up, stop iterating through the loop.
 					if (order.getOrderStatus() == OrderStatus.COMPLETE) {
 						break;

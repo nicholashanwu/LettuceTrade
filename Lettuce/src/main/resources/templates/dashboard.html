@@ -35,6 +35,9 @@
 				<h4 class="green-text-v1">View your portfolio and current rates!</h4>
 				<div class="dashboard-section">
 					
+					<!-- Flash attributes -->
+					<div class="validation-message" th:text="${orderSuccess}" th:if="${orderSuccess}"></div>
+					
 					<h2>Portfolio Summary</h2>
 					<br />
 					

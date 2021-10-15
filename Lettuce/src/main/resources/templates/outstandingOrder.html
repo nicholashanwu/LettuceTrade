@@ -48,7 +48,7 @@
 							</td>
 							<td th:text = "${#numbers.formatDecimal(rate.value, 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
 							
-							<td ><input id="quant" type="number" th:field="*{initialQuantity}" th:onchange= "total([[${rate.key}]])"></td>	
+							<td ><input id="quant" type="number" min = "0" th:field="*{initialQuantity}" th:oninput= "total([[${rate.key}]])" onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 ? true : !isNaN(Number(event.key))"></td>	
 							<td>
 								<span
 									id="totalPrice" th:text="0">0</span>		

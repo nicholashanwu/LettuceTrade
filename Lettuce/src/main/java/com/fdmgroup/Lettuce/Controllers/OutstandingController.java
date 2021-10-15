@@ -26,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fdmgroup.Lettuce.Exceptions.InsufficientFundsException;
 import com.fdmgroup.Lettuce.Exceptions.InvalidDateException;
+import com.fdmgroup.Lettuce.Exceptions.InvalidNumberException;
 import com.fdmgroup.Lettuce.Exceptions.RecursiveTradeException;
 import com.fdmgroup.Lettuce.Models.Currency;
 import com.fdmgroup.Lettuce.Models.Order;
@@ -111,9 +112,13 @@ public class OutstandingController {
 		
 		try {
 			osi.addOrder(newOrder);
+			redir.addFlashAttribute("orderSuccess", "Order placed: trading " + newOrder.getBaseCurrency() + " for " + newOrder.getTargetCurrency());
 			return "redirect:/dashboard";
 		} catch (InsufficientFundsException e) {
 			redir.addFlashAttribute("noFunds", "You don't have sufficient funds to place that order!");
+			return "redirect:/outstandingOrder";
+		} catch (InvalidNumberException e) {
+			redir.addFlashAttribute("invalidNumber", "You must enter a positive number!");
 			return "redirect:/outstandingOrder";
 		} 
 		
