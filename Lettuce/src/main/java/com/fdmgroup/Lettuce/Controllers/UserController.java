@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.repository.query.Param;
@@ -50,6 +52,9 @@ public class UserController {
 	private PortfolioRepo pr;
 	@Autowired
 	private HeldCurrencyRepo hcr;
+	
+	public static final Logger actLogger=LogManager.getLogger("ActLogging");
+	public static final Logger dbLogger=LogManager.getLogger("DBLogging");
 
 	// When adding currencies to a user's portfolio, please follow this process!
 	public void setUpNewTestUser(User user) throws DuplicatedEmailException {
@@ -232,6 +237,7 @@ public class UserController {
 			usi.resetPassword(email, getSiteURL(request));
 			redir.addFlashAttribute("message",
 					"A reset password link has been sent to your email. Please use it to set up your new password");
+			actLogger.info("Reset password link sent to " + email);
 		} catch (UserNotFoundException e) {
 			redir.addFlashAttribute("error", e.getMessage());
 		} catch (UnsupportedEncodingException | MessagingException ex) {
@@ -262,6 +268,7 @@ public class UserController {
 				User user = usi.findByVerificationCode(token);
 				usi.updatePassword(user, confrimpassword);
 				usi.sendResetPassworConfimationEmail(user);
+				actLogger.info("User " + user.getEmail() + " reset their password");
 				return "redirect:/login";
 			} catch (Exception e) {
 				return "redirect:/forgot-password";
@@ -309,6 +316,7 @@ public class UserController {
 			usi.updatePassword(user, newPassword);
 //			    actLogger.info("Change password successfully");
 //			    dbLogger.info("Change password successfully");
+			actLogger.info("User " + user.getEmail() + " updated their password");
 			return "redirect:/login";
 
 		} else {
@@ -325,6 +333,7 @@ public class UserController {
 		boolean isEnabled = true;
 		try {
 			verified = usi.loginWithEmailAndPassword(email, password);
+			actLogger.info("User " + email + " has logged in");
 			isAdmin = false;
 //			isAdmin=usi.isAdmin(email);											may not have admin features in final product
 			currentUserId = usi.getUserByEmail(email).getUserId();
@@ -336,8 +345,8 @@ public class UserController {
 			verified = false;
 			isAdmin = false;
 			redir.addFlashAttribute("error", "The username or password is not correct.");
-			e.printStackTrace();
-			return "login";
+			actLogger.info("User " + email + " failed to log in");
+			return "redirect:/login";
 
 //		    actLogger.warn("Fail to login because EXCEPTION " + e.getClass()+" "+e.getMessage());
 		}
@@ -348,7 +357,7 @@ public class UserController {
 //		        actLogger.info(" log in successfully as an admin");
 //		        dbLogger.info(" log in successfully as an admin");
 //		        adminLogger.info(" log in successfully as an admin");
-				return "adminDashboard";
+				return "redirect:/adminDashboard";
 			} else {
 				// the default value of currentAdmin is false
 
@@ -364,7 +373,7 @@ public class UserController {
 			}
 		} else {
 			redir.addFlashAttribute("message", "Please check your mail box to verify your account");
-			return "login";
+			return "redirect:/login";
 		}
 	}
 
@@ -395,7 +404,9 @@ public class UserController {
 
 	@RequestMapping("/logout")
 	public String logOutHandler(HttpServletRequest request) {
+		User user = (User) request.getSession().getAttribute("user");
 		request.getSession().invalidate();
+		actLogger.info("User " + user.getEmail() + " logged out");
 		return "redirect:/";
 	}
 
