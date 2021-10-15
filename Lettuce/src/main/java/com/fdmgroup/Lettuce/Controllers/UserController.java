@@ -237,7 +237,6 @@ public class UserController {
 		} catch (UnsupportedEncodingException | MessagingException ex) {
 			redir.addFlashAttribute("error", "We are encountering an error while sending email. Please try again.");
 		}
-
 		return "forgot-password";
 	}
 

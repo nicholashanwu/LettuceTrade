@@ -23,10 +23,40 @@
         	<p><a th:href="@{/}">Return to index.</a></p>
         </th:block>
         <th:block th:if="${session.user}">
-	        <form class="form" id="fund-form" th:action = "@{/fundHandler}" th:object = "${amount}" method="post" novalidate>
-	        <input class="form-control" min="0" type = "number" onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 ? true : !isNaN(Number(event.key))" id="amount" name="amount" placeholder="Quantity" required/><label style="margin:15px;"><b>AUD</b></label><br>
-	          <button type="submit" id = "top-up" class="btn btn-primary" name = "top-up" value = "top-up">Top Up</button>
-	          <button style="margin:15px;" type="submit" id = "withdraw" class="btn btn-primary" name = "withdraw" value = "withdraw">Withdraw</button>  
+        
+        
+        
+	        <form id="fund-form" th:action = "@{/fundHandler}" th:object = "${amount}" method="post" novalidate>
+	        	<table class="mytable align-bottom">
+	        		<tr>
+	        		<th colspan="2"><input class="form-control-lg border border-success" min="0" type = "number" onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 ? true : !isNaN(Number(event.key))" id="amount" name="amount" placeholder="Quantity" required/></th>
+	        		<th><span class="green-text-v1-lg">AUD</span></th>
+	        		<th></th>
+	        		</tr>
+	        	
+	        		
+	        		<tr>
+	        			<td>
+	        				 <button type="submit" id = "top-up" class="btn btn-primary" name = "top-up" value = "top-up" style="width:100%">Top Up</button>
+	        				
+	        			</td>
+	        		
+	        			<td>
+	        				 <button type="submit" id = "withdraw" class="btn btn-primary" name = "withdraw" value = "withdraw" style="width:100%">Withdraw</button>  
+	        			</td>
+	        			
+	        			
+	        		
+	        		</tr>
+	        	
+	        	
+	        	</table>
+	        	
+	        	
+		        
+		        	
+		         
+		          
 	        </form>
 	        <div class="validation-message" th:text="${noFunds}" th:if="${noFunds}"></div>
         </th:block>

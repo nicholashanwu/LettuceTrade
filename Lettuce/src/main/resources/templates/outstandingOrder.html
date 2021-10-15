@@ -27,7 +27,7 @@
 				</th:block>
 				<th:block th:if="${session.user}">
 				
-				<table class="table mytable align-middle" id = "myTable">
+				<table class="table mytable" id = "myTable">
 					<tr>
 						<th colspan="2">Selling</th>
 						<th>Remaining</th>
@@ -39,30 +39,21 @@
 					<form th:action="@{/outOrderHandler}" th:object="${newOrder}" method="post">
 						<tr th:id= "${rate.key}">
 							<td>
-								<div th:class="${'currency-flag currency-flag-' + rate.key.substring(0,3).toLowerCase()}"></div>
-								<div th:class="${'currency-flag currency-flag-' + rate.key.substring(7,10).toLowerCase()}"></div>
+							<div th:class="${'currency-flag currency-flag-' + rate.key.substring(0,3).toLowerCase()}"></div>
+							<div th:class="${'currency-flag currency-flag-' + rate.key.substring(7,10).toLowerCase()}"></div>
 							</td>
+							<td> 
+							<input type = "text" th:value ="${rate.key}" th:id="details" th:name = "details" readonly>
+							 
+							</td>
+							<td th:text = "${#numbers.formatDecimal(rate.value, 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
 							
+							<td ><input id="quant" type="number" th:field="*{initialQuantity}" th:oninput= "total([[${rate.key}]])"></td>	
 							<td>
-								
-								<!-- <input type = "text" th:value ="${rate.key}" th:id="details" th:name = "details" readonly> -->
-								
-								<span id="details" th:value ="${rate.key}"  th:text ="${rate.key}"></span>
-							</td>
-							
-							<td th:text = "${#numbers.formatDecimal(rate.value, 1, 'DEFAULT', 2, 'DEFAULT')}">
-							</td>
-							
-							<td>
-								<input class="form-control" id="quant" type="number" min="0" th:field="*{initialQuantity}" th:onchange= "total([[${rate.key}]])">
-							</td>
-								
-							<td>
-								<!-- <p id = "totalPrice" text = "0">0</p> -->
-								<span id = "totalPrice" text = "0">0</span>
-							</td>
-												
-							<td><input class="btn btn-primary" type ="submit" value = "Buy" th:data-confirm-delete="|Are you sure you want to place trade?|"
+								<span
+									id="totalPrice" th:text="0">0</span>		
+							</td>		
+							<td><input type ="submit" value = "Buy" th:data-confirm-delete="|Are you sure you want to place trade?|"
   onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false"></td>
 						</tr>
 						</form>

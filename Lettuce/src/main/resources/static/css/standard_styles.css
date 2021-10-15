@@ -45,6 +45,12 @@ a:hover {
   color: var(--green-main);
 }
 
+.green-text-v1-lg {
+  color: var(--green-main);
+  font-family: 'Roboto Light', sans-serif;
+  font-size: 200%;
+}
+
 .green-text-v1-light {
   color: var(--green-main);
   font-family: 'Roboto Light', sans-serif
@@ -61,6 +67,18 @@ a:hover {
 	border-color: #33AB74;
 	border-width: 2px;
 	color: #999999;
+}
+
+.form-control-lg {
+  min-height: calc(1.5em + 1rem + 2px);
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  border-radius: 0.3rem;
+  border-color: #33AB74 !important;
+  border-width: 2px !important;
+  outline: none !important;
+  color: var(--subtext) !important;
+  
 }
 
 .form-select:focus {
