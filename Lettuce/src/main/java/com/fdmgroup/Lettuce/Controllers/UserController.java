@@ -247,12 +247,12 @@ public class UserController {
 	public String forgetPasswordHandler(@RequestParam(value = "email") String email,HttpServletRequest request,Model model) throws UnsupportedEncodingException, MessagingException, UserNotFoundException{
 		try {
 			usi.resetPassword(email, getSiteURL(request));
-			model.addAttribute("message","A reset password link has been sent to your email. Please use it to set up your new password");
+			model.addAttribute("message","A reset password link has been sent to your email. Please click the link in it to reset your password");
 		} catch (UserNotFoundException e) {
 			 model.addAttribute("error", e.getMessage());
 		}
 		catch (UnsupportedEncodingException | MessagingException ex) {
-			model.addAttribute("error", "We are encoutring an error while sending email. Please try again.");
+			model.addAttribute("error", "We encountered an error while sending you the email. Please try again.");
 		}
 		
 		return "forgot-password";
@@ -314,7 +314,7 @@ public class UserController {
 		} catch (Exception e) {
 			verified = false;
 			user = new User();
-			model.addAttribute("error", "The username or passowrd is not correct.");
+			model.addAttribute("error", "The username or password is not correct.");
 			return "changePassword";
 //		    actLogger.warn("Fail to change password because EXCEPTION " + e.getClass()+" "+e.getMessage());
 		}
@@ -355,7 +355,7 @@ public class UserController {
 		} catch (Exception e) {
 			verified = false;
 			isAdmin = false;
-			model.addAttribute("error", "The username or passowrd is not correct.");
+			model.addAttribute("error", "The username or password is not correct.");
 			e.printStackTrace();
 			return "login";
 			
@@ -383,7 +383,7 @@ public class UserController {
 				return "redirect:/dashboard";
 			}
 		} else {
-			model.addAttribute("message", "Please check your mail box to verify your account");
+			model.addAttribute("message", "Please check your email to verify your account");
 			return "login";
 		}
 	}
