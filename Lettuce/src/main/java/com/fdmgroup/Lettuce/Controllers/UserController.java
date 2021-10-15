@@ -235,13 +235,13 @@ public class UserController {
 			throws UnsupportedEncodingException, MessagingException, UserNotFoundException {
 		try {
 			usi.resetPassword(email, getSiteURL(request));
-			redir.addFlashAttribute("message",
+			model.addAttribute("message",
 					"A reset password link has been sent to your email. Please use it to set up your new password");
 			actLogger.info("Reset password link sent to " + email);
 		} catch (UserNotFoundException e) {
-			redir.addFlashAttribute("error", e.getMessage());
+			model.addAttribute("error", e.getMessage());
 		} catch (UnsupportedEncodingException | MessagingException ex) {
-			redir.addFlashAttribute("error", "We are encountering an error while sending email. Please try again.");
+			model.addAttribute("error", "We are encountering an error while sending email. Please try again.");
 		}
 		return "forgot-password";
 	}
@@ -288,7 +288,7 @@ public class UserController {
 	}
 
 	@RequestMapping("/changePasswordHandler")
-	public String handlerChangePassword(@RequestParam(value = "email") String email,
+	public String handlerChangePassword(HttpServletRequest request,@RequestParam(value = "email") String email,
 			@RequestParam(value = "oldPassword") String oldPassword,
 			@RequestParam(value = "newPassword") String newPassword,
 			@RequestParam(value = "confirmPassword") String confirmPassword, Model model, RedirectAttributes redir) {
@@ -317,6 +317,7 @@ public class UserController {
 //			    actLogger.info("Change password successfully");
 //			    dbLogger.info("Change password successfully");
 			actLogger.info("User " + user.getEmail() + " updated their password");
+			logOutHandler(request);
 			return "redirect:/login";
 
 		} else {
@@ -330,17 +331,19 @@ public class UserController {
 
 		boolean verified = true;
 		boolean isAdmin;
-		boolean isEnabled = true;
+		boolean isEnabled = false;
 		try {
 			verified = usi.loginWithEmailAndPassword(email, password);
 			actLogger.info("User " + email + " has logged in");
 			isAdmin = false;
 //			isAdmin=usi.isAdmin(email);											may not have admin features in final product
 			currentUserId = usi.getUserByEmail(email).getUserId();
-			/*
-			 * if(usi.getUserByEmail(email).getEnabled().equals("true")) { isEnabled = true;
-			 * }
-			 */
+			
+			  if(usi.getUserByEmail(email).getEnabled().equals("true")) 
+			  { 
+				  isEnabled = true;
+			  }
+			 
 		} catch (Exception e) {
 			verified = false;
 			isAdmin = false;
