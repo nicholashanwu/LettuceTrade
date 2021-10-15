@@ -253,7 +253,7 @@ public class UserController {
 			return "reset-password";
 		} else {
 			redir.addFlashAttribute("message", "Invalid Token");
-			return "forgot-password";
+			return "redirect:/forgot-password";
 		}
 
 	}
