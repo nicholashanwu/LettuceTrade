@@ -143,33 +143,37 @@ public class UserServiceImpl implements iUser {
 
 	}
 
-	public boolean verify(String verificationCode) {
+	public boolean verify(String verificationCode) throws UserNotFoundException {
+		boolean isVerify = false;
 		User user = userRepo.findByVerificationCode(verificationCode).get();
 		System.out.println(user);
 		if (user == null || user.getEnabled().equals("true")) {
-			return false;
+			
+			throw new UserNotFoundException("Invalid Token");
 		} else {
 			user.setVerificationCode(null);
 			user.setEnabled("true");
 			userRepo.save(user);
 
-			return true;
+			isVerify = true;
 		}
-
+		return isVerify;
 	}
 
-	public boolean verifyToken(String verificationCode) {
+	public boolean verifyToken(String verificationCode) throws UserNotFoundException {
+		boolean isVerify = false;
 		User user = userRepo.findByVerificationCode(verificationCode).get();
-		System.out.println(user);
+		//System.out.println(user);
 		if (user == null) {
-			return false;
+			throw new UserNotFoundException("Invalid Token");
 		} else {
 			// user.setVerificationCode(null);
 			// user.setEnabled("true");
 			// userRepo.save(user);
 
-			return true;
+			isVerify=true;
 		}
+		return isVerify;
 
 	}
 

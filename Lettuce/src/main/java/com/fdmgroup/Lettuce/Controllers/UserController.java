@@ -210,13 +210,15 @@ public class UserController {
 
 	// email verification for registration
 	@RequestMapping("/verify")
-	public String verifyUser(@Param("code") String code) {
+	public String verifyUser(@Param("code") String code) throws UserNotFoundException {
 		// System.out.println(code);
-		if (usi.verify(code)) {
+		try {
+			usi.verify(code);
 			return "redirect:/login";
-		} else {
+		} catch (Exception e) {
 			return "redirect:/register";
 		}
+		
 	}
 
 	private String getSiteURL(HttpServletRequest request) {
@@ -248,10 +250,11 @@ public class UserController {
 
 	@RequestMapping("/reset_password")
 	public String resetPassword(@Param("code") String code, Model model, RedirectAttributes redir) {
-		if (usi.verifyToken(code)) {
+		try {
+			usi.verifyToken(code);
 			model.addAttribute("token", code);
 			return "reset-password";
-		} else {
+		} catch (Exception e) {
 			redir.addFlashAttribute("message", "Invalid Token");
 			return "redirect:/forgot-password";
 		}
@@ -307,7 +310,7 @@ public class UserController {
 			verified = false;
 			user = new User();
 			redir.addFlashAttribute("error", "The username or passowrd is not correct.");
-			return "changePassword";
+			return "redirect:/changePassword";
 //		    actLogger.warn("Fail to change password because EXCEPTION " + e.getClass()+" "+e.getMessage());
 		}
 
